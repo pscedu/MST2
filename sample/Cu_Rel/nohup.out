@@ -1,0 +1,1979 @@
+  
+             ********************************************************
+             *                                                      *
+             *              Fortran 90 Interface Module             *
+             *                                                      *
+             *                         For                          *
+             *                                                      *
+             *              MPI Message Passing Library             *
+             *                                                      *
+             *                   Version No. 2.0k                   *
+             *                                                      *
+             ********************************************************
+  
+ CHARACTER_BYTES =            1
+ INTEGER_BYTES   =            4
+ REAL_BYTES      =            8
+ COMPLEX_BYTES   =           16
+ ADDRESS_BYTES   =            8
+  
+ Number of Procs =           32
+  
+Execution starts at 16:06:16, 05-23-2017 on    32 nodes
+#-------------------------------------------------------------------------------
+#
+#
+#           ********************************************************
+#           *                                                      *
+#           *    Full-Potential Multiple Scattering Theory Based   *
+#           *                                                      *
+#           *  Ab Initio Electronic Structure Calculation Package  *
+#           *                                                      *
+#           ********************************************************
+#
+#
+#   username                 : ywg
+#   system name              : dxcgpu02.psc.edu
+#   code compiled            : Tuesday, May 23 2017 15:26:58
+#-------------------------------------------------------------------------------
+
+ The Position Data File: ./position.dat
+
+ The Position Data is read successfully!
+
+
+================================================================================
+
+ The lattice system is: Cubic       
+
+********************************
+* Output from SPACEGRP         *
+********************************
+
+The point group of the crystal is the full cubic        group
+Space group is symmorphic
+--------------------------------------------------------------------------------
+
+********************************
+* Output from CHECKSYMM        *
+********************************
+
+Symmetry is correct
+--------------------------------------------------------------------------------
+
+********************************
+* Output from SPACEGRP         *
+********************************
+
+The point group of the crystal is the full cubic        group
+Space group is symmorphic
+--------------------------------------------------------------------------------
+
+********************************
+* Output from SPKPT            *
+********************************
+
+Wavevector mesh contains   16384 points
+--------------------------------------------------------------------------------
+
+================================================================================
+
+            *********************************************
+            *     Output from createParallelization     *
+            *            in ProcMappingModule           *
+            *********************************************
+
+The number of processors in each box :    1
+The number of repeats along k-dimen. :   32
+The number of repeats along e-dimen. :    1
+Dimension of the box :    1 x    1 x    1
+MyPE =     0, NumEs, NumEsPerBox =    30   30
+MyPE =     0, NumKs, NumKsPerBox = 16384  512
+MyPE =     0, K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
+MyPE =     1, NumEs, NumEsPerBox =    30   30
+MyPE =     3, NumEs, NumEsPerBox =    30   30
+MyPE =     3, NumKs, NumKsPerBox = 16384  512
+MyPE =     3, K index =  1537 1538 1539 1540 1541 1542 1543 1544 1545 1546 1547 1548 1549 1550 1551 1552, ...,...
+MyPE =     6, NumEs, NumEsPerBox =    30   30
+MyPE =     6, NumKs, NumKsPerBox = 16384  512
+MyPE =     6, K index =  3073 3074 3075 3076 3077 3078 3079 3080 3081 3082 3083 3084 3085 3086 3087 3088, ...,...
+MyPE =     7, NumEs, NumEsPerBox =    30   30
+MyPE =     7, NumKs, NumKsPerBox = 16384  512
+MyPE =     7, K index =  3585 3586 3587 3588 3589 3590 3591 3592 3593 3594 3595 3596 3597 3598 3599 3600, ...,...
+MyPE =     2, NumEs, NumEsPerBox =    30   30
+MyPE =     2, NumKs, NumKsPerBox = 16384  512
+MyPE =     2, K index =  1025 1026 1027 1028 1029 1030 1031 1032 1033 1034 1035 1036 1037 1038 1039 1040, ...,...
+MyPE =     4, NumEs, NumEsPerBox =    30   30
+MyPE =     5, NumEs, NumEsPerBox =    30   30
+MyPE =     5, NumKs, NumKsPerBox = 16384  512
+MyPE =     5, K index =  2561 2562 2563 2564 2565 2566 2567 2568 2569 2570 2571 2572 2573 2574 2575 2576, ...,...
+K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
+Process =     0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0, ...,...
+MyPE =     4, NumKs, NumKsPerBox = 16384  512
+MyPE =     1, NumKs, NumKsPerBox = 16384  512
+MyPE =     1, K index =   513  514  515  516  517  518  519  520  521  522  523  524  525  526  527  528, ...,...
+MyPE =     4, K index =  2049 2050 2051 2052 2053 2054 2055 2056 2057 2058 2059 2060 2061 2062 2063 2064, ...,...
+
+================================================================================
+
+The number of processes that write output data:      1
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22442243D+00, MS IDOS_ws_Pole =  0.37408504D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole = -0.13582340D+01, MS IDOS_ws_Pole = -0.11550718D+01
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.17721027D+00, MS IDOS_ws_Pole =  0.32053861D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21901417D+00, MS IDOS_ws_Pole =  0.37194786D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.28358248D+00, MS IDOS_ws_Pole =  0.45271841D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.21530883D+00, MS IDOS_ws_Pole =  0.36627265D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.22738728D+00, MS IDOS_ws_Pole =  0.38098319D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23794196D+00, MS IDOS_ws_Pole =  0.39317517D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23772635D+00, MS IDOS_ws_Pole =  0.39354177D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23719839D+00, MS IDOS_ws_Pole =  0.39236342D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23653233D+00, MS IDOS_ws_Pole =  0.39196982D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23667463D+00, MS IDOS_ws_Pole =  0.39220816D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23679699D+00, MS IDOS_ws_Pole =  0.39239191D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23689959D+00, MS IDOS_ws_Pole =  0.39254036D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23701892D+00, MS IDOS_ws_Pole =  0.39272710D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23705988D+00, MS IDOS_ws_Pole =  0.39278762D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739557D+00, MS IDOS_ws_Pole =  0.39268770D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23739079D+00, MS IDOS_ws_Pole =  0.39268936D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23697714D+00, MS IDOS_ws_Pole =  0.39233114D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23725342D+00, MS IDOS_ws_Pole =  0.39258142D+00

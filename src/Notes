@@ -1,0 +1,16 @@
+========================================================
+03/03/04
+The files that have been changed in order to run on T3E:
+
+   PotentialModule.f90
+   TauLSMSModule.F90
+   MultipleScatteringModule.F90
+   ValenceStatesModule.F90
+   Makefile
+   BinvMatrix.F90
+   GreenFunctionModule.F90
+   ScreenStrConstModule.F90
+   SIngleScatteringModule.F90
+   SpecKIntegrationModule.F90
+   DataCommModule.F90
+========================================================

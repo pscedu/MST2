@@ -1,0 +1,238 @@
+module PublicTypeDefinitionsModule
+   use KindParamModule, only : IntKind, RealKind, CmplxKind
+   implicit none
+!
+   public ::  LizLmaxStruct,      &
+              LloydStruct,        &
+              InputTableStruct,   &
+              MixListRealStruct,  &
+              MixListCmplxStruct, &
+              NeighborStruct,     &
+              CommTableStruct,    &
+              GridStruct,         &
+              ScmBlockStruct,     &
+              FFTGridStruct,      &
+              FFTGAtomInfoStruct, &
+              VisualGridStruct,   &
+              VGAtomInfoStruct,   &
+              GlobalIndex,        &
+              AtomPosition
+!
+   integer (kind=IntKind), allocatable, target :: GlobalIndex(:)
+!
+   real (kind=RealKind), allocatable, target :: AtomPosition(:,:)
+!
+!  AtomModule data types
+!
+   type LizLmaxStruct
+      real (kind=RealKind) :: rad
+      real (kind=RealKind) :: rad_s
+      integer (kind=IntKind) :: nmax
+      integer (kind=IntKind) :: NumShells
+      integer (kind=IntKind), pointer :: lmax_shell(:)
+   end type LizLmaxStruct
+!
+!  InputModule
+!
+   type InputTableStruct
+      character (len=160) :: TableName
+      integer (kind=IntKind) :: TableIndex
+      integer (kind=IntKind) :: NumData
+      integer (kind=IntKind) :: UnitNumber
+      logical :: Open
+      character (len=50), pointer :: KeyName(:)
+      character (len=160), pointer :: KeyValue(:)
+      type (InputTableStruct), pointer :: next
+   end type InputTableStruct
+!
+!  MixingModule
+!
+   type MixListRealStruct
+      integer (kind=IntKind) :: size
+      real (kind=RealKind) :: rms
+      real (kind=RealKind), pointer :: mesh(:)
+      real (kind=RealKind), pointer :: vector_old(:)
+      real (kind=RealKind), pointer :: vector_new(:)
+      type (MixListRealStruct), pointer :: next
+   end type MixListRealStruct
+!
+   type MixListCmplxStruct
+      integer (kind=IntKind) :: size
+      real (kind=RealKind) :: rms
+      real (kind=RealKind), pointer :: mesh(:)
+      complex (kind=CmplxKind), pointer :: vector_old(:)
+      complex (kind=CmplxKind), pointer :: vector_new(:)
+      type (MixListCmplxStruct), pointer :: next
+   end type MixListCmplxStruct
+!
+!  NeighborModule
+!
+   type NeighborStruct
+      integer (kind=IntKind) :: NumAtoms             ! no. of neighbor atoms
+                                                     ! in cluster. Note: center
+                                                     ! atom is not counted.
+      integer (kind=IntKind) :: NumReceives          ! No. receiving calls
+                                                     ! needed for retrieving
+                                                     ! the neighboring atoms'
+                                                     ! data
+      integer (kind=IntKind), pointer :: Z(:)        ! Atomic number of 
+                                                     ! neigbor atom
+      integer (kind=IntKind), pointer :: Lmax(:)     ! L-cut off for each atom
+                                                     ! in the cluster
+      integer (kind=IntKind), pointer :: ProcIndex(:)  ! the index of the CPU
+                                                     ! that the neighbor atom
+                                                     ! is mapped onto.
+      integer (kind=IntKind), pointer :: LocalIndex(:) ! the local index of the
+                                                     ! neighbor atom on the CPU
+                                                     ! it is mapped onto.
+      integer (kind=IntKind), pointer :: GlobalIndex(:) ! the global index of
+                                                     ! the neighbor atom.
+      real (kind=RealKind), pointer :: Position(:,:) ! the coordinates of the
+                                                     ! neighbor atom.
+      integer (kind=IntKind), pointer :: IndexMN(:)  ! the count of contributing
+                                                     ! atoms to Tau
+      real (kind=RealKind), pointer :: Rmunu(:,:,:)  !
+
+      integer (kind=IntKind) :: NumShells            ! no. of shells in LIZ
+      integer (kind=IntKind),pointer:: ShellIndex(:) ! index to which shell 
+                                                     ! this neighbor atom
+                                                     ! belongs
+      real (kind=RealKind), pointer :: ShellRad(:)   ! radii of shells
+
+   end type NeighborStruct
+!
+   type CommTableStruct
+      integer (kind=IntKind) :: NumRequests          ! No. of times that my atom is on other
+                                                     ! atoms's neighbor list or no. of times
+                                                     ! that other atoms are on my neighbor list
+      integer (kind=IntKind) :: NumComms             ! No. of sending/receiving calls needed
+      integer (kind=IntKind), allocatable :: RemoteAtomList(:) ! The list of atoms that need
+                                                               ! my t-matrix or whose t-matrix are needed
+      integer (kind=IntKind), allocatable :: RemoteProcList(:) ! The list of processors that
+                                                               ! need me to send my t-matrix or
+                                                               ! that will send their t-matrix to me
+   end type CommTableStruct
+!
+!  RadialGridModule
+!
+   type GridStruct
+      real (kind=RealKind) :: rend          ! the terminal sphere radius
+                                            ! = rmt, rws, or rcirc
+      real (kind=RealKind) :: rinsc         ! the inscribed sphere radius 
+      real (kind=RealKind) :: rmt           ! the muffin-tin sphere radius
+      real (kind=RealKind) :: rws           ! the Wigner-Seitz sphere radius
+      real (kind=RealKind) :: rstart        ! the near origin starting point
+      real (kind=RealKind) :: xend          ! log(rend)
+      real (kind=RealKind) :: xinsc         ! log(rinsc)
+      real (kind=RealKind) :: xmt           ! log(rmt)
+      real (kind=RealKind) :: xstart        ! the near origin starting point
+      real (kind=RealKind) :: hout          ! x-step bwteen xmt and xcirc
+      real (kind=RealKind) :: hin           ! x-step bwteen xstart and xmt
+!
+      integer (kind=IntKind) :: nmult       ! = hin/hout
+      integer (kind=IntKind) :: jend        ! the number of x or r mesh points
+                                            ! inside rend (including rend)
+      integer (kind=IntKind) :: jmt         ! Num. of r-mesh on and inside
+                                            ! the Muffin-tin radius.
+      integer (kind=IntKind) :: jinsc       ! Num. of r-mesh on and inside
+                                            ! the inscribed radius.
+      integer (kind=IntKind) :: jend_plus_n ! = jend+n_extra
+      integer (kind=IntKind) :: jws         ! the r-mesh point closest to rws
+!
+      real (kind=RealKind), pointer :: x_mesh(:)
+      real (kind=RealKind), pointer :: r_mesh(:)
+   end type GridStruct
+!
+!  StrConstModule 
+!
+   type ScmBlockStruct
+      integer (kind=IntKind) :: lmaxi
+      integer (kind=IntKind) :: lmaxj
+      complex (kind=CmplxKind), pointer :: strcon_matrix(:,:)
+   end type ScmBlockStruct
+!
+!  FFTGridModule
+!
+   type FFTGridStruct
+      integer (kind=IntKind) :: nga
+      integer (kind=IntKind) :: ngb
+      integer (kind=IntKind) :: ngc
+      integer (kind=IntKind) :: ng     ! ng = nga*ngb*ngc
+      real (kind=RealKind) :: vec_a(3)
+      real (kind=RealKind) :: vec_b(3)
+      real (kind=RealKind) :: vec_c(3)
+      real (kind=RealKind) :: step_a
+      real (kind=RealKind) :: step_b
+      real (kind=RealKind) :: step_c
+   end type FFTGridStruct
+!
+   type FFTGAtomInfoStruct
+      integer (kind=IntKind) :: VP_point
+      integer (kind=IntKind) :: indexAtom
+      real (kind=RealKind) :: r(3)
+      type (FFTGAtomInfoStruct), pointer :: nextAtom  ! pointer to another index
+   end type FFTGAtomInfoStruct
+!
+!  VisualGridModule
+!
+   type VisualGridStruct
+      integer (kind=IntKind) :: dim
+      integer (kind=IntKind) :: nga
+      integer (kind=IntKind) :: ngb
+      integer (kind=IntKind) :: ngc
+      integer (kind=IntKind) :: ng     !ng = nga*ngb*ngc
+      real (kind=RealKind) :: vec_o(3)
+      real (kind=RealKind) :: vec_a(3)
+      real (kind=RealKind) :: vec_b(3)
+      real (kind=RealKind) :: vec_c(3)
+      real (kind=RealKind) :: step_a
+      real (kind=RealKind) :: step_b
+      real (kind=RealKind) :: step_c
+   end type VisualGridStruct
+!
+   type VGAtomInfoStruct
+      integer (kind=IntKind) :: VP_point
+      integer (kind=IntKind) :: indexAtom
+      real (kind=RealKind) :: r(3)
+      type (VGAtomInfoStruct), pointer :: nextAtom  ! pointer to another index
+   end type VGAtomInfoStruct
+!
+   type LloydStruct
+      logical:: lloydOn
+      logical:: lloydOnly
+      complex(kind=CmplxKind) :: q_lloyd(2)
+   end type LloydStruct
+!
+contains
+!
+!  =================================================================== 
+!
+!  *******************************************************************
+!
+!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+   subroutine initPublicTypeDefinitions( na,lmax, gindex, pos )
+!  =================================================================== 
+   implicit none
+   integer(kind=IntKind), intent(in) :: na, lmax
+   integer(kind=IntKind), intent(in) :: gindex(na)
+   real(kind=RealKind), intent(in) :: pos(3,na)
+!
+   allocate(GlobalIndex(na),AtomPosition(3,na))
+   GlobalIndex(1:na) = gindex(1:na)
+   AtomPosition(1:3,1:na)=pos(1:3,1:na)
+!
+   end subroutine initPublicTypeDefinitions
+!  =================================================================== 
+!
+!  *******************************************************************
+!
+!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+   subroutine endPublicTypeDefinitions()
+!  =================================================================== 
+   implicit none
+!
+   deallocate(GlobalIndex,AtomPosition)
+!
+   end subroutine endPublicTypeDefinitions
+!  =================================================================== 
+   end module PublicTypeDefinitionsModule

@@ -1,0 +1,12 @@
+========================================================
+03/03/04
+The files that have been changed in order to run on T3E:
+
+   testMPP.f90
+   tst_stepfunc.f90
+   Makefile
+
+The following new test cases have been added:
+
+   tst_DataComm.f90
+========================================================

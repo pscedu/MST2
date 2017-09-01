@@ -1,0 +1,628 @@
+  
+             ********************************************************
+             *                                                      *
+             *              Fortran 90 Interface Module             *
+             *                                                      *
+             *                         For                          *
+             *                                                      *
+             *              MPI Message Passing Library             *
+             *                                                      *
+             *                   Version No. 2.0k                   *
+             *                                                      *
+             ********************************************************
+  
+ CHARACTER_BYTES =            1
+ INTEGER_BYTES   =            4
+ REAL_BYTES      =            8
+ COMPLEX_BYTES   =           16
+ ADDRESS_BYTES   =            8
+  
+ Number of Procs =           32
+  
+Execution starts at 13:16:22, 05-23-2017 on    32 nodes
+#-------------------------------------------------------------------------------
+#
+#
+#           ********************************************************
+#           *                                                      *
+#           *    Full-Potential Multiple Scattering Theory Based   *
+#           *                                                      *
+#           *  Ab Initio Electronic Structure Calculation Package  *
+#           *                                                      *
+#           ********************************************************
+#
+#
+#   username                 : ywg
+#   system name              : dxcgpu02.psc.edu
+#   code compiled            : Tuesday, May 23 2017 13:13:58
+#-------------------------------------------------------------------------------
+
+ The Position Data File: ./position.dat
+
+ The Position Data is read successfully!
+
+
+================================================================================
+
+ The lattice system is: Cubic       
+
+********************************
+* Output from SPACEGRP         *
+********************************
+
+The point group of the crystal is the full cubic        group
+Space group is symmorphic
+--------------------------------------------------------------------------------
+
+********************************
+* Output from CHECKSYMM        *
+********************************
+
+Symmetry is correct
+--------------------------------------------------------------------------------
+
+********************************
+* Output from SPACEGRP         *
+********************************
+
+The point group of the crystal is the full cubic        group
+Space group is symmorphic
+--------------------------------------------------------------------------------
+
+********************************
+* Output from SPKPT            *
+********************************
+
+Wavevector mesh contains   16384 points
+--------------------------------------------------------------------------------
+
+================================================================================
+
+            *********************************************
+            *     Output from createParallelization     *
+            *            in ProcMappingModule           *
+            *********************************************
+
+The number of processors in each box :    1
+The number of repeats along k-dimen. :   32
+The number of repeats along e-dimen. :    1
+Dimension of the box :    1 x    1 x    1
+MyPE =     0, NumEs, NumEsPerBox =    30   30
+MyPE =     0, NumKs, NumKsPerBox = 16384  512
+MyPE =     0, K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
+MyPE =     2, NumEs, NumEsPerBox =    30   30
+MyPE =     2, NumKs, NumKsPerBox = 16384  512
+MyPE =     2, K index =  1025 1026 1027 1028 1029 1030 1031 1032 1033 1034 1035 1036 1037 1038 1039 1040, ...,...
+MyPE =     3, NumEs, NumEsPerBox =    30   30
+MyPE =     3, NumKs, NumKsPerBox = 16384  512
+MyPE =     3, K index =  1537 1538 1539 1540 1541 1542 1543 1544 1545 1546 1547 1548 1549 1550 1551 1552, ...,...
+MyPE =     4, NumEs, NumEsPerBox =    30   30
+MyPE =     4, NumKs, NumKsPerBox = 16384  512
+MyPE =     4, K index =  2049 2050 2051 2052 2053 2054 2055 2056 2057 2058 2059 2060 2061 2062 2063 2064, ...,...
+MyPE =     5, NumEs, NumEsPerBox =    30   30
+MyPE =     5, NumKs, NumKsPerBox = 16384  512
+MyPE =     5, K index =  2561 2562 2563 2564 2565 2566 2567 2568 2569 2570 2571 2572 2573 2574 2575 2576, ...,...
+K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
+Process =     0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0, ...,...
+MyPE =     1, NumEs, NumEsPerBox =    30   30
+MyPE =     1, NumKs, NumKsPerBox = 16384  512
+MyPE =     1, K index =   513  514  515  516  517  518  519  520  521  522  523  524  525  526  527  528, ...,...
+MyPE =     6, NumEs, NumEsPerBox =    30   30
+MyPE =     6, NumKs, NumKsPerBox = 16384  512
+MyPE =     6, K index =  3073 3074 3075 3076 3077 3078 3079 3080 3081 3082 3083 3084 3085 3086 3087 3088, ...,...
+MyPE =     7, NumEs, NumEsPerBox =    30   30
+MyPE =     7, NumKs, NumKsPerBox = 16384  512
+MyPE =     7, K index =  3585 3586 3587 3588 3589 3590 3591 3592 3593 3594 3595 3596 3597 3598 3599 3600, ...,...
+
+================================================================================
+
+The number of processes that write output data:      1
+
+Rel: IDOS of the SS_Pole (e<0) term
+id =  1, is =  1, MS IDOS_mt_Pole =  0.23488240D+00, MS IDOS_ws_Pole =  0.38271784D+00
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007FA466ED8370  Unknown               Unknown  Unknown
+libmkl_avx2.so     00007FA4482AEFD1  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F813D0C6370  Unknown               Unknown  Unknown
+libmkl_avx2.so     00007F811E49CFA0  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007FF864C83370  Unknown               Unknown  Unknown
+libmkl_avx2.so     00007FF846059F11  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F62E32C4370  Unknown               Unknown  Unknown
+libmkl_avx2.so     00007F62C469B0CA  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F7C29A65370  Unknown               Unknown  Unknown
+libmkl_avx2.so     00007F7C0AE3BFD1  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F134D2B4370  Unknown               Unknown  Unknown
+libmkl_avx2.so     00007F132E68AE38  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F17A2083370  Unknown               Unknown  Unknown
+mst2.1             0000000000D96A78  relmssolvermodule         536  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F17A0A7DB35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F7EE60D8370  Unknown               Unknown  Unknown
+mst2.1             0000000000D964C8  relmssolvermodule         533  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F7EE4AD2B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F06FE9A6370  Unknown               Unknown  Unknown
+mst2.1             0000000000D95E7A  relmssolvermodule         532  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F06FD3A0B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007FF4752EE370  Unknown               Unknown  Unknown
+mst2.1             0000000000D92A2E  relmssolvermodule         511  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007FF473CE8B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007FC05353F370  Unknown               Unknown  Unknown
+mst2.1             0000000000D921B7  relmssolvermodule         510  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007FC051F39B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F99A3696370  Unknown               Unknown  Unknown
+mst2.1             0000000000DE4D69  gfmethodmodule_mp         557  GFMethodModule.F90
+mst2.1             0000000000DD78F6  gfmethodmodule_mp        5678  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F99A2090B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F13117C9370  Unknown               Unknown  Unknown
+mst2.1             0000000000D97515  relmssolvermodule         538  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F13101C3B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F844A535370  Unknown               Unknown  Unknown
+mst2.1             0000000000D927CF  relmssolvermodule         511  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F8448F2FB35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007FCF2F0DF370  Unknown               Unknown  Unknown
+mst2.1             0000000000E095B4  gfmethodmodule_mp        3832  GFMethodModule.F90
+mst2.1             0000000000DD7BFA  gfmethodmodule_mp        5686  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007FCF2DAD9B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F2D06F8E370  Unknown               Unknown  Unknown
+mst2.1             0000000000D922F4  relmssolvermodule         510  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F2D05988B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F6AA68C4370  Unknown               Unknown  Unknown
+mst2.1             0000000000D922F4  relmssolvermodule         510  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F6AA52BEB35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F8D99311370  Unknown               Unknown  Unknown
+mst2.1             0000000000D97515  relmssolvermodule         538  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F8D97D0BB35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F3EE111D370  Unknown               Unknown  Unknown
+mst2.1             0000000000D97515  relmssolvermodule         538  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F3EDFB17B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007FE7AB510370  Unknown               Unknown  Unknown
+mst2.1             0000000000D97515  relmssolvermodule         538  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007FE7A9F0AB35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007FFB1466C370  Unknown               Unknown  Unknown
+mst2.1             0000000000D92A2E  relmssolvermodule         511  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007FFB13066B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F2697FDD370  Unknown               Unknown  Unknown
+mst2.1             0000000000D95D21  relmssolvermodule         531  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F26969D7B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F95ADB4D370  Unknown               Unknown  Unknown
+mst2.1             0000000000D96D7E  relmssolvermodule         537  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F95AC547B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F91E2968370  Unknown               Unknown  Unknown
+mst2.1             0000000000D92A2E  relmssolvermodule         511  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F91E1362B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F302C145370  Unknown               Unknown  Unknown
+mst2.1             0000000000D929B4  relmssolvermodule         511  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F302AB3FB35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007FE2D8BA0370  Unknown               Unknown  Unknown
+mst2.1             0000000000D92A2E  relmssolvermodule         511  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007FE2D759AB35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F976ECBE370  Unknown               Unknown  Unknown
+mst2.1             0000000000D92A2E  relmssolvermodule         511  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F976D6B8B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F4F753F6370  Unknown               Unknown  Unknown
+mst2.1             0000000000D92A2E  relmssolvermodule         511  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F4F73DF0B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F705352D370  Unknown               Unknown  Unknown
+mst2.1             0000000000D962B5  relmssolvermodule         533  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F7051F27B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007F0943075370  Unknown               Unknown  Unknown
+mst2.1             0000000000D97515  relmssolvermodule         538  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007F0941A6FB35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
+forrtl: error (69): process interrupted (SIGINT)
+Image              PC                Routine            Line        Source             
+mst2.1             00000000010BB2D1  Unknown               Unknown  Unknown
+mst2.1             00000000010B9A27  Unknown               Unknown  Unknown
+mst2.1             0000000001075284  Unknown               Unknown  Unknown
+mst2.1             0000000001075096  Unknown               Unknown  Unknown
+mst2.1             000000000102866F  Unknown               Unknown  Unknown
+mst2.1             000000000102E377  Unknown               Unknown  Unknown
+libpthread.so.0    00007FE800C16370  Unknown               Unknown  Unknown
+mst2.1             0000000000D9747D  relmssolvermodule         538  RelMSSolverModule.F90
+mst2.1             0000000000D89F5E  relmssolvermodule         323  RelMSSolverModule.F90
+mst2.1             0000000000E06809  gfmethodmodule_mp        2974  GFMethodModule.F90
+mst2.1             0000000000DD7766  gfmethodmodule_mp        5671  GFMethodModule.F90
+mst2.1             0000000000DC6C8F  gfmethodmodule_mp         830  GFMethodModule.F90
+mst2.1             000000000040EFC6  MAIN__                   1418  mst2.1.F90
+mst2.1             0000000000404C5E  Unknown               Unknown  Unknown
+libc.so.6          00007FE7FF610B35  Unknown               Unknown  Unknown
+mst2.1             0000000000404B69  Unknown               Unknown  Unknown
