@@ -95,14 +95,20 @@ endif
 #=====================================================================
 # 5 Make Settings
 #   Use_FFTW     = 1, use the FFTW3 package for Fourier transformation
-#                  0, otherwise
+#                  0, otherwise (This stops working now...)
+#   If p3dfft is available, enable it for running parallel FFT
 #=====================================================================
-Use_FFTW = 0
+Use_FFTW = 1
 ifeq "$(Use_FFTW)" "1"
-   FFTW_INC = 
-   FFTW_LIB = 
-   FFT_FLAG = -DFFTW -I$(FFTW_INC)
-   ADDLIBS += -L$(FFTW_LIB) -lfftw3
+#   FFTW_INC = 
+#   FFTW_LIB = 
+#   FFT_FLAG = -DFFTW -I$(FFTW_INC)
+#   ADDLIBS += -L$(FFTW_LIB) -lfftw3
+   FFTW_INC = /lvol/packages/PGI/fftw-3.3.6-pl2/include
+   FFT_FLAG = -DFFTW -I$(FFTW_INC) -DP3DFFT -I/lvol/packages/PGI/p3dfft-2.7.6/include
+   ADDLIBS += -L/lvol/packages/PGI/p3dfft-2.7.6/lib -lp3dfft -L/lvol/packages/PGI/fftw-3.3.6-pl2/lib -lfftw3
+#  FFT_FLAG = -DFFTW -I$(FFTW_INC)
+#  ADDLIBS += -L/lvol/packages/PGI/fftw-3.3.6-pl2/lib -lfftw3
 endif
 
 #=====================================================================

@@ -446,6 +446,7 @@ c
            sum=0.0
            esum=0.0
            do 13 i=1,numsc(ic,is)
+ccc           ebott = min(ebott,esc(i,ic,is))
               esum=esum+ocsc(i,ic,is)*esc(i,ic,is)
   13          sum=sum+ocsc(i,ic,is)
            esemi(ic,is)=esum
@@ -461,6 +462,7 @@ c      calculate the valence charge density:  vchd
 c      determine the fermi energy and one-electron energy sum
 c
 c .....................................................................
+cc       ebott = max(-0.5d0,ebott)
          call ensum(vchd,evsum,ef1,zv2,vws,conc,
      >     ncomp,nspins,lmax,r,v,mesh,nsize,jmt,jws,rws,vdif,
      >     ndiv,ebott,eimag,ipr)
@@ -1109,6 +1111,8 @@ c _____________________________________________________________________
 c
       vws=0
       ef=0.0
+      v0 = 0.0d0
+      numsc(ic,is) = 0
       go to 999
 c _____________________________________________________________________
 c
@@ -1667,43 +1671,30 @@ c    >                 npc(i),lc(i),ec(i),npc(i),lsym(lc(i)),'core state'
            enddo
         endif
 c
+c       I took out the nsc and lsc comparison against the ChemElementModule 
+c       database comparison due to the problem that the rule of the
+c       semi-core configuration order is difficult to determine. For
+c       exampl, for La, no 4f state under 5s in the semi-core states.
+c       -Yang Wang, 05/19/2018............
         if(nsemi.gt.0) then
            do i=1,nsemi
               et(i) = esc(i)
            enddo
-cccc       call HeapSort(nsemi,et,idx)
+           call HeapSort(nsemi,et,idx)
+           n = 0
            do j=1,nsemi
-cccc          i = idx(j)
-              i = 0; found_i = .false.
-              do while (i < nsemi)
-                 i = i + 1
-                 if (npsc(i)== getCoreStateN(atname,n) .and.
-     >               lsc(i) == getCoreStateL(atname,n)) then
-                    found_i = .true.
-                    exit
-                 endif
-              enddo
-              if (found_i) then
-                 if (lsc(i) == 0) then
-                    write(iunit,'(3i5,f12.5,1x,i2,1x,a1,1x,a)')
-     >                 npsc(i),lsc(i),-1,esc(i),npsc(i),lsym(lsc(i)),
-     >                 'semi-core state'
-                    n = n + 1
-                 else
-                    write(iunit,'(3i5,f12.5,1x,i2,1x,a1,1x,a)')
+              i = idx(j)
+              if (lsc(i) == 0) then
+                 write(iunit,'(3i5,f12.5,1x,i2,1x,a1,1x,a)')
+     >                 npsc(i),lsc(i),-1,esc(i),npsc(i),
+     >                 lsym(lsc(i)),'semi-core state'
+              else
+                 write(iunit,'(3i5,f12.5,1x,i2,1x,a1,1x,a)')
      >                 npsc(i),lsc(i),lsc(i),esc(i),npsc(i),
      >                 lsym(lsc(i)),'semi-core state'
-                    write(iunit,'(3i5,f12.5,1x,i2,1x,a1,1x,a)')
+                 write(iunit,'(3i5,f12.5,1x,i2,1x,a1,1x,a)')
      >                 npsc(i),lsc(i),-lsc(i)-1,esc(i),npsc(i),
      >                 lsym(lsc(i)),'semi-core state'
-c                   write(iunit,'(2i5,f12.5,1x,i2,1x,a1,'' semi-core state'')')
-c    >                 npsc(i),lsc(i),esc(i),npsc(i),lsym(lsc(i))
-                    n = n + 2
-                 endif
-              else
-                 write(6,'(a)')
-     >                 'A semi-core state is not found in database'
-                 stop 'Error!'
               endif
            enddo
         endif

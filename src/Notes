@@ -14,3 +14,18 @@ The files that have been changed in order to run on T3E:
    SpecKIntegrationModule.F90
    DataCommModule.F90
 ========================================================
+01/02/2018
+The following two functions in ChargeDensityModule need to be
+checked on the use n_mult.
+getChrgDen_r
+getMomDen_r
+Note that in function getChrgDen_r, n_mult is multiplied to the core density
+on the grid points outside the atomic cell. This essentially means that
+the core densities contributed by the nearby atoms are not avaraged, but rather
+are summed up. The idea behind this is that if a neighboring grid point is 
+outside the atomic cell, the charge density contribution from the
+atom to the grid point is the single site core density.
+On the other hand, n_mult is not actually used in getMomDen_r, so that 
+the outside grid points are not treated in the exact same way as in
+getChrgDen_r. This might be a bug, and it needs to be looked into further.
+========================================================

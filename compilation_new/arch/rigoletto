@@ -93,8 +93,11 @@ endif
 #=====================================================================
 Use_FFTW = 1
 ifeq "$(Use_FFTW)" "1"
-   FFTW_INC = $(MKLROOT)/include/fftw
-   FFT_FLAG = -DFFTW -I$(FFTW_INC)
+#  FFTW_INC = $(MKLROOT)/include/fftw
+#  FFT_FLAG = -DFFTW -I$(FFTW_INC)
+   FFTW_INC = /usr/local/packages/fftw-3.3.4/include
+   FFT_FLAG = -DFFTW -I$(FFTW_INC) -DP3DFFT -I/usr/local/packages/p3dfft/include
+   ADDLIBS += -L/usr/local/packages/fftw-3.3.4/lib -lfftw3_mpi -lfftw3 -L/usr/local/packages/p3dfft/lib -lp3dfft
 endif
 
 #=====================================================================

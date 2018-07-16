@@ -365,7 +365,7 @@ contains
    enddo
 !
 !  -------------------------------------------------------------------
-   call setupRadGridAndCell(NumAtoms,lmax_max)
+   call setupRadGridAndCell(LocalNumAtoms,lmax_max)
 !  -------------------------------------------------------------------
 !
    if (isDataStorageExisting('Bravais Vector')) then

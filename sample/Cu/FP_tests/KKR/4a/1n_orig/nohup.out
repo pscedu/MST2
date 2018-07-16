@@ -1,0 +1,102 @@
+  
+             ********************************************************
+             *                                                      *
+             *              Fortran 90 Interface Module             *
+             *                                                      *
+             *                         For                          *
+             *                                                      *
+             *              MPI Message Passing Library             *
+             *                                                      *
+             *                   Version No. 2.0k                   *
+             *                                                      *
+             ********************************************************
+  
+ CHARACTER_BYTES =            1
+ INTEGER_BYTES   =            4
+ REAL_BYTES      =            8
+ COMPLEX_BYTES   =           16
+ ADDRESS_BYTES   =            8
+  
+ Number of Procs =            1
+  
+Execution starts at 22:01:13, 07-03-2018 on     1 nodes
+#-------------------------------------------------------------------------------
+#
+#
+#           ********************************************************
+#           *                                                      *
+#           *    Full-Potential Multiple Scattering Theory Based   *
+#           *                                                      *
+#           *  Ab Initio Electronic Structure Calculation Package  *
+#           *                                                      *
+#           ********************************************************
+#
+#
+#   username                 : ywg
+#   system name              : muir6.psc.edu
+#   code compiled            : Saturday, May 19 2018 18:46:52
+#-------------------------------------------------------------------------------
+
+ The Position Data File: ./position.dat
+
+ The Position Data is read successfully!
+
+
+================================================================================
+
+ The lattice system is: Cubic       
+
+********************************
+* Output from SPACEGRP         *
+********************************
+
+     A nonprimitive supercell was chosen with    4 times
+     as many more space group operations than that for
+     the corresponding primitive unit cell
+
+The point group of the crystal is the full cubic        group
+Space group is symmorphic
+--------------------------------------------------------------------------------
+
+********************************
+* Output from CHECKSYMM        *
+********************************
+
+Symmetry is correct
+--------------------------------------------------------------------------------
+
+********************************
+* Output from SPACEGRP         *
+********************************
+
+The point group of the crystal is the full cubic        group
+Space group is symmorphic
+--------------------------------------------------------------------------------
+
+********************************
+* Output from SPKPT            *
+********************************
+
+Wavevector mesh contains     512 points
+--------------------------------------------------------------------------------
+
+================================================================================
+
+            *********************************************
+            *     Output from createParallelization     *
+            *            in ProcMappingModule           *
+            *********************************************
+
+The number of processors in each box :    1
+The number of repeats along k-dimen. :    1
+The number of repeats along e-dimen. :    1
+Dimension of the box :    1 x    1 x    1
+MyPE =     0, NumEs, NumEsPerBox =    30   30
+MyPE =     0, NumKs, NumKsPerBox =    20   20
+MyPE =     0, K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
+K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
+Process =     0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0, ...,...
+
+================================================================================
+
+The number of processes that write output data:      1

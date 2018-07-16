@@ -7,11 +7,11 @@ public :: initIntegerFactors,          &
           deleteIntegerFactorsOnAccel, &
           isIntegerFactorsInitialized
 !
-public :: lofk, mofk, jofk, lofj, mofj, kofj, m1m
+public :: lofk, mofk, jofk, lofj, mofj, kofj, m1m, bofk
 !
    integer (kind=IntKind), allocatable :: m1m(:),                     &
                                           lofk(:), mofk(:), jofk(:),  &
-                                          lofj(:), mofj(:), kofj(:)
+                                          lofj(:), mofj(:), kofj(:), bofk(:)
 private
    logical :: Initialized = .false.
    integer (kind=IntKind) :: lmax
@@ -59,7 +59,7 @@ contains
 !
    if ( present(isResetOn) ) then
 !     ----------------------------------------------------------------
-      deallocate( lofk, mofk, jofk, lofj, mofj, kofj, m1m )
+      deallocate( lofk, mofk, jofk, lofj, mofj, kofj, m1m, bofk )
 !     ----------------------------------------------------------------
       return
    endif
@@ -72,7 +72,7 @@ contains
    endif
 !
 !  -------------------------------------------------------------------
-   deallocate( lofk, mofk, jofk, lofj, mofj, kofj, m1m )
+   deallocate( lofk, mofk, jofk, lofj, mofj, kofj, m1m, bofk )
 !  -------------------------------------------------------------------
    Initialized = .false.
 !
@@ -93,11 +93,11 @@ contains
    kmax=(l0+1)*(l0+1)
    jmax=(l0+1)*(l0+2)/2
 !
-   allocate( lofk(kmax), mofk(kmax), jofk(kmax) )
+   allocate( lofk(kmax), mofk(kmax), jofk(kmax), bofk(kmax) )
    allocate( lofj(jmax), mofj(jmax), kofj(jmax) )
    allocate( m1m(-l0:l0) )
 !  ===================================================================
-!  calculate the factors: lofk, mofk, jofk, lofj, mofj, kofj and m1m.
+!  calculate the factors: lofk, mofk, jofk, lofj, mofj, kofj, m1m, and bofk.
 !  ===================================================================
    jl = 0
    kl = 0
@@ -108,6 +108,7 @@ contains
          kl = kl+1
          lofk(kl) = l
          mofk(kl) = m
+         bofk(kl) = kl-2*m
          if ( m>=0 ) then
             jofk(kl) = n + m
          else
@@ -149,7 +150,7 @@ contains
 #ifdef TMP_ACCEL
 !  -------------------------------------------------------------------
    call initialize_integerfactors(lmax,jmax,kmax)
-   call push_integerfactors(lofk,mofk,lofj,mofj,kofj,m1m)
+   call push_integerfactors(lofk,mofk,lofj,mofj,kofj,m1m,bofk)
 !  -------------------------------------------------------------------
 #endif
 !

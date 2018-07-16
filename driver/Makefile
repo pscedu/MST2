@@ -57,6 +57,7 @@ $(ODIR)/MadelungModule.o  \
 $(ODIR)/LatticeModule.o  \
 $(ODIR)/NeighborModule.o  \
 $(ODIR)/OutputModule.o \
+$(ODIR)/WriteFunctionModule.o \
 $(ODIR)/putpotg.o \
 $(ODIR)/potredg.o \
 $(ODIR)/PolygonModule.o \
@@ -103,7 +104,10 @@ TEST_CASES = $(ODIR)/testStrConst \
              $(ODIR)/testMadelung \
              $(ODIR)/madpot \
              $(ODIR)/ft \
+             $(ODIR)/ft_s \
+             $(ODIR)/ft_p \
              $(ODIR)/pav \
+             $(ODIR)/testParallelFFT \
              $(ODIR)/testSineMatrixPole \
              $(ODIR)/testSineMatrixPole2 \
              $(ODIR)/findResonance \
@@ -126,6 +130,7 @@ TEST_CASES = $(ODIR)/testStrConst \
              $(ODIR)/ssk \
              $(ODIR)/assk \
              $(ODIR)/testCoreStates \
+             $(ODIR)/findBoundStates \
              $(ODIR)/testPolyFermi \
              $(ODIR)/testBandStructure
 
@@ -141,7 +146,6 @@ TEST_CASES_O = $(ODIR)/testStrConst.o \
                $(ODIR)/tst_findFit.o \
                $(ODIR)/testMadelung.o \
                $(ODIR)/madpot.o \
-               $(ODIR)/ft.o \
                $(ODIR)/pav.o \
                $(ODIR)/testSineMatrixPole.o \
                $(ODIR)/testSineMatrixPole2.o \
@@ -177,10 +181,10 @@ $(ODIR)/tst_findFit: tst_findFit.o
 	$(LD) -o $(ODIR)/tst_findFit tst_findFit.o $(MSTLIB) $(ADDLIBS)
 
 $(ODIR)/testStrConst: testStrConst.o $(SRC_OBJS)
-	$(LD) -o $(ODIR)/testStrConst testStrConst.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MSTLIB) $(ADDLIBS) $(MPPLIB)
+	$(LD) -o $(ODIR)/testStrConst testStrConst.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MPPLIB) $(MSTLIB) $(ADDLIBS)
 
 $(ODIR)/testBZone: testBZone.o
-	$(LD) -o $(ODIR)/testBZone testBZone.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MSTLIB) $(ADDLIBS) $(MPPLIB)
+	$(LD) -o $(ODIR)/testBZone testBZone.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MPPLIB) $(MSTLIB) $(ADDLIBS)
 
 $(ODIR)/testQuadraticMatrix: testQuadraticMatrix.o
 	$(LD) -o $(ODIR)/testQuadraticMatrix $(ODIR)/testQuadraticMatrix.o $(MSTLIB) $(ADDLIBS)
@@ -210,7 +214,7 @@ $(ODIR)/testNeighbor: testNeighbor.o
 	$(LD) -o $(ODIR)/testNeighbor testNeighbor.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB)  $(MPPLIB) $(MSTLIB) $(ADDLIBS)
 
 $(ODIR)/testMadelung: testMadelung.o
-	$(LD) -o $(ODIR)/testMadelung testMadelung.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MSTLIB) $(ADDLIBS) $(MPPLIB)
+	$(LD) -o $(ODIR)/testMadelung testMadelung.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MPPLIB) $(MSTLIB) $(ADDLIBS)
 
 $(ODIR)/madpot: madpot.o
 	$(LD) -o $(ODIR)/madpot madpot.o $(SRC_OBJS) $(IOLIB) $(MPPLIB) $(MSTLIB) $(ADDLIBS)
@@ -220,11 +224,28 @@ $(ODIR)/pav: pot_average.o
 
 
 $(ODIR)/ft: inc_fftw fourier_transform.o
-	$(LD) -o $(ODIR)/ft fourier_transform.o $(MSTLIB) $(ADDLIBS)
+	$(LD) -o $(ODIR)/ft fourier_transform.o $(MPPLIB) $(MSTLIB) $(ADDLIBS)
+	rm -f fftw3f.h
+
+$(ODIR)/ft_s: inc_fftw ft_serial.o
+	$(LD) -o $(ODIR)/ft_s ft_serial.o $(MSTLIB) $(ADDLIBS)
+	rm -f fftw3f.h
+
+$(ODIR)/ft_m: inc_fftw ft_mpi-fftw.o
+	$(LD) -o $(ODIR)/ft_m ft_mpi-fftw.o $(MPPLIB) $(MSTLIB) $(ADDLIBS)
+	rm -f fftw3f.h
+
+$(ODIR)/ft_p: inc_fftw ft_p3dfft.o
+	$(LD) -o $(ODIR)/ft_p ft_p3dfft.o $(MPPLIB) $(MSTLIB) $(ADDLIBS)
 	rm -f fftw3f.h
 
 inc_fftw:
 	if test "$(Use_FFTW)" == "1"; then ln -fs $(FFTW_INC)/fftw3.f fftw3f.h; fi
+
+$(ODIR)/testParallelFFT: inc_fftw testParallelFFT.o $(ODIR)/Uniform3DGridModule.o $(ODIR)/ParallelFFTModule.o
+	$(LD) -o $(ODIR)/testParallelFFT testParallelFFT.o $(ODIR)/Uniform3DGridModule.o $(ODIR)/ParallelFFTModule.o \
+$(SRC_OBJS)  $(IOLIB) $(MPPLIB) $(MSTLIB) $(ADDLIBS)
+	rm -f fftw3f.h
 
 $(ODIR)/testSineMatrixPole: testSineMatrixPole.o calScatteringPoles.o
 	$(LD) -o $(ODIR)/testSineMatrixPole testSineMatrixPole.o $(ODIR)/calScatteringPoles.o $(ODIR)/readInputs.o $(SRC_OBJS) $(IOLIB) $(MPPLIB) $(MSTLIB) $(ADDLIBS)
@@ -244,9 +265,8 @@ $(ODIR)/testWronskian: testWronskian.o
 	$(LD) -o $(ODIR)/testWronskian $(ODIR)/testWronskian.o $(ODIR)/SCPolesModule.o \
 $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MPPLIB) $(MSTLIB) $(ADDLIBS)
 
-$(ODIR)/testFFTGrid: testFFTGrid.o $(ODIR)/FFTGridModule.o $(ODIR)/FFTTransformModule.o
-	$(LD) -o $(ODIR)/testFFTGrid $(ODIR)/testFFTGrid.o \
-FFTGridModule.o FFTTransformModule.o \
+$(ODIR)/testFFTGrid: testFFTGrid.o $(ODIR)/Uniform3DGridModule.o
+	$(LD) -o $(ODIR)/testFFTGrid $(ODIR)/testFFTGrid.o Uniform3DGridModule.o \
 $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MPPLIB) $(MSTLIB) $(ADDLIBS)
 
 $(ODIR)/testIBZRotation: testIBZRotation.o
@@ -297,13 +317,16 @@ $(ODIR)/testGroupComm: testGroupComm.o
 #	$(LD) -o $(ODIR)/testSetupProcDim testSetupProcDim.o setupProcDim.o $(MSTLIB)
 
 $(ODIR)/testFEGreen: testFEGreen.o $(SRC_OBJS)
-	$(LD) -o $(ODIR)/testFEGreen testFEGreen.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MSTLIB) $(ADDLIBS) $(MPPLIB)
+	$(LD) -o $(ODIR)/testFEGreen testFEGreen.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MPPLIB) $(MSTLIB) $(ADDLIBS)
 
 $(ODIR)/testCoreStates: testCoreStates.o $(SRC_OBJS)
-	$(LD) -o $(ODIR)/testCoreStates testCoreStates.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MSTLIB) $(ADDLIBS) $(MPPLIB)
+	$(LD) -o $(ODIR)/testCoreStates testCoreStates.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MPPLIB) $(MSTLIB) $(ADDLIBS)
+
+$(ODIR)/findBoundStates: findBoundStates.o $(SRC_OBJS)
+	$(LD) -o $(ODIR)/findBoundStates findBoundStates.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MPPLIB) $(MSTLIB) $(ADDLIBS)
 
 $(ODIR)/testPolyFermi: testPolyFermi.o $(SRC_OBJS)
-	$(LD) -o $(ODIR)/testPolyFermi testPolyFermi.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MSTLIB) $(ADDLIBS) $(MPPLIB)
+	$(LD) -o $(ODIR)/testPolyFermi testPolyFermi.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MPPLIB) $(MSTLIB) $(ADDLIBS)
 
 $(ODIR)/testBandStructure: testBandStructure.o $(SRC_OBJS)
-	$(LD) -o $(ODIR)/testBandStructure testBandStructure.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MSTLIB) $(ADDLIBS) $(MPPLIB)
+	$(LD) -o $(ODIR)/testBandStructure testBandStructure.o $(BASE_ROUTINES) $(SRC_OBJS) $(IOLIB) $(MPPLIB) $(MSTLIB) $(ADDLIBS)

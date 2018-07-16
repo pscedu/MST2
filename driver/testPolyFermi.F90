@@ -82,7 +82,7 @@ program testPolyFermi
 !  -------------------------------------------------------------------
 !
 !  -------------------------------------------------------------------
-   call setupRadGridAndCell(NumAtoms,lmax_max)
+   call setupRadGridAndCell(LocalNumAtoms,lmax_max)
 !  -------------------------------------------------------------------
    call initPotential(LocalNumAtoms,lmax_pot,lmax_step,               &
                       n_spin_pola,n_spin_cant,istop,atom_print_level)

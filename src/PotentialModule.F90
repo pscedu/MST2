@@ -147,7 +147,8 @@ contains
                                        setDataStorageLDA,     &
                                        setDataStorage2Value,  &
                                        RealType, ComplexType, &
-                                       RealMark, ComplexMark
+                                       RealMark, ComplexMark, &
+                                       IntegerType, IntegerMark
 !
    use LdaCorrectionModule, only : checkLdaCorrection, getDataPackSize
    use PotentialTypeModule, only : isFullPotential
@@ -433,12 +434,14 @@ contains
       do id = 1,LocalNumAtoms
          DataSize(id) = SiteMaxNumc(id)*n_spin_pola*Potential(id)%NumSpecies
          if (DataSize(id) < 1) then      ! in case of empty cell
-            DataSize(id) = 1
+            DataSize(id) = n_spin_pola
          endif
       enddo
 !     ---------------------------------------------------------------
       call createDataStorage(LocalNumAtoms,'OldEstimatedCoreEnergy', &
                              DataSize,RealType)
+      call createDataStorage(LocalNumAtoms,'OldEstimatedCoreStates', &
+                             DataSize,IntegerType)
 !     ---------------------------------------------------------------
    endif
 !
@@ -1778,6 +1781,7 @@ contains
    use ChemElementModule, only : getCoreStateN, getCoreStateL
    use ChemElementModule, only : getCoreStateKappa
    use ChemElementModule, only : getNumCoreStates, setNumCoreStates
+   use ChemElementModule, only : getCoreStateIndex
 !
    use RadialGridModule, only : getNumRmesh
 !
@@ -1786,7 +1790,8 @@ contains
                                        isDataStorageExisting, &
                                        setDataStorage2Value,  &
                                        RealType, ComplexType, &
-                                       RealMark, ComplexMark
+                                       RealMark, ComplexMark, &
+                                       IntegerType, IntegerMark
 !
    implicit none
 !
@@ -1804,12 +1809,13 @@ contains
 !
    integer (kind=IntKind), parameter :: funit=91
 !
-   integer (kind=IntKind) :: is, ig, js
+   integer (kind=IntKind) :: is, ig, js, n
    integer (kind=IntKind) :: j_inter, irp
    integer (kind=IntKind) :: ns,j,jmt,nrrho,nrcor,jmax
    integer (kind=IntKind) :: numc,jz,jc,ios,lmax,jend,jl,nr,ir,jm,jlr
    integer (kind=IntKind) :: nc, lc, kc
    integer (kind=IntKind) :: DataSize(LocalNumAtoms)
+   integer (kind=IntKind), pointer :: pc0(:,:,:)
 !
    real (kind=RealKind) :: ztss,alat,zcss,edum
    real (kind=RealKind) :: xstart,xmt,vzero(2),xvalws(2)
@@ -1818,7 +1824,7 @@ contains
    real (kind=RealKind), allocatable :: rhoin(:,:), rhotot(:)
    real (kind=RealKind), pointer :: rho0(:,:)
    real (kind=RealKind), pointer :: mom0(:,:)
-   real (kind=RealKind), pointer :: ec(:,:)
+   real (kind=RealKind), pointer :: ec(:,:,:)
 !
    complex (kind=CmplxKind) :: vc
    complex (kind=CmplxKind), allocatable :: pot_l(:)
@@ -1839,8 +1845,10 @@ contains
    ThisP=>Potential(id)
 !
    if (SiteMaxNumc(id) >= 1) then
-      ec => getDataStorage(id,'OldEstimatedCoreEnergy', SiteMaxNumc(id)*n_spin_pola, &
+      ec => getDataStorage(id,'OldEstimatedCoreEnergy', SiteMaxNumc(id), n_spin_pola, &
                            NumSpecies(id), RealMark)
+      pc0 => getDataStorage( id, 'OldEstimatedCoreStates',            &
+                             SiteMaxNumc(id), n_spin_pola, NumSpecies(id), IntegerMark)
    endif
 !
 !  -------------------------------------------------------------------
@@ -1900,17 +1908,18 @@ contains
       read(funit,'(2i5)') numc,nrcor
       do j=1,numc
          if (j <= getNumCoreStates(atname)) then
-            read(funit,*)nc,lc,kc,ec((js-1)*SiteMaxNumc(id)+j,ia)
-            if (nc /= getCoreStateN(atname,j)) then
-               call ErrorHandler(sname,'nc <> getCoreStateN()',nc,     &
-                                 getCoreStateN(atname,j))
-            else if (lc /= getCoreStateL(atname,j)) then
-               call ErrorHandler(sname,'lc <> getCoreStateL()',lc,     &
-                                 getCoreStateL(atname,j))
-            else if (kc /= getCoreStateKappa(atname,j)) then
-               call ErrorHandler(sname,'kc <> getCoreStateKappa()',kc, &
-                                 getCoreStateKappa(atname,j))
-            endif
+            read(funit,*)nc,lc,kc,ec(j,js,ia)
+            pc0(j,js,ia) = getCoreStateIndex(nc,lc,kc)
+!           if (nc /= getCoreStateN(atname,j)) then
+!              call ErrorHandler(sname,'nc <> getCoreStateN()',nc,     &
+!                                getCoreStateN(atname,j))
+!           else if (lc /= getCoreStateL(atname,j)) then
+!              call ErrorHandler(sname,'lc <> getCoreStateL()',lc,     &
+!                                getCoreStateL(atname,j))
+!           else if (kc /= getCoreStateKappa(atname,j)) then
+!              call ErrorHandler(sname,'kc <> getCoreStateKappa()',kc, &
+!                                getCoreStateKappa(atname,j))
+!           endif
          else
             read(funit,*)nc,lc,kc,edum
          endif
@@ -1945,7 +1954,8 @@ contains
       vzero(2) = vzero(1)
       do j=1,numc
          if (j <= getNumCoreStates(atname)) then
-            ec(SiteMaxNumc(id)+j,ia) = ec(j,ia)
+            ec(j,2,ia) = ec(j,1,ia)
+            pc0(j,2,ia)=pc0(j,1,ia)
          endif
       enddo
       do j = 1, nrrho
@@ -2160,11 +2170,13 @@ contains
    use ChemElementModule, only : MaxLenOfAtomName
    use ChemElementModule, only : getZtot, getZcor, getZsem
    use ChemElementModule, only : getNumCoreStates, setNumCoreStates
+   use ChemElementModule, only : getCoreStateIndex
    use DataServiceCenterModule, only : createDataStorage,     &
                                        getDataStorage,        &
                                        isDataStorageExisting, &
                                        RealType, ComplexType, &
-                                       RealMark, ComplexMark
+                                       RealMark, ComplexMark, &
+                                       IntegerType, IntegerMark
 !
    use MPPModule, only: GlobalMax
 !
@@ -2180,9 +2192,10 @@ contains
    character (len=5), allocatable  :: lst(:,:)
 !
    integer (kind=IntKind) :: na, id_g, nspin, iform
-   integer (kind=IntKind) :: jmt, jws, i, is, nr, nrmax
+   integer (kind=IntKind) :: jmt, jws, i, is, nr, nrmax, n
    integer (kind=IntKind) :: numc, DataSize(LocalNumAtoms)
    integer (kind=IntKind), allocatable :: nc(:,:), lc(:,:), kc(:,:)
+   integer (kind=IntKind), pointer :: pc0(:,:,:)
 !
    real (kind=RealKind) ::  evec(3)
    real (kind=RealKind) :: ztotss, zcorss
@@ -2190,7 +2203,7 @@ contains
    real (kind=RealKind), pointer :: r_mesh(:)
    real (kind=RealKind), pointer :: rho0(:,:)
    real (kind=RealKind), pointer :: mom0(:,:)
-   real (kind=RealKind), pointer :: ec0(:,:)
+   real (kind=RealKind), pointer :: ec0(:,:,:)
    real (kind=RealKind), pointer :: vr(:,:)
    real (kind=RealKind), allocatable :: rhotot(:,:)
    real (kind=RealKind), allocatable :: ec(:,:)
@@ -2294,11 +2307,16 @@ contains
                            nr+1, NumSpecies(id), RealMark )
    if (SiteMaxNumc(id) >= 1) then
       ec0  => getDataStorage( id, 'OldEstimatedCoreEnergy',           &
-                              SiteMaxNumc(id)*n_spin_pola, NumSpecies(id), RealMark )
+                              SiteMaxNumc(id),n_spin_pola, NumSpecies(id), RealMark )
+      pc0 => getDataStorage( id, 'OldEstimatedCoreStates',            &
+                             SiteMaxNumc(id), n_spin_pola, NumSpecies(id), IntegerMark)
    endif
 !
-   do i = 1,numc
-      ec0(i,ia) = ec(i,1)
+   do is = 1, n_spin_pola
+      do i = 1,numc
+         ec0(i,is,ia) = ec(i,is)
+         pc0(i,is,ia) = getCoreStateIndex(nc(i,is),lc(i,is),kc(i,is))
+      enddo
    enddo
 !
    if (n_spin_pola == 1) then
@@ -2326,12 +2344,9 @@ contains
       enddo
       rho0(nr+1,ia) = xvalws(1)+xvalws(2)
       mom0(nr+1,ia) = xvalws(1)-xvalws(2)
-      do i = 1,numc
-         ec0(SiteMaxNumc(id)+i,ia) = ec(i,2)  ! Beware how the data is stored in ec0
-      enddo
    endif
 !
-   nullify(ec0,rho0,mom0)
+   nullify(ec0,pc0,rho0,mom0)
    deallocate( nc, lc, kc, lst, ec, rhotot )
 !
    end subroutine readUnformattedData
@@ -2417,11 +2432,12 @@ contains
    use ChemElementModule, only : MaxLenOfAtomName
    use ChemElementModule, only : getZcor, getZsem, getZval, getZtot
    use ChemElementModule, only : getCoreStateN, getCoreStateL, getNumCoreStates
-   use ChemElementModule, only : getCoreStateKappa
+   use ChemElementModule, only : getCoreStateKappa, getCoreStateSymbol
 !
    use DataServiceCenterModule, only : getDataStorage,                &
                                        RealType, ComplexType,         &
-                                       RealMark, ComplexMark
+                                       RealMark, ComplexMark,         &
+                                       IntegerType, IntegerMark
 !
    use Atom2ProcModule, only : getGlobalIndex
 !
@@ -2443,15 +2459,16 @@ contains
 !
    integer (kind=IntKind), intent(in) :: id, ia
 !
-   integer (kind=IntKind) :: ns,ir,ic,jl
+   integer (kind=IntKind) :: ns,ir,ic,jl,n
    integer (kind=IntKind) :: nspin
    integer (kind=IntKind) :: nr,nrcor,numc,present_atom,jmt,jws
    integer (kind=IntKind), allocatable :: nc(:,:), lc(:,:), kc(:,:)
+   integer (kind=IntKind), pointer :: pc0(:,:,:)
    integer (kind=IntKind), parameter :: ounit = 201
 !
    real (kind=RealKind) :: ztotss, zcorss, zsemss, zvalss
    real (kind=RealKind) :: xstart,xmt,rmt,xvalws(2),evec(3)
-   real (kind=RealKind), pointer :: vr(:,:), rho0(:,:), mom0(:,:), ec0(:,:), r_mesh(:)
+   real (kind=RealKind), pointer :: vr(:,:), rho0(:,:), mom0(:,:), ec0(:,:,:), r_mesh(:)
    real (kind=RealKind), allocatable :: ec(:,:), rhotot(:,:)
 !
    type (PotentialStruct), pointer :: ThisP
@@ -2495,17 +2512,21 @@ contains
    if (SiteMaxNumc(id) >= 1) then
 !     ----------------------------------------------------------------
       ec0 => getDataStorage( id, 'NewEstimatedCoreEnergy',            &
-                             SiteMaxNumc(id)*n_spin_pola, NumSpecies(id), RealMark)
+                             SiteMaxNumc(id), n_spin_pola, NumSpecies(id), RealMark)
+      pc0 => getDataStorage( id, 'NewEstimatedCoreStates',            &
+                             SiteMaxNumc(id), n_spin_pola, NumSpecies(id), IntegerMark)
 !     ----------------------------------------------------------------
    endif
 !
    do ns = 1,n_spin_pola
       do ic=1,numc
-         nc(ic,ns)=getCoreStateN(atname,ic)
-         lc(ic,ns)=getCoreStateL(atname,ic)
-         kc(ic,ns)=getCoreStateKappa(atname,ic)
-         lst(ic,ns)="     "
-         ec(ic,ns) = ec0((ns-1)*SiteMaxNumc(id)+ic,ia)
+         n = pc0(ic,ns,ia)
+         nc(ic,ns)=getCoreStateN(atname,n)
+         lc(ic,ns)=getCoreStateL(atname,n)
+         kc(ic,ns)=getCoreStateKappa(atname,n)
+         lst(ic,ns)= getCoreStateSymbol(atname,n)
+!        ec(ic,ns) = ec0((ns-1)*SiteMaxNumc(id)+ic,ia)
+         ec(ic,ns) = ec0(ic,ns,ia)
       enddo
    enddo
 !
@@ -2564,8 +2585,7 @@ contains
       nrcor = 0
       write(ounit,'(2i5)') numc,nrcor
       do ic=1,numc
-         write(ounit,'(3i5,f12.5,2x,a5)')                   &
-               nc(ic,ns),lc(ic,ns),kc(ic,ns),ec(ic,ns),lst(ic,ns)
+         write(ounit,'(3i5,f12.5,2x,a5)') nc(ic,ns),lc(ic,ns),kc(ic,ns),ec(ic,ns),lst(ic,ns)
       enddo
    enddo
 !
@@ -2610,10 +2630,11 @@ contains
    use ChemElementModule, only : getNumCoreStates
    use ChemElementModule, only : getCoreStateN
    use ChemElementModule, only : getCoreStateL
-   use ChemElementModule, only : getCoreStateKappa
+   use ChemElementModule, only : getCoreStateKappa, getCoreStateSymbol
    use DataServiceCenterModule, only : getDataStorage,        &
                                        RealType, ComplexType, &
-                                       RealMark, ComplexMark
+                                       RealMark, ComplexMark, &
+                                       IntegerMark, IntegerType
 !
    implicit none
    integer (kind=IntKind), intent(in) :: wunit
@@ -2627,6 +2648,7 @@ contains
    integer (kind=IntKind) :: na, id_g, n
    integer (kind=IntKind) :: jmt, jws
    integer (kind=IntKind) :: nspin, numc, i, is, nr, ic
+   integer (kind=IntKind), pointer :: pc0(:,:,:)
    integer (kind=IntKind), allocatable :: nc(:,:), lc(:,:), kc(:,:)
 !
    real (kind=RealKind) :: evec(3)
@@ -2639,7 +2661,7 @@ contains
    real (kind=RealKind), allocatable :: rhotot(:,:)
    real (kind=RealKind), pointer :: vr(:,:)
    real (kind=RealKind), pointer :: ec(:,:)
-   real (kind=RealKind), pointer :: ec0(:,:)
+   real (kind=RealKind), pointer :: ec0(:,:,:)
    real (kind=RealKind) :: fmsgbuf((9+jmtmax+jwsmax)*n_spin_pola)
 !
    real (kind=RealKind), allocatable :: r_pot_l(:)
@@ -2690,17 +2712,21 @@ contains
    if (SiteMaxNumc(id) >= 1) then
 !     ----------------------------------------------------------------
       ec0 => getDataStorage( id, 'NewEstimatedCoreEnergy',            &
-                             SiteMaxNumc(id)*n_spin_pola, NumSpecies(id), RealMark)
+                             SiteMaxNumc(id), n_spin_pola, NumSpecies(id), RealMark)
+      pc0 => getDataStorage( id, 'NewEstimatedCoreStates',            &
+                             SiteMaxNumc(id), n_spin_pola, NumSpecies(id), IntegerMark)
 !     ----------------------------------------------------------------
    endif
 !
    do is = 1,n_spin_pola
       do ic=1,numc
-         nc(ic,is)=getCoreStateN(atname,ic)
-         lc(ic,is)=getCoreStateL(atname,ic)
-         kc(ic,is)=getCoreStateKappa(atname,ic)
-         lst(ic,is)="     "
-         ec(ic,is) = ec0((is-1)*SiteMaxNumc(id)+ic,ia)
+         n = pc0(ic,is,ia)
+         nc(ic,is)=getCoreStateN(atname,n)
+         lc(ic,is)=getCoreStateL(atname,n)
+         kc(ic,is)=getCoreStateKappa(atname,n)
+         lst(ic,is)= getCoreStateSymbol(atname,n)
+!        ec(ic,is) = ec0((is-1)*SiteMaxNumc(id)+ic,ia)
+         ec(ic,is) = ec0(ic,is,ia)
       enddo
    enddo
 !

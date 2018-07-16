@@ -24,7 +24,7 @@ program mst2
 !
    use PublicTypeDefinitionsModule, only : MixListRealStruct,  &
                                            MixListCmplxStruct, &
-                                           FFTGridStruct
+                                           UniformGridStruct
 !
    use PublicParamDefinitionsModule, only : PrintDOSswitchOff, ButterFly
 !
@@ -46,6 +46,7 @@ program mst2
    use PolyhedraModule, only : getInscrSphRadius, getOutscrSphRadius
    use PolyhedraModule, only : getWignerSeitzRadius
    use PolyhedraModule, only : getNeighborDistance
+   use PolyhedraModule, only : getPointLocationFlag
    use PolyhedraModule, only : printPolyhedron
    use PolyhedraModule, only : printPolyhedronBoundary
 !
@@ -158,11 +159,11 @@ program mst2
 !
    use RadialGridModule, only : initRadialGrid, endRadialGrid
    use RadialGridModule, only : genRadialGrid, printRadialGrid
-   use RadialGridModule, only : getNumRmesh, getRmesh, getGrid, getGridRadius
+   use RadialGridModule, only : getNumRmesh, getRmesh, getGrid
 !
    use CoreStatesModule, only : initCoreStates, calCoreStates, endCoreStates
    use CoreStatesModule, only : readCoreStates
-   use CoreStatesModule, only : printCoreStates
+   use CoreStatesModule, only : printCoreStates, printCoreDensity
 !
    use BZoneModule, only : initBZone, printBZone, endBZone, getNumRotations, &
                            getNumKs
@@ -171,7 +172,7 @@ program mst2
                                  printIBZRotationMatrix
 !
    use ValenceDensityModule, only : initValenceDensity, getFermiEnergy, endValenceDensity
-   use ValenceDensityModule, only : printRho_L, getValenceElectronDensityAtPosi
+   use ValenceDensityModule, only : printRho_L
    use ValenceDensityModule, only : getValenceVPCharge, getValenceVPMoment
    use ValenceDensityModule, only : setValenceVPCharge, setValenceVPMomentSize
    use ValenceDensityModule, only : getValenceSphericalDensity, getExchangeEnergy
@@ -181,11 +182,10 @@ program mst2
    use GFMethodModule, only : calValenceStates, calValenceDOS, writeSS_DOS, writeDOS, calPartialDOS
    use GFMethodModule, only : printExchangeParam
 !
-   use FFTGridModule, only : initFFTGrid, setFFTGrid, endFFTGrid, printFFTGrid
-   use FFTGridModule, only : getFFTGrid
-   use FFTTransformModule, only : initFFTTransform, endFFTTransform
-   use VisualGridModule, only : initVisualGrid, endVisualGrid
-   use VisualGridModule, only : printVisualGrid, printGPAtoms
+   use Uniform3DGridModule, only : initUniform3DGrid, endUniform3DGrid
+   use Uniform3DGridModule, only : isUniform3DGridInitialized, createUniform3DGrid, printUniform3DGrid
+   use Uniform3DGridModule, only : createProcessorMesh, insertAtomsInGrid, getUniform3DGrid
+   use Uniform3DGridModule, only : distributeUniformGrid
 !
    use IsoparametricIntegrationModule, only : initIsoparametricIntegration, &
                                               endIsoparametricIntegration
@@ -202,9 +202,7 @@ program mst2
                                          endPotentialGeneration,   &
                                          computeNewPotential,      &
                                          printPotentialGeneration, &
-                                         printMadelungShiftTable,  &
-                                         getPotentialAtPosi
-                                        ! SphericalDensityListStruct
+                                         printMadelungShiftTable
    use PotentialGenerationModule, only : printNewPot_L => printPot_L
 !
    use TotalEnergyModule, only : initTotalEnergy, endTotalEnergy,     &
@@ -240,7 +238,6 @@ program mst2
                                    endChargeDensity,          &
                                    constructChargeDensity,    &
                                    isChargeComponentZero,     &
-                                   isSphericalChargeDensity,  &
                                    printChargeDensity,        &
                                    printChargeDensity_L,      &
                                    printMomentDensity_L,      &
@@ -271,6 +268,7 @@ program mst2
    character (len=8)  :: exec_date
    character (len=10) :: exec_time
    character (len=200) :: FileName
+   character (len=50) :: StorageKey
 !
    integer (kind=IntKind) :: MyPE, NumPEs
    integer (kind=IntKind) :: funit, funit_sysmov, en_movie
@@ -283,9 +281,9 @@ program mst2
    integer (kind=IntKind) :: ndivin, ndivout, nmult
    integer (kind=IntKind) :: NumRotations
    integer (kind=IntKind) :: LocalNumAtoms
-   integer (kind=IntKind) :: node_print_level, lprint
-   integer (kind=IntKind) :: ng_uniform(3)
-   integer (kind=IntKind) :: InitModeFFT, InitModeVis
+   integer (kind=IntKind) :: node_print_level
+!  integer (kind=IntKind) :: ng_uniform(3)
+   integer (kind=IntKind) :: InitMode
    integer (kind=IntKind), pointer :: AtomicNumber(:)
    integer (kind=IntKind), allocatable :: atom_print_level(:)
    integer (kind=IntKind), allocatable :: LocalAtomicNumber(:)
@@ -303,11 +301,13 @@ program mst2
    integer (kind=IntKind) :: MaxVal_Integer(2)
 !  Needed for L-SIC:
    integer (kind=IntKind) :: lsic_mode
+   integer (kind=IntKind) :: vna, vnb, vnc
 !
    real (kind=RealKind), pointer :: AtomPosition(:,:)
    real (kind=RealKind), allocatable :: LocalNumValenceElectrons(:)
    real (kind=RealKind), allocatable :: LocalAtomPosi(:,:)
    real (kind=RealKind), allocatable :: LocalEvec(:,:)
+   real (kind=RealKind), allocatable :: radius(:)
 !
    real (kind=RealKind), allocatable :: rho_rms(:,:),pot_rms(:,:)
    real (kind=RealKind), allocatable :: evec_rms(:), bcon_rms(:)
@@ -315,8 +315,9 @@ program mst2
    real (kind=RealKind) :: ef_diff, tote_diff
    real (kind=RealKind) :: max_rms(8), keep_rms(4), rms, rms_sys(4)
 !
+   real (kind=RealKind) :: vcell(3,3), vorigin(3)
    real (kind=RealKind) :: bravais(3,3)
-   real (kind=RealKind) :: radius, alat
+   real (kind=RealKind) :: alat
    real (kind=RealKind) :: rmt, rinsc, rend, rws
    real (kind=RealKind) :: Efermi, volume
    real (kind=RealKind) :: v0, val, evb
@@ -324,10 +325,8 @@ program mst2
 !
    real (kind=RealKind), pointer :: mom_table(:)
 !
-!   real (kind=RealKind), pointer :: rho_vis(:,:,:), pot_vis(:,:,:)
-!
    real (kind=RealKind), parameter :: xstart = -.1113096740000D+02
-!   real (kind=RealKind), parameter :: xstart = -.913096740000D+01
+!  real (kind=RealKind), parameter :: xstart = -.913096740000D+01
 !
    complex (kind=CmplxKind), pointer :: pot_l(:)
 !
@@ -337,7 +336,7 @@ program mst2
    type (MixListRealStruct), target :: RealArrayList
    type (MixListCmplxStruct), target :: CmplxArrayList
 !
-   type (FFTGridStruct), pointer:: fftgp
+!  type (UniformGridStruct), pointer:: fftgp
 !
    interface
 !
@@ -630,7 +629,7 @@ program mst2
    call initOutput(def_id)
 !  -------------------------------------------------------------------
    node_print_level = getStandardOutputLevel()
-   call setErrorOutput(node_print_level)
+   call setErrorOutput(1)
 !  -------------------------------------------------------------------
 !
    allocate(atom_print_level(1:LocalNumAtoms))
@@ -789,6 +788,17 @@ program mst2
    endif
 !  ===================================================================
 !
+   allocate(LocalAtomPosi(3,LocalNumAtoms), LocalAtomicNumber(LocalNumAtoms))
+   allocate(GlobalIndex(LocalNumAtoms), LocalEvec(3,LocalNumAtoms))
+!
+   do id=1,LocalNumAtoms
+      LocalAtomPosi(1:3,id)=getLocalAtomPosition(id)
+      LocalEvec(1:3,id)=getLocalEvecOld(id)
+      GlobalIndex(id)=getGlobalIndex(id)
+      LocalAtomicNumber(id)=getLocalAtomicNumber(id)
+   enddo
+!
+!
 !  *******************************************************************
 !
 !  ===================================================================
@@ -801,12 +811,13 @@ program mst2
 !
 !  ===================================================================
 !  initialize radial grid
-   radius = ZERO
+   allocate(radius(LocalNumAtoms))
+   radius = TEN2m6
 !  -------------------------------------------------------------------
    call initRadialGrid(LocalNumAtoms, istop, node_print_level)
 !  -------------------------------------------------------------------
    do i=1,LocalNumAtoms
-      ig=getGlobalIndex(i)
+      ig=GlobalIndex(i)
 !     ----------------------------------------------------------------
       call getGridData(i,ndivin,ndivout,nmult)
 !     ----------------------------------------------------------------
@@ -913,46 +924,30 @@ program mst2
          call printRadialGrid(i)
 !        -------------------------------------------------------------
       endif
-      radius = max(radius,getGridRadius(i))
+      radius(i) = getOutscrSphRadius(i)
    enddo
-!
-!  ===================================================================
-!  initialize and setup the FFT grid
-!  -------------------------------------------------------------------
-   if ( isFullPotential() .and. .not.isMuffinTinFullPotential() ) then
-      call initFFTGrid(istop, node_print_level)
-      ng_uniform(1:3) = getUniformGridParam()
-      call setFFTGrid( ng_uniform(1), ng_uniform(2), ng_uniform(3),   &
-                       bravais, radius )
-!     call setFFTGrid(ng_uniform(1),ng_uniform(2),ng_uniform(3),bravais)
-      if (node_print_level >= 0) then
-         call printFFTGrid()
-      endif
-!      alat = getLatticeConstant()
-      fftgp => getFFTGrid()
-!     ----------------------------------------------------------------
-      call initFFTTransform(fftgp%nga, fftgp%ngb, fftgp%ngc, bravais)
-!     ----------------------------------------------------------------
-   endif
-!  ===================================================================
 !
 !  ===================================================================
 !  initialize and setup the Visual grid
 !  -------------------------------------------------------------------
    if ( getDensityPrintFlag() >= 1 .or. getPotentialPrintFlag() >= 1) then
-      call initVisualGrid(istop, node_print_level, radius)
+      if (.not.isUniform3DGridInitialized()) then
+         call initUniform3DGrid(istop, node_print_level)
+      endif
+!     ----------------------------------------------------------------
+      call fetchVisualDomainParameters(vna, vnb, vnc, vcell, vorigin)
+!     ----------------------------------------------------------------
+      call createUniform3DGrid('Visual',vna, vnb, vnc, vcell, cell_origin=vorigin)
+!     ----------------------------------------------------------------
+      call distributeUniformGrid('Visual')
+      call insertAtomsInGrid('Visual', LocalNumAtoms, LocalAtomPosi,  &
+                             GlobalIndex, getPointLocationFlag, radius)
+!     ----------------------------------------------------------------
       if (node_print_level > 0) then
-         call printVisualGrid()
+         call printUniform3DGrid('Visual')
       endif
    endif
-!  Initializes the uniform grids
-!
-!    WARNING
-!  This needs to be done every time the atom positions are modified
-!
-   InitModeVis = 0
-   InitModeFFT = 0
-!
+   deallocate(radius)
 !  ===================================================================
 !
 !  *******************************************************************
@@ -1051,16 +1046,7 @@ program mst2
 !  ===================================================================
 !  setup Madelung matrix
 !  ===================================================================
-   allocate(LocalAtomPosi(3,LocalNumAtoms), LocalAtomicNumber(LocalNumAtoms))
-   allocate(GlobalIndex(LocalNumAtoms), LocalEvec(3,LocalNumAtoms))
-!
-   do id=1,LocalNumAtoms
-      LocalAtomPosi(1:3,id)=getLocalAtomPosition(id)
-      LocalEvec(1:3,id)=getLocalEvecOld(id)
-      GlobalIndex(id)=getGlobalIndex(id)
-      LocalAtomicNumber(id)=getLocalAtomicNumber(id)
-   enddo
-!
+!  -------------------------------------------------------------------
    call initMadelung(LocalNumAtoms,GlobalNumAtoms,GlobalIndex,        &
                      lmax_rho_max,lmax_pot_max,bravais,AtomPosition,  &
                      node_print_level)
@@ -1320,6 +1306,11 @@ program mst2
 !
    niter = 0
    SD_LOOP: do itstep = 1,ntstep
+!     ================================================================
+!     reset the Initialization for calculating charge density on uniform grids
+!     This needs to be done every time the atom positions are modified
+!     ================================================================
+      InitMode = 0
 !
       sdstep_new = 1
       rho_rms(:,:) = ZERO
@@ -1394,6 +1385,7 @@ program mst2
                if (atom_print_level(id) >= 0) then
 !                 ----------------------------------------------------
                   call printCoreStates(id)
+!                 call printCoreDensity(id)
 !                 ----------------------------------------------------
                endif
             enddo
@@ -1689,65 +1681,12 @@ program mst2
                enddo
             endif
 !
-            if (  getDensityPrintFlag()>=1 ) then
-               lprint = -1
-               call constructDensityOnGrid( "Charge", "Valence",         &
-                     lprint, -1, "VisualGrid", InitModeFFT, InitModeVis )          ! total charge
-               call printDensityOnGrid("Charge","Valence",lprint)
-               call constructDensityOnGrid( "Charge", "TotalNew",        &
-                     lprint, -1, "VisualGrid", InitModeFFT, InitModeVis )          ! total charge
-               call printDensityOnGrid("Charge","TotalNew",lprint)
-               do id = 1,LocalNumAtoms
-                  call printDataOnLine('ValenDen',id,getValenceElectronDensityAtPosi)
-               enddo
-               if ( .not.isSphericalChargeDensity() ) then
-                  call constructDensityOnGrid( "Charge", "Pseudo",       &
-                     lprint, -1, "VisualGrid", InitModeFFT, InitModeVis )
-                  call printDensityOnGrid("Charge","Pseudo",lprint)
-               endif
-!
+            if ( getDensityPrintFlag()>=1 .and. MyPE == 0 ) then
+               call printDensityOnGrid(LocalNumAtoms,node_print_level)
             endif
-            if ( isFullPotential() ) then
-               if ( node_print_level >=0 ) then
-                  lprint = -1
-               endif
 !
-               if (  getPotentialPrintFlag()>=1 ) then
-!
-                  call constructDensityOnGrid( "Potential", "Coulomb",   &
-                       lprint, -1, "VisualGrid", InitModeFFT, InitModeVis )          ! total potential
-                  call printDensityOnGrid("Potential", "Coulomb", lprint)
-!
-                  call constructDensityOnGrid( "Potential", "Exchg",     &
-                       lprint, -1, "VisualGrid", InitModeFFT, InitModeVis )
-                  call printDensityOnGrid("Potential", "Exchg", lprint)
-!
-                  call constructDensityOnGrid( "Potential", "Total",     &
-                       lprint, -1, "VisualGrid", InitModeFFT, InitModeVis )
-                  call printDensityOnGrid("Potential", "Total", lprint)
-!
-                  do id = 1,LocalNumAtoms
-                     call printDataOnLine('Potential',id,getPotentialAtPosi)
-                     call printDataOnLine('Coulomb',id,getPotentialAtPosi)
-                     call printDataOnLine('En_Exchg',id,getPotentialAtPosi)
-                  enddo
-               endif
-            else
-               if ( node_print_level >=1 ) then
-                  lprint = -1
-                  do id = 1,LocalNumAtoms
-                     if ( atom_print_level(id) >= 1 ) then
-                        call printPot_L(id)
-                        call printNewPot_L(id,-1,"Total")
-                     endif
-                  enddo
-               endif
-!
-               if (  getPotentialPrintFlag()>=1 ) then
-                  call constructDensityOnGrid( "Potential", "Total",     &
-                         lprint, -1, "VisualGrid", InitModeFFT, InitModeVis )
-                  call printDensityOnGrid("Potential", "Total", lprint)
-               endif
+            if ( getPotentialPrintFlag()>=1 .and. MyPE == 0 ) then
+               call printPotentialOnGrid(LocalNumAtoms,node_print_level)
             endif
 !
             n_visual = 0
@@ -1945,8 +1884,6 @@ program mst2
       endif
    enddo SD_LOOP
 !
-   InitModeFFT = 0
-   InitModeVis = 0
    if ( MyPE==0 .and. printSysMovie==1) then
       call driverSystemMovie( initSystemMovie, getEnergyPerAtom(), &
                               funit_sysmov, en_movie )
@@ -2075,12 +2012,8 @@ stop 'Under construction...'
    if ( IsoParamVINT ) then
       call endIsoparametricIntegration()
    endif
-   if ( isFullPotential() .and. .not.isMuffinTinFullPotential()) then
-      call endFFTGrid()
-      call endFFTTransform()
-   endif
-   if ( getDensityPrintFlag() >= 1 .or. getPotentialPrintFlag() >= 1) then
-      call endVisualGrid()
+   if (isUniform3DGridInitialized()) then
+      call endUniform3DGrid()
    endif
    call endKrein()
    call endSystemSymmetry()

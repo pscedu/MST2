@@ -7,7 +7,9 @@ module MatrixModule
 !
 public :: setupUnitMatrix, &
           computeAStar,    & ! compute B = A^{dot}
+          computeAStarInv,    & ! compute B = A^{-dot}
           computeAStarT,   & ! compute B = A^{Tdot}
+          computeAStarTInv,   & ! compute B = A^{-Tdot}
           computeUAU,      & ! compute B = U1 * A * U2
           computeUAUt,     & ! compute B = U1 * A * U2^{T}
           computeUAUts,    & ! compute B = U1 * A * U2^{Tdot}
@@ -317,26 +319,26 @@ contains
    n = 0
    LOOP_lmc: do lmc = 1, nc
       if (lmc*lmc == nc) then
-         n = 1
+         n = lmc
          exit LOOP_lmc
       endif
    enddo LOOP_lmc
-   if (n /= 1) then
+   if (n == 0) then
       call ErrorHandler('computeAStar','sqrt[nc] is not a integer',nc)
    endif
-   lmc = lmc - 1
+   lmc = n - 1
 !
    n = 0
    LOOP_lmr: do lmr = 1, nr
       if (lmr*lmr == nr) then
-         n = 1
+         n = lmr
          exit LOOP_lmr
       endif
    enddo LOOP_lmr
-   if (n /= 1) then
+   if (n == 0) then
       call ErrorHandler('computeAStar','sqrt[nr] is not a integer',nr)
    endif
-   lmr = lmr - 1
+   lmr = n - 1
 !
    kl = 0
    do l = 0, lmc
@@ -357,6 +359,42 @@ contains
 !  ===================================================================
 !
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+   subroutine computeAStarInv(A,nr,nc,B)
+!  ===================================================================
+   implicit none
+!
+   integer (kind=IntKind), intent(in) :: nr, nc
+   integer (kind=IntKind) :: ipiv(2*nc), info
+!
+   complex (kind=CmplxKind), intent(in) :: A(nr,nc)
+   complex (kind=CmplxKind), intent(out) :: B(nr,nc)
+   complex (kind=CmplxKind) :: w(16*nc)
+!
+!  -------------------------------------------------------------------
+   call computeAStar(a,nr,nc,B)
+!  -------------------------------------------------------------------
+!
+!  -------------------------------------------------------------------
+   call zgetrf( nc, nc, B, nr, ipiv, info )
+!  -------------------------------------------------------------------
+   if (info /= 0) then
+!     ----------------------------------------------------------------
+      call ErrorHandler('computeAStarInv','ZGETRF failure, B is ill conditioned',info)
+!     ----------------------------------------------------------------
+   endif
+!  -------------------------------------------------------------------
+   call zgetri( nc, B, nr, ipiv, w, 16*nc, info)
+!  -------------------------------------------------------------------
+   if (info /= 0) then
+!     ----------------------------------------------------------------
+      call ErrorHandler('computeAStarInv','ZGETRI failure, B is ill conditioned',info)
+!     ----------------------------------------------------------------
+   endif
+!
+   end subroutine computeAStarInv
+!  ===================================================================
+!
+!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    subroutine computeAStarT(A,nr,nc,B)
 !  ===================================================================
    implicit none
@@ -372,26 +410,26 @@ contains
    n = 0
    LOOP_lmc: do lmc = 1, nc
       if (lmc*lmc == nc) then
-         n = 1
+         n = lmc
          exit LOOP_lmc
       endif
    enddo LOOP_lmc
-   if (n /= 1) then
-      call ErrorHandler('computeAStar','sqrt[nc] is not a integer',nc)
+   if (n == 0) then
+      call ErrorHandler('computeAStarT','sqrt[nc] is not a integer',nc)
    endif
-   lmc = lmc - 1
+   lmc = n - 1
 !
    n = 0
    LOOP_lmr: do lmr = 1, nr
       if (lmr*lmr == nr) then
-         n = 1
+         n = lmr
          exit LOOP_lmr
       endif
    enddo LOOP_lmr
-   if (n /= 1) then
-      call ErrorHandler('computeAStar','sqrt[nr] is not a integer',nr)
+   if (n == 0) then
+      call ErrorHandler('computeAStarT','sqrt[nr] is not a integer',nr)
    endif
-   lmr = lmr - 1
+   lmr = n - 1
 !
    kl = 0
    do l = 0, lmc
@@ -409,5 +447,41 @@ contains
    enddo
 !
    end subroutine computeAStarT
+!  ===================================================================
+!
+!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+   subroutine computeAStarTInv(A,nr,nc,B)
+!  ===================================================================
+   implicit none
+!
+   integer (kind=IntKind), intent(in) :: nr, nc
+   integer (kind=IntKind) :: ipiv(2*nc), info
+!
+   complex (kind=CmplxKind), intent(in) :: A(nr,nc)
+   complex (kind=CmplxKind), intent(out) :: B(nr,nc)
+   complex (kind=CmplxKind) :: w(16*nc)
+!
+!  -------------------------------------------------------------------
+   call computeAStarT(A,nr,nc,B)
+!  -------------------------------------------------------------------
+!
+!  -------------------------------------------------------------------
+   call zgetrf( nc, nc, B, nr, ipiv, info )
+!  -------------------------------------------------------------------
+   if (info /= 0) then
+!     ----------------------------------------------------------------
+      call ErrorHandler('computeAStarTInv','ZGETRF failure, B is ill conditioned',info)
+!     ----------------------------------------------------------------
+   endif
+!  -------------------------------------------------------------------
+   call zgetri( nc, B, nr, ipiv, w, 16*nc, info)
+!  -------------------------------------------------------------------
+   if (info /= 0) then
+!     ----------------------------------------------------------------
+      call ErrorHandler('computeAStarTInv','ZGETRI failure, B is ill conditioned',info)
+!     ----------------------------------------------------------------
+   endif
+!
+   end subroutine computeAStarTInv
 !  ===================================================================
 end module MatrixModule

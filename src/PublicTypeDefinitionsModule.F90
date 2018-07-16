@@ -2,25 +2,7 @@ module PublicTypeDefinitionsModule
    use KindParamModule, only : IntKind, RealKind, CmplxKind
    implicit none
 !
-   public ::  LizLmaxStruct,      &
-              LloydStruct,        &
-              InputTableStruct,   &
-              MixListRealStruct,  &
-              MixListCmplxStruct, &
-              NeighborStruct,     &
-              CommTableStruct,    &
-              GridStruct,         &
-              ScmBlockStruct,     &
-              FFTGridStruct,      &
-              FFTGAtomInfoStruct, &
-              VisualGridStruct,   &
-              VGAtomInfoStruct,   &
-              GlobalIndex,        &
-              AtomPosition
-!
-   integer (kind=IntKind), allocatable, target :: GlobalIndex(:)
-!
-   real (kind=RealKind), allocatable, target :: AtomPosition(:,:)
+public
 !
 !  AtomModule data types
 !
@@ -151,51 +133,41 @@ module PublicTypeDefinitionsModule
       complex (kind=CmplxKind), pointer :: strcon_matrix(:,:)
    end type ScmBlockStruct
 !
-!  FFTGridModule
+   type AtomOnUniformGridStruct
+      integer (kind=IntKind) :: NumLocalAtoms               ! Determined by the parallelization over
+                                                            ! atoms
+      integer (kind=IntKind) :: NumGridPointsOnCellBound
+      integer (kind=IntKind), allocatable :: AtomBox(:,:,:) ! Stores the starting and ending index
+                                                            ! of the uniform grid points associated
+                                                            ! with each atom
+      integer (kind=IntKind), allocatable :: NumGridPointsInAtomBox(:)
+      integer (kind=IntKind), allocatable :: GlobalAtomIndex(:)
+      integer (kind=IntKind), allocatable :: CBGridPointIndex(:)
+      integer (kind=IntKind), allocatable :: NumNeighboringAtoms(:)
+      integer (kind=IntKind), allocatable :: NumTargetProcs(:)
+      integer (kind=IntKind), allocatable :: NumSourceProcs(:)
+      integer (kind=IntKind), pointer :: TargetProc(:,:)
+      integer (kind=IntKind), pointer :: SourceProc(:,:)
+   end type AtomOnUniformGridStruct
 !
-   type FFTGridStruct
-      integer (kind=IntKind) :: nga
-      integer (kind=IntKind) :: ngb
-      integer (kind=IntKind) :: ngc
+   type UniformGridStruct
+      integer (kind=IntKind) :: nga    ! no. of grid points along a-dim
+      integer (kind=IntKind) :: ngb    ! no. of grid points along b-dim
+      integer (kind=IntKind) :: ngc    ! no. of grid points along c-dim
       integer (kind=IntKind) :: ng     ! ng = nga*ngb*ngc
-      real (kind=RealKind) :: vec_a(3)
-      real (kind=RealKind) :: vec_b(3)
-      real (kind=RealKind) :: vec_c(3)
-      real (kind=RealKind) :: step_a
-      real (kind=RealKind) :: step_b
-      real (kind=RealKind) :: step_c
-   end type FFTGridStruct
-!
-   type FFTGAtomInfoStruct
-      integer (kind=IntKind) :: VP_point
-      integer (kind=IntKind) :: indexAtom
-      real (kind=RealKind) :: r(3)
-      type (FFTGAtomInfoStruct), pointer :: nextAtom  ! pointer to another index
-   end type FFTGAtomInfoStruct
-!
-!  VisualGridModule
-!
-   type VisualGridStruct
-      integer (kind=IntKind) :: dim
-      integer (kind=IntKind) :: nga
-      integer (kind=IntKind) :: ngb
-      integer (kind=IntKind) :: ngc
-      integer (kind=IntKind) :: ng     !ng = nga*ngb*ngc
-      real (kind=RealKind) :: vec_o(3)
-      real (kind=RealKind) :: vec_a(3)
-      real (kind=RealKind) :: vec_b(3)
-      real (kind=RealKind) :: vec_c(3)
-      real (kind=RealKind) :: step_a
-      real (kind=RealKind) :: step_b
-      real (kind=RealKind) :: step_c
-   end type VisualGridStruct
-!
-   type VGAtomInfoStruct
-      integer (kind=IntKind) :: VP_point
-      integer (kind=IntKind) :: indexAtom
-      real (kind=RealKind) :: r(3)
-      type (VGAtomInfoStruct), pointer :: nextAtom  ! pointer to another index
-   end type VGAtomInfoStruct
+      integer (kind=IntKind) :: nproc_a ! no. of processor mesh along a-dim
+      integer (kind=IntKind) :: nproc_b ! no. of processor mesh along b-dim
+      integer (kind=IntKind) :: nproc_c ! no. of processor mesh along c-dim
+      integer (kind=IntKind) :: gstart(3)
+      integer (kind=IntKind) :: gend(3)
+      integer (kind=IntKind) :: NumLocalGridPoints
+      real (kind=RealKind) :: vec_origin(3)
+      real (kind=RealKind) :: cell(3,3)
+      real (kind=RealKind) :: grid_step_a(3)
+      real (kind=RealKind) :: grid_step_b(3)
+      real (kind=RealKind) :: grid_step_c(3)
+      type (AtomOnUniformGridStruct), pointer :: AtomOnGrid
+   end type UniformGridStruct
 !
    type LloydStruct
       logical:: lloydOn
@@ -203,36 +175,4 @@ module PublicTypeDefinitionsModule
       complex(kind=CmplxKind) :: q_lloyd(2)
    end type LloydStruct
 !
-contains
-!
-!  =================================================================== 
-!
-!  *******************************************************************
-!
-!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-   subroutine initPublicTypeDefinitions( na,lmax, gindex, pos )
-!  =================================================================== 
-   implicit none
-   integer(kind=IntKind), intent(in) :: na, lmax
-   integer(kind=IntKind), intent(in) :: gindex(na)
-   real(kind=RealKind), intent(in) :: pos(3,na)
-!
-   allocate(GlobalIndex(na),AtomPosition(3,na))
-   GlobalIndex(1:na) = gindex(1:na)
-   AtomPosition(1:3,1:na)=pos(1:3,1:na)
-!
-   end subroutine initPublicTypeDefinitions
-!  =================================================================== 
-!
-!  *******************************************************************
-!
-!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-   subroutine endPublicTypeDefinitions()
-!  =================================================================== 
-   implicit none
-!
-   deallocate(GlobalIndex,AtomPosition)
-!
-   end subroutine endPublicTypeDefinitions
-!  =================================================================== 
-   end module PublicTypeDefinitionsModule
+end module PublicTypeDefinitionsModule

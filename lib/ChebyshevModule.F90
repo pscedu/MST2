@@ -40,7 +40,7 @@ contains
 !
    integer (kind=IntKind), intent(in) :: order
    real (kind=RealKind), intent(in) :: a, b
-   real (kind=RealKind), target :: f(1:order)
+   real (kind=RealKind), intent(in) :: f(1:order)
    type (ChebyshevStruct), target :: cheb_struct
 !
    integer (kind=IntKind) :: k, j
@@ -87,7 +87,7 @@ contains
 !
    integer (kind=IntKind), intent(in) :: order
    real (kind=RealKind), intent(in) :: a, b
-   complex (kind=CmplxKind), target :: f(1:order)
+   complex (kind=CmplxKind), intent(in) :: f(1:order)
    type (ChebyshevStruct), target :: cheb_struct
 !
    integer (kind=IntKind) :: k,j

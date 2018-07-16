@@ -3,6 +3,18 @@
 !                                                                         !
 ! HISTORY ---------                                                       !
 !                                                                         !
+!     VERSION: 2.5b                                                       !
+!     AUTHOR: Yang Wang (07/09/2018)                                      !
+!     ADDED FEATURE: Added one function for allowing the MPI processes    !
+!                    to perform non-blocking send package                 !
+!                    nbsendPackage: non-block sending a package           !
+!            Note: nbrecvPackage is not implemented, because of a major   !
+!                  techinical difficulty due to that the package size is  !
+!                  not known beforehand and needs to call MPI_iprobe to   !
+!                  find out. However, even though MPI_iprobe is non-      !
+!                  blocking, it doesn't return a MPI_request handler for  !
+!                  MPI_wait to use.                                       !
+!                                                                         !
 !     VERSION: 2.5a                                                       !
 !     AUTHOR: Yang Wang (01/31/2017)                                      !
 !     ADDED FEATURE: Added two functions for allowing the MPI processes   !
@@ -619,6 +631,7 @@
          public :: unpackMessage
          public :: recvPackage
          public :: sendPackage
+         public :: nbsendPackage
          public :: syncAllPEs
          public :: GlobalCollect
          public :: GlobalSum
@@ -4538,6 +4551,82 @@
 !=====================================================================
 !=====================================================================
 !=====================================================================
+         function nbsendPackage(msgtyp,dest) result(id)
+            implicit none
+            integer (kind=IntKind), intent(in) :: msgtyp
+            integer (kind=IntKind), intent(in) :: dest
+            integer (kind=IntKind) :: id
+#ifdef MPI
+            integer i, m
+#endif
+            if (dest == MyPE_comm) then
+               id=1
+               return
+            else if (.not.isParentAlive() .and. NumPEs_comm.eq.1) then
+               return
+            else if (dest > NumPEs_comm) then
+               call ErrorHandler('nbsendPackage','invalid target',dest)
+            else if (.not.isParentAlive() .and. dest == NumPEs_comm) then
+               call ErrorHandler('nbsendPackage','invalid target',dest)
+            else if (.not.packing) then
+               call ErrorHandler('nbsendPackage',                     &
+     &                           'need to call packMessage first!')
+            endif
+!
+            if (NumWaits==MaxWaits) then
+               call printWaitInfo()
+               call ErrorHandler('nbsendPackage',                     &
+     &                           'Too many messages are waiting!')
+            endif
+            NumWaits=NumWaits+1
+            NumSends=NumSends+1
+            do i=1,MaxWaits
+               if (WaitType(i)=='NONE') then
+                  id=i
+                  exit
+               endif
+            enddo
+            WaitType(id)='SDPG'
+#ifdef MPI
+            bsize=0
+            do i=1,NumPacks
+!              -------------------------------------------------------
+               call MPI_pack_size(PackedBuffer(i)%size,               &
+     &                            PackedBuffer(i)%DataType,           &
+     &                            communicator,m,info)
+!              -------------------------------------------------------
+               bsize=bsize+m
+            enddo
+!           ----------------------------------------------------------
+            allocate( bspace(bsize) )
+!           ----------------------------------------------------------
+            call packBuffer()
+!           ----------------------------------------------------------
+            if (dest==AllPEs) then
+               do i=1,NumPEs_comm
+                  if (i-1.ne.MyPE_comm) then
+!                    -------------------------------------------------
+                     call MPI_isend(bspace,bpos,MPI_PACKED,i-1,msgtyp, &
+     &                              communicator,MsgID(id),info)
+!                    -------------------------------------------------
+                  endif
+               enddo
+            else
+!              -------------------------------------------------------
+               call MPI_isend(bspace,bpos,MPI_PACKED,dest,msgtyp,     &
+     &                        communicator,MsgID(id),info)
+!              -------------------------------------------------------
+            endif
+!           ----------------------------------------------------------
+            deallocate( bspace )
+            call zeroBuffer()
+!           ----------------------------------------------------------
+#endif
+            packing=.false.
+         end function nbsendPackage
+!=====================================================================
+!=====================================================================
+!=====================================================================
          subroutine recvPackage(msgtyp,source)
             implicit none
             integer (kind=IntKind), intent(in) :: msgtyp
@@ -4574,7 +4663,6 @@
                                ! bpos for unpack functions
             received=.true.
          end subroutine recvPackage
-!
 !=====================================================================
 !=====================================================================
 !=====================================================================
@@ -5948,7 +6036,7 @@
                   return
                endif
                NumRecvs=NumRecvs-1
-            else if (WaitType(id)=='SEND') then
+            else if (WaitType(id)=='SEND' .or. WaitType(id)=='SDPG') then
                if (NumSends==0) then
                   call WarningHandler('waitMessage',                  &
      &                                'No message in waiting')
@@ -5962,6 +6050,7 @@
             endif
 #ifdef MPI
             call MPI_wait(MsgID(id),status,info)
+!
             if (WaitType(id)=='RECV') then
                sourceNode=status(MPI_SOURCE)
             endif
@@ -6537,7 +6626,7 @@
 !
       if (p >= n .or. p < 0 .or. n < 0) then
          call ErrorHandler('setCommunicator',                         &
-                           'Invalid MyPE ond/or NumPEs input for the new comm', &
+              'Invalid MyPE ond/or NumPEs input for the new comm',    &
                            p, n)
       endif
 !

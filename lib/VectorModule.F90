@@ -2,6 +2,7 @@ module VectorModule
    use KindParamModule, only : IntKind
    use KindParamModule, only : RealKind
    use ErrorHandlerModule, only : ErrorHandler, StopHandler, WarningHandler
+   use MathParamModule, only : ZERO
 !
    implicit none
 !
@@ -47,7 +48,7 @@ contains
 !  *******************************************************************
 !
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-   function getDotProduct(n,vec1,vec2) result(p)
+   function getDotProduct(n,vec1,vec2,absolute) result(p)
 !  ===================================================================
    implicit none
 !
@@ -56,6 +57,8 @@ contains
 !
    real (kind=RealKind), intent(in) :: vec1(n), vec2(n)
    real (kind=RealKind) :: p
+!
+   logical, optional, intent(in) :: absolute
 !
    if (n < 1) then
       call ErrorHandler('getDotProduct','invalid dimension',n)
@@ -70,6 +73,12 @@ contains
       do i = 2, n
          p = p + vec1(i)*vec2(i)
       enddo
+   endif
+!
+   if (present(absolute)) then
+      if (absolute .and. p < ZERO) then
+         p = -p
+      endif
    endif
 !
    end function getDotProduct

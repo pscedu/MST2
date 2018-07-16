@@ -14,6 +14,8 @@ public :: getAtomInfo,      &
           getCoreStateN,    &
           getCoreStateL,    &
           getCoreStateKappa,&
+          getCoreStateIndex,&
+          getCoreStateSymbol,&
           getDebyeTemperature
 !
    interface setNumCoreStates
@@ -50,6 +52,10 @@ public :: getAtomInfo,      &
 !
    interface getCoreStateKappa
       module procedure getCoreStateKappa_a, getCoreStateKappa_n
+   end interface
+!
+   interface getCoreStateSymbol
+      module procedure getCoreStateSymbol_a, getCoreStateSymbol_n
    end interface
 !
    integer (kind=IntKind), parameter, public :: MaxLenOfAtomName = 16
@@ -1465,6 +1471,33 @@ contains
 !  *******************************************************************
 !
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+   function getCoreStateIndex(n,l,k) result(i)
+!  ===================================================================
+   implicit none
+!
+   integer (kind=IntKind), intent(in) :: n, l, k
+   integer (kind=IntKind) :: i, j
+!
+   if (.not.Initialized) then
+      call initChemElement()
+   endif
+!
+   do j = 1, MaxNumc
+      if (n == CoreState(j)%n .and. l == CoreState(j)%l .and.         &
+          k == CoreState(j)%kappa) then
+         i = j
+         return
+      endif
+   enddo
+!
+   call ErrorHandler('getCoreStateIndex','Invalid core state config',n,l,k)
+!
+   end function getCoreStateIndex
+!  ===================================================================
+!
+!  *******************************************************************
+!
+!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    function getCoreStateN_a(AtomName,i) result(c)
 !  ===================================================================
    implicit none
@@ -1667,6 +1700,76 @@ contains
 !
    c=CoreState(i)%kappa
    end function getCoreStateKappa_n
+!  ===================================================================
+!
+!  *******************************************************************
+!
+!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+   function getCoreStateSymbol_a(AtomName,i) result(c)
+!  ===================================================================
+   implicit none
+!
+   character (len=*), intent(in) :: AtomName
+   character (len=2) :: c
+   integer (kind=IntKind), intent(in) :: i
+   integer (kind=IntKind) :: z, j
+!
+   if (.not.Initialized) then
+      call initChemElement()
+   endif
+!
+   z=getZtot(AtomName)
+   if (z < MinZtot) then
+      call ErrorHandler('getCoreStateSymbol','Invalid Atom Name',AtomName)
+   else if (i < 1) then
+      call ErrorHandler('getCoreStateSymbol','Invalid Core State Index',i)
+   else if (Element(z)%NumVariations == 0 .and.                       &
+            i <= Element(z)%NumCoreStates) then
+      c=CoreState(i)%Symbol
+      return
+   else if (Element(z)%NumVariations > 0) then
+      if (AtomName == Element(z)%AtomName .and.                       &
+             i <= Element(z)%NumCoreStates) then
+         c=CoreState(i)%Symbol
+         return
+      else
+         do j = 1, Element(z)%NumVariations
+            if (AtomName == Element(z)%Variation(j)%AtomName .and.    &
+                i <= Element(z)%Variation(j)%NumCoreStates) then
+               c=CoreState(i)%Symbol
+               return
+            endif
+         enddo
+      endif
+   endif
+!
+   call ErrorHandler('getCoreStateSymbol','Invalid Core State Index',i)
+!
+   end function getCoreStateSymbol_a
+!  ===================================================================
+!
+!  *******************************************************************
+!
+!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+   function getCoreStateSymbol_n(AtomNumber,i) result(c)
+!  ===================================================================
+   implicit none
+!
+   integer (kind=IntKind), intent(in) :: AtomNumber, i
+   character (len=2) :: c
+!
+   if (.not.Initialized) then
+      call initChemElement()
+   endif
+!
+   if (AtomNumber < MinZtot .or. AtomNumber > NumElements) then
+      call ErrorHandler('getCoreStateSymbol','Invalid Atom Number',AtomNumber)
+   else if (i < 1 .or. i > Element(AtomNumber)%NumCoreStates) then
+      call ErrorHandler('getCoreStateSymbol','Invalid Core State Index',i)
+   endif
+!
+   c=CoreState(i)%Symbol
+   end function getCoreStateSymbol_n
 !  ===================================================================
 !
 !  *******************************************************************

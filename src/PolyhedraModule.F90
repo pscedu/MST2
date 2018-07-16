@@ -30,6 +30,7 @@ public :: initPolyhedra,        &
           getIndexCornerPlane,  &
           isExternalPoint,      &
           isSurfacePoint,       &
+          getPointLocationFlag, &
           printPolyhedron,      &
           printPolyhedronBoundary, &
           printPolyhedraTable
@@ -2598,5 +2599,28 @@ contains
    a = .true.
 !
    end function isSurfacePoint
+!  ===================================================================
+!
+!  *******************************************************************
+!
+!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+   function getPointLocationFlag(poly,x,y,z) result(f)
+!  ===================================================================
+   implicit none
+!
+   integer (kind=IntKind), intent(in) :: poly
+   integer (kind=IntKind) :: f
+!
+   real (kind=RealKind), intent(in) :: x, y, z
+!
+   if (isExternalPoint(poly,x,y,z)) then
+      f = -1
+   else if (isSurfacePoint(poly,x,y,z)) then
+      f = 0
+   else
+      f = 1
+   endif
+!
+   end function getPointLocationFlag
 !  ===================================================================
 end module PolyhedraModule

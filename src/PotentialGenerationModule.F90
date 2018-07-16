@@ -6,8 +6,9 @@ Module PotentialGenerationModule
                                PI2, PI4, SQRT_PI, TEN2m6, TEN2m7,     &
                                TEN2m8, TEN2m9, TEN2m10, TEN2m12, TEN2m13, Y0
    use IntegerFactorsModule, only : lofk, mofk, lofj, mofj, kofj, m1m
-   use PublicTypeDefinitionsModule, only : GridStruct
+   use PublicTypeDefinitionsModule, only : GridStruct, UniformGridStruct
    use TimerModule, only : getTime
+   use ChebyshevModule, only : ChebyshevStruct
 !
    implicit none
 !
@@ -15,7 +16,7 @@ public :: initPotentialGeneration, &
           endPotentialGeneration,  &
           computeNewPotential,     &
           getPotential,            &
-          getPotentialAtPosi,      &
+          getPotentialAtPoint,     &
           getPotLmax,              &
           isPotComponentZero,      &
           getPotComponentFlag,     &
@@ -31,7 +32,7 @@ public :: initPotentialGeneration, &
           printPotentialGeneration
 !
    interface getPotential
-      module procedure getPot_L, getPot_Lj, getPoten_l2, getPoten_l3
+      module procedure getPot_L, getPot_Lj
    end interface
 !
 private
@@ -88,6 +89,7 @@ private
    character (len=50) :: StopRoutine
 !
    integer (kind=IntKind) :: jend_max
+   integer (kind=IntKind) :: lmax_max
    integer (kind=IntKind) :: jmax_max
    integer (kind=IntKind) :: lmax_rho_max
    integer (kind=IntKind) :: LocalNumAtoms
@@ -95,9 +97,9 @@ private
    integer (kind=IntKind) :: NumPEsInGroup, MyPEinGroup, GroupID
    integer (kind=IntKind) :: n_spin_pola
    integer (kind=IntKind) :: PotentialType
+   integer (kind=IntKind) :: node_print_level
    integer (kind=IntKind) :: n_inter = 5
-   integer (kind=IntKind) :: InitModeFFT = 0
-   integer (kind=IntKind) :: InitModeVis = 1
+   integer (kind=IntKind) :: InitMode = 0
    integer (kind=IntKind), allocatable :: GlobalIndex(:)
    integer (kind=IntKind), allocatable :: Print_Level(:)
    integer (kind=IntKind), allocatable :: indrl_fit(:,:)
@@ -144,10 +146,55 @@ private
 !
    type (AngularIntegrationData) :: AngularData
 !
+   integer (kind=IntKind) :: numk_local
+   integer (kind=IntKind), parameter :: nr_int_max = 3
+   integer (kind=IntKind), parameter :: n_interp_max = 100
+   integer (kind=IntKind), allocatable :: iparam(:,:)
+!
+   complex(kind=CmplxKind), allocatable, target :: fft_c(:)
+   complex(kind=CmplxKind), allocatable :: Ylm(:)
+   complex(kind=CmplxKind), allocatable, target :: v_interp(:,:)
+   real (kind=RealKind), allocatable, target ::  LocalAtomPosi(:,:)
+   type (ChebyshevStruct), allocatable, target :: chebv_struct(:)
+!
+   interface
+      subroutine constructDataOnGrid(grid_name, value_name, value_type, getData, den, lmax, spin)
+         use KindParamModule, only : IntKind, RealKind
+         use PublicTypeDefinitionsModule, only : UniformGridStruct
+         implicit none
+         character (len=*), intent(in) :: grid_name
+         character (len=*), intent(in) :: value_name
+         character (len=*), intent(in) :: value_type
+         real (kind=RealKind), intent(out) :: den(:)
+         integer (kind=IntKind), intent(in), optional :: lmax, spin
+!
+         interface
+            function getData( dname, id, ia, r, jmax_in, n ) result(v)
+               use KindParamModule, only : IntKind, RealKind
+               implicit none
+               character (len=*), intent(in) :: dname
+               integer (kind=IntKind), intent(in) :: id, ia
+               real (kind=RealKind), intent(in) :: r(3)
+               integer (kind=IntKind), intent(in), optional :: jmax_in, n
+               real (kind=RealKind) :: v
+            end function getData
+         end interface
+!
+      end subroutine constructDataOnGrid
+   end interface
+!
+   interface
+      function nocaseCompare(s1,s2) result(t)
+         character (len=*), intent(in) :: s1
+         character (len=*), intent(in) :: s2
+         logical :: t
+      end function nocaseCompare
+   end interface
+!
 contains
 !  ===================================================================
-!
-!  *******************************************************************
+   include '../lib/arrayTools.F90'
+!  ===================================================================
 !
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    subroutine initPotentialGeneration(nlocal,num_atoms,lmax_p,lmax_r, &
@@ -158,9 +205,13 @@ contains
    use GroupCommModule, only : getGroupID, getNumPEsInGroup, getMyPEinGroup
    use GroupCommModule, only : GlobalSumInGroup, GlobalMinInGroup, GlobalMaxInGroup
 !
-   use RadialGridModule, only : getGrid, getNumRmesh
+   use ParallelFFTModule, only : initParallelFFT, allocateFunctionSpace
+   use ParallelFFTModule, only : getGlobalGridIndexRange, getProcessorMesh
+!
+   use RadialGridModule, only : getGrid, getNumRmesh, getGridRadius
 !
    use PolyhedraModule, only : getVolume
+   use PolyhedraModule, only : getPointLocationFlag, getOutscrSphRadius
 !
    use MadelungModule, only : getMadelungMatrix
 !
@@ -181,13 +232,20 @@ contains
    use SurfElementsModule, only : genGaussPoints, genGaussSphHarmonics
 #endif
 !
-   use SystemModule, only : getLmaxRho
+   use SystemModule, only : getLmaxRho, getLmaxMax
+   use SystemModule, only : getUniformGridParam, getBravaisLattice
 !
    use Atom2ProcModule, only : getGlobalIndex
 !
    use AtomModule, only : getLocalNumSpecies
+   use AtomModule, only : getLocalAtomPosition
 !
    use ScfDataModule, only : isChargeSymm
+!
+   use Uniform3DGridModule, only : initUniform3DGrid
+   use Uniform3DGridModule, only : isUniform3DGridInitialized, createUniform3DGrid, printUniform3DGrid
+   use Uniform3DGridModule, only : createProcessorMesh, getUniform3DGrid
+   use Uniform3DGridModule, only : distributeUniformGrid, insertAtomsInGrid
 !
    implicit none
 !
@@ -204,11 +262,14 @@ contains
    type (GridStruct), pointer :: Grid
 !
    integer (kind=IntKind) :: i, jl, kl, l, m, j, id, nr, ir
-   integer (kind=IntKind) :: lmax_max, kmax_max, lmax_pot, jmax_pot
+   integer (kind=IntKind) :: kmax_max, lmax_pot, jmax_pot
    integer (kind=IntKind) :: jmt, jend
+   integer (kind=IntKind) :: grid_start(3), grid_end(3), gir(3,3), ng_uniform(3)
 !
    real (kind=RealKind) :: alpha, r, alpha_min, alpha_max
+   real (kind=RealKind) :: bravais(3,3)
    real (kind=RealKind), pointer :: madmat(:), r_mesh(:)
+   real (kind=RealKind), allocatable :: radius(:)
 !
    type (NewPotentialStruct), pointer :: p_Pot
 !
@@ -243,14 +304,17 @@ contains
 !
    jend_max = 0 
    lmax_max = 0
+   node_print_level = -1
    do id = 1, LocalNumAtoms
       lmax_max=max(lmax_max, lmax_p(id), lmax_r(id))
       DataSize(id) = getNumRmesh(id)
       DataSizeL(id) = getNumRmesh(id)*(((lmax_p(id)+1)*(lmax_p(id)+2))/2)
       jend_max=max(jend_max,DataSize(id))
+      node_print_level = max(node_print_level,Print_Level(id))
    enddo
    lmax_rho_max = getLmaxRho()
    lmax_max = max(lmax_max,lmax_rho_max)
+   lmax_max = max(lmax_max,getLmaxMax())
    jmax_max = ((lmax_max+1)*(lmax_max+2))/2
    kmax_max = (lmax_max+1)*(lmax_max+1)
 !
@@ -503,11 +567,14 @@ contains
    enddo
 !
    allocate( alpha_mad(LocalNumAtoms), GlobalIndex(LocalNumAtoms) )
+   allocate( LocalAtomPosi(3,LocalNumAtoms) )
    allocate( MadelungShiftTable(GlobalNumAtoms) )
+   allocate( radius(LocalNumAtoms) )
 !
    alpha_min =  1.0d+20
    alpha_max = -1.0d+20
    MadelungSum = ZERO
+   radius = TEN2m6
    do i = 1, LocalNumAtoms
       madmat => getMadelungMatrix(i)
       alpha=ZERO
@@ -519,6 +586,9 @@ contains
       MadelungSum = MadelungSum + alpha
       alpha_mad(i)=TWO*alpha*getVolume(i)
       GlobalIndex(i) = getGlobalIndex(i)
+      LocalAtomPosi(1:3,i)=getLocalAtomPosition(i)
+      radius(i) = getOutscrSphRadius(i)
+radius(i) = getGridRadius(i)
    enddo
 !
 !  ===================================================================
@@ -562,6 +632,46 @@ contains
       allocate( DF_Pseudo(3,LocalNumAtoms) )
    endif
 !
+   if ( isFullPot ) then
+      if (.not.isUniform3DGridInitialized()) then
+!        -------------------------------------------------------------
+         call initUniform3DGrid(istop, node_print_level)
+!        -------------------------------------------------------------
+      endif
+      ng_uniform(1:3) = getUniformGridParam()
+      bravais = getBravaisLattice()
+!     ----------------------------------------------------------------
+      call createUniform3DGrid('FFT', ng_uniform(1), ng_uniform(2), ng_uniform(3), bravais)
+!     ----------------------------------------------------------------
+      call initParallelFFT()
+!     ----------------------------------------------------------------
+      call createProcessorMesh('FFT', getProcessorMesh())
+!     ----------------------------------------------------------------
+      gir = getGlobalGridIndexRange('R')
+!     ----------------------------------------------------------------
+      grid_start(1:3) = gir(1:3,1)
+      grid_end(1:3) = gir(1:3,2)
+!     ----------------------------------------------------------------
+      call distributeUniformGrid('FFT',grid_start,grid_end)
+!     ----------------------------------------------------------------
+      call insertAtomsInGrid('FFT', LocalNumAtoms, LocalAtomPosi,     &
+                             GlobalIndex, getPointLocationFlag, radius)
+!     ----------------------------------------------------------------
+      if (node_print_level >= 0) then
+         call printUniform3DGrid('FFT')
+      endif
+!     ----------------------------------------------------------------
+      call allocateFunctionSpace(fft_c,numk_local)
+!     ----------------------------------------------------------------
+!
+      allocate( Ylm(kmax_max) )
+      allocate( iparam(4+nr_int_max,LocalNumAtoms) )
+      allocate( v_interp(n_interp_max*nr_int_max*jmax_max,LocalNumAtoms) )
+      allocate( chebv_struct(jmax_max) )
+   endif
+!
+   deallocate( radius )
+!
    Initialized = .true.
    EmptyTable = .true.
    isFirstExchg = .true.
@@ -576,9 +686,10 @@ contains
 !  ===================================================================
    use IntegerFactorsModule, only : endIntegerFactors
 #ifdef POT_DEBUG
-!
    use SurfElementsModule, only : endSurfElements
 #endif
+!
+   use ParallelFFTModule, only : endParallelFFT
 !
    implicit none
 !
@@ -623,6 +734,9 @@ contains
       if (.not.isMTFP) then
          deallocate( DF_Pseudo )
       endif
+      deallocate( Ylm )
+      deallocate( v_interp )
+      deallocate( chebv_struct )
    endif
 !
 #ifdef POT_DEBUG
@@ -636,7 +750,9 @@ contains
    if ( isFullPot ) then
 !     ----------------------------------------------------------------
       call clearAngularData()
+      call endParallelFFT()
 !     ----------------------------------------------------------------
+      deallocate( fft_c )
       deallocate( indrl_fit )
       deallocate( pXC_r, pXC_rphi, eXC_r, eXC_rphi )
    endif
@@ -944,24 +1060,24 @@ contains
       call ErrorHandler('getPotential','invalid is',is)
    else if (jl < 1 .or. jl > Potential(id)%jmax) then
       call ErrorHandler('getPotential','invalid jl',jl)
-   else if (isMTFP .and. PotentialType(1:5)=="Pseud" ) then
-      call ErrorHandler('getPot_Lj','invalid potential type','Pseud')
+   else if (isMTFP .and. nocaseCompare(PotentialType,"Pseudo") ) then
+      call ErrorHandler('getPot_Lj','invalid potential type','Pseudo')
    endif
 !
    iend = Potential(id)%Grid%jend
-   if ( PotentialType(1:5)=="Total" ) then
+   if ( nocaseCompare(PotentialType,"Total") ) then
       pot_l => Potential(id)%potL(1:iend,jl,is)
-   else if ( PotentialType(1:5)=="Pseud" ) then
+   else if ( nocaseCompare(PotentialType,"Pseudo") ) then
       pot_l => Potential(id)%potL_Pseudo(1:iend,jl)
-   else if ( PotentialType(1:5)=="Tilda" ) then
+   else if ( nocaseCompare(PotentialType,"Tilda") ) then
       pot_l => Potential(id)%potL_Tilda(1:iend,jl)
-   else if ( PotentialType(1:5)=="Madel" ) then
+   else if ( nocaseCompare(PotentialType,"Madelung") ) then
       pot_l => Potential(id)%potL_Madelung(1:iend,jl)
-   else if ( PotentialType(1:5)=="Coulo" ) then
+   else if ( nocaseCompare(PotentialType,"Coulomb") ) then
       pot_l => Potential(id)%potL_Coulomb(1:iend,jl)
-   else if ( PotentialType(1:5)=="Exchg" ) then
+   else if ( nocaseCompare(PotentialType,"Exchg") ) then
       pot_l => Potential(id)%potL_Exch(1:iend,jl,is)
-   else if ( PotentialType(1:8)=="En_Exchg" ) then
+   else if ( nocaseCompare(PotentialType,"En_Exchg") ) then
       pot_l => Potential(id)%enL_Exch(1:iend,jl,is)
    else
       call ErrorHandler("getPot_Lj","Undefined potential type")
@@ -989,25 +1105,25 @@ contains
       call ErrorHandler('getPotential','invalid id',id)
    else if (is < 1 .or. is > n_spin_pola) then
       call ErrorHandler('getPotential','invalid is',is)
-   else if (isMTFP .and. PotentialType(1:5)=="Pseud" ) then
-      call ErrorHandler('getPot_L','invalid potential type','Pseud')
+   else if (isMTFP .and. nocaseCompare(PotentialType,"Pseudo") ) then
+      call ErrorHandler('getPot_L','invalid potential type','Pseudo')
    endif
 !
    iend = Potential(id)%Grid%jend
    jmax = Potential(id)%jmax
-   if ( PotentialType(1:5)=="Total" ) then
+   if ( nocaseCompare(PotentialType,"Total") ) then
       pot_l => Potential(id)%potL(1:iend,1:jmax,is)
-   else if ( PotentialType(1:5)=="Pseud" ) then
+   else if ( nocaseCompare(PotentialType,"Pseudo") ) then
       pot_l => Potential(id)%potL_Pseudo(1:iend,1:jmax)
-   else if ( PotentialType(1:5)=="Tilda" ) then
+   else if ( nocaseCompare(PotentialType,"Tilda") ) then
       pot_l => Potential(id)%potL_Tilda(1:iend,1:jmax)
-   else if ( PotentialType(1:5)=="Coulo" ) then
+   else if ( nocaseCompare(PotentialType,"Coulomb") ) then
       pot_l => Potential(id)%potL_Coulomb(1:iend,1:jmax)
-   else if ( PotentialType(1:5)=="Madel" ) then
+   else if ( nocaseCompare(PotentialType,"Madelung") ) then
       pot_l => Potential(id)%potL_Madelung(1:iend,1:jmax)
-   else if ( PotentialType(1:5)=="Exchg" ) then
+   else if ( nocaseCompare(PotentialType,"Exchg") ) then
       pot_l => Potential(id)%potL_Exch(1:iend,1:jmax,is)
-   else if ( PotentialType(1:8)=="En_Exchg" ) then
+   else if ( nocaseCompare(PotentialType,"En_Exchg") ) then
       pot_l => Potential(id)%enL_Exch(1:iend,1:jmax,is)
    else
       call ErrorHandler("getPot_L","Undefined potential type")
@@ -2818,31 +2934,31 @@ endif
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    subroutine calExchgCorrPot()
 !  ===================================================================
-   use DataServiceCenterModule, only : getDataStorage, RealMark
-   use ChargeDensityModule, only : getChargeDensity,                  &
-                                   getMomentDensity,                  &
+   use MPPModule, only : GlobalSum, setCommunicator, resetCommunicator
+   use ChargeDensityModule, only : getChargeDensity, getMomentDensity, &
+                                   getChargeDensityAtPoint,           &
+                                   getMomentDensityAtPoint,           &
                                    isChargeComponentZero,             &
                                    getRhoLmax
    use ExchCorrFunctionalModule, only : getExchCorrPot
-   use FFTGridModule, only : getNumGridA, getNumGridB, getNumGridC,   &
-                             isVP_point
-   use FFTTransformModule, only : FFT_struct,                         &
-                                  setFFTStruct, delFFTStruct,         &
-                                  calFFTTransform, calFFTRadialProj
-   use AtomModule, only : getLocalAtomPosition
+   use Uniform3DGridModule, only : getNumGridPoints, isOnAtomicCellBoundary
+   use ParallelFFTModule, only : performTransformR2C, allocateFunctionSpace
+   use ParallelFFTModule, only : getParaFFTCommunicator
 !
    implicit none
 !
    integer (kind=IntKind) :: is, id, ir, jl, jend, ir0, ir1, ia
    integer (kind=IntKind) :: jmin, lmin, l_rho, jmt, jmax, lmax, lmax_rho
 !
-   integer (kind=IntKind) :: nga, ngb, ngc, ng, na, nb, nc, nn_av, nn
+   integer (kind=IntKind) :: ng, na, nb, nc, nn_av, nn, nlocal, comm, p, n
 !
-   real (kind=RealKind) :: r0, rmt, posi(3), r, r2, pot_r
+   real (kind=RealKind) :: r0, rmt, r, r2, pot_r, buf(3)
    real (kind=RealKind) :: ac, bc, cc, pot_av(n_spin_pola), rho_n, mom_n
-   real (kind=RealKind), pointer :: V_tmp(:), r_mesh(:)
-   real (kind=RealKind), pointer :: p_rho(:,:,:), p_mom(:,:,:), p_Vexch(:,:,:)
+   real (kind=RealKind), allocatable, target :: rhoData(:), momData(:), excData(:)
+   real (kind=RealKind), pointer :: p_rho(:), p_mom(:)
    real (kind=RealKind), allocatable :: dV1_r(:)
+   real (kind=RealKind), pointer :: V_tmp(:), r_mesh(:)
+   real (kind=RealKind), pointer :: p_Vexch(:)
 #ifdef TIMING
    real (kind=RealKind) :: t0
 #endif
@@ -2850,22 +2966,7 @@ endif
    complex (kind=CmplxKind) :: V1_c0, dV1_c0
    complex (kind=CmplxKind), pointer :: rhol(:), moml(:)
    complex (kind=CmplxKind), pointer :: V_exc(:), vexch_jl(:,:)
-!
-   type (FFT_struct), target :: FFT_data
-!
-   interface
-      subroutine constructDensityOnGrid(density,data_type,lmax, is,  &
-                                   grid_type,InitModeFFT,InitModeVis)
-         use KindParamModule, only : IntKind
-         implicit none
-         character (len=*), intent(in) :: density
-         character (len=*), intent(in) :: data_type
-         character (len=*), intent(in) :: grid_type
-         integer (kind=IntKind), intent(in) :: lmax
-         integer (kind=IntKind), intent(in) :: is
-         integer (kind=IntKind), intent(inout) :: InitModeFFT, InitModeVis
-      end subroutine constructDensityOnGrid
-   end interface
+   complex (kind=CmplxKind), pointer :: p_fft_c(:)
 !
 #ifdef TIMING
    t0 = getTime()
@@ -2873,69 +2974,62 @@ endif
 !
    allocate( dV1_r(jend_max) )
 !
-   nga = getNumGridA()
-   ngb = getNumGridB()
-   ngc = getNumGridC()
-   ng  = nga*ngb*ngc
+!  ng = fft_grid%NumLocalGridPoints
+   ng = getNumGridPoints('FFT',local_grid=.true.)
+   call allocateFunctionSpace( rhoData, nlocal )
+   p_rho => rhoData
 !
-   call constructDensityOnGrid( "Charge", "TotalNew", -1,-1,            &
-                              "UniformGrid", InitModeFFT, InitModeVis )
-!
-   p_rho => getDataStorage("TotalNew Electron Density on Uniform Mesh", &
-                           nga, ngb, ngc, RealMark)
+   call constructDataOnGrid( 'FFT', 'Charge', 'TotalNew', getChargeDensityAtPoint, p_rho )
 !
    if ( n_spin_pola==2 ) then
-      call constructDensityOnGrid( "Moment", "TotalNew", -1,-1,         &
-                              "UniformGrid", InitModeFFT, InitModeVis )
-!
-      p_mom => getDataStorage("TotalNew Moment Density on Uniform Mesh",&
-                               nga, ngb, ngc, RealMark)
-!
+      call allocateFunctionSpace( momData, nlocal )
+      p_mom => momData
+      call constructDataOnGrid( 'FFT', 'Moment', 'TotalNew', getMomentDensityAtPoint, p_mom )
    endif
 !
-   pot_av(1:n_spin_pola) = ZERO
+   pot_av = ZERO
    if ( n_spin_pola==1 ) then
-      nn = 0
       nn_av = 0
-      do nc = 1,ngc
-         do nb = 1,ngb
-            do na = 1,nga
-               nn = nn + 1
-               p_rho(na,nb,nc) = getExchCorrPot(p_rho(na,nb,nc),ZERO,1)
-               if ( isVP_Point(nn,1)==0 ) then
-                  nn_av = nn_av + 1
-                  pot_av(1) = pot_av(1) + p_rho(na,nb,nc)
-               endif
-            enddo
-         enddo
+      do nn = 1, ng
+         p_rho(nn) = getExchCorrPot(p_rho(nn),ZERO,1)
+         if ( isOnAtomicCellBoundary('FFT',nn,local_index=.true.) ) then
+            nn_av = nn_av + 1
+            pot_av(1) = pot_av(1) + p_rho(nn)
+         endif
       enddo
    else
-      nn = 0
       nn_av = 0
-      do nc = 1,ngc
-         do nb = 1,ngb
-            do na = 1,nga
-               nn = nn + 1
-               rho_n = p_rho(na,nb,nc)
-               mom_n = p_mom(na,nb,nc)
-               p_rho(na,nb,nc) = getExchCorrPot(rho_n,mom_n,1)
-               p_mom(na,nb,nc) = getExchCorrPot(rho_n,mom_n,2)
-               if ( isVP_Point(nn,1)==0 ) then
-                  nn_av = nn_av + 1
-                  pot_av(1) = pot_av(1) + p_rho(na,nb,nc)
-                  pot_av(2) = pot_av(2) + p_mom(na,nb,nc)
-               endif
-            enddo
-         enddo
+      do nn = 1, ng
+         rho_n = p_rho(nn)
+         mom_n = p_mom(nn)
+         p_rho(nn) = getExchCorrPot(rho_n,mom_n,1)
+         p_mom(nn) = getExchCorrPot(rho_n,mom_n,2)
+         if ( isOnAtomicCellBoundary('FFT',nn,local_index=.true.) ) then
+            nn_av = nn_av + 1
+            pot_av(1) = pot_av(1) + p_rho(nn)
+            pot_av(2) = pot_av(2) + p_mom(nn)
+         endif
       enddo
    endif
-   if ( nn_av/=0 ) then
-      pot_av = pot_av/nn_av
+   buf(1) = nn_av
+   buf(2:2+n_spin_pola-1) = pot_av(1:n_spin_pola)
+   comm = getParaFFTCommunicator(MyProc=p,NumProcs=n)
+   if (comm > 0) then ! For serial FFT, comm = -1.
+      call setCommunicator(comm,p,n)
+      call GlobalSum(buf,2+n_spin_pola)
+      call resetCommunicator()
+   endif
+   if ( buf(1) >= ONE ) then
+      pot_av(1:n_spin_pola) = buf(2:2+n_spin_pola-1)/buf(1)   ! This average needs to be checked for parallel case 05/15/18
    else
       pot_av = ZERO
    endif
 !
-!   write(6,*) "Surface Pot_XC Global average::",pot_av
+!  write(6,*) "Surface Pot_XC Global average::",pot_av
+!
+!  Note: I am not clear why we need to calculate pot_av, the average
+!  exchange-correlation potential on atomic cell surface.
+!  -Yang Wang, 07/10/2018
 !
    do id = 1,LocalNumAtoms
       jend = Potential(id)%n_Rpts
@@ -3042,30 +3136,28 @@ endif
 !  Perform the Fourier transform on the exchange potential difference
 !  and construct the full expansion of the exchange Potential.
 !  -------------------------------------------------------------------
+   p_fft_c => fft_c
 !
-   call setFFTStruct( nga, ngb, ngc, FFT_data )
+   call allocateFunctionSpace( excData, nlocal )
+   p_Vexch => excData
 !
    Potential(id)%potL_Exch = CZERO ! set ZERO here
    do is = 1,n_spin_pola
-      call constructDensityOnGrid( "Potential", "XCHat", 0, is,        &
-                 "UniformGrid", InitModeFFT, InitModeVis )
-!
-      p_Vexch => getDataStorage("XCHat Potential on Uniform Mesh L00", &
-                                nga, ngb, ngc, RealMark)
+      p_Vexch = ZERO
+      call constructDataOnGrid( 'FFT', 'Potential', 'XCHat', getPotentialAtPoint, p_Vexch, lmax=0, spin=is )
 !
       if ( is == 2 ) then
          p_rho => p_mom
       endif
-      do nc = 1,ngc
-         do nb = 1,ngb
-            do na = 1,nga
-               p_Vexch(na,nb,nc) = p_rho(na,nb,nc)- p_Vexch(na,nb,nc)
-            enddo
-         enddo
+      do nn = 1, ng
+         p_Vexch(nn) = p_rho(nn)- p_Vexch(nn)
       enddo
 !
-      call calFFTTransform( p_Vexch, FFT_data, 1)
-!
+!     ----------------------------------------------------------------
+      call performTransformR2C(p_Vexch,p_fft_c)
+!     ----------------------------------------------------------------
+      call calRadialInterpolation(p_fft_c,0,60,iparam,v_interp)
+!     ---------------------------------------------------------------
       do id = 1,LocalNumAtoms
          lmax   = Potential(id)%lmax
          lmax_rho = getRhoLmax(id)
@@ -3073,20 +3165,12 @@ endif
          jmin = min(jmax,((lmax_rho+1)*(lmax_rho+2))/2)
          jend = Potential(id)%jend
          r_mesh => Potential(id)%Grid%r_mesh(1:jend)
-         rmt = r_mesh(Potential(id)%jmt)
-         posi   = getLocalAtomPosition(id)
          do ia = 1, Potential(id)%NumSpecies
             vexch_jl => Potential(id)%potL_Exch(1:jend,1:jmax,is)
-!           vexch_jl = CZERO
-!
 !           ---------------------------------------------------------
-!            call calFFTRadialProj( lmax, jend, r_mesh, posi,             &
-!                                   FFT_data, 0, vexch_jl)
+            call calRadialProjection(jend,r_mesh,                    &
+                                     iparam(:,id),v_interp(:,id),vexch_jl)
 !           ---------------------------------------------------------
-            call calFFTRadialProj( lmax, jend, r_mesh, rmt, posi,        &
-                                   FFT_data,0, 60, vexch_jl)
-!           ---------------------------------------------------------
-!
             LOOP_jl: do jl = 1,jmin
                if ( isChargeComponentZero(id,jl) ) then
                   vexch_jl(1:jend,jl) = CZERO
@@ -3106,14 +3190,14 @@ endif
             enddo LOOP_jl
          enddo
       enddo
-!
-      p_Vexch = ZERO
-!
    enddo
 !
-   deallocate( dV1_r )
+   nullify(p_fft_c, p_rho, p_mom, p_Vexch)
 !
-   call delFFTStruct(FFT_data)
+   deallocate( dV1_r, rhoData, excData )
+   if (n_spin_pola == 2) then
+      deallocate( momData )
+   endif
 !
 #ifdef TIMING
    t0 = getTime() - t0
@@ -3128,14 +3212,12 @@ endif
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    subroutine calFFTPseudoPot()
 !  ===================================================================
-   use DataServiceCenterModule, only : getDataStorage, RealMark
-   use FFTGridModule, only : getNumGridA, getNumGridB, getNumGridC
-   use FFTTransformModule, only : FFT_struct,                         &
-                                  setFFTStruct, delFFTStruct,         &
-                                  calFFTTransform, calFFTRadialProj,  &
-                                  calPseudoPotAtSite
-   use AtomModule, only : getLocalAtomPosition
-   use ChargeDensityModule, only : isChargeComponentZero, getRhoLmax
+   use MPPModule, only : GlobalSum, setCommunicator, resetCommunicator
+   use Uniform3DGridModule, only : getNumGridPoints
+   use ParallelFFTModule, only : performTransformR2C, allocateFunctionSpace
+   use ParallelFFTModule, only : getParaFFTCommunicator
+   use ChargeDensityModule, only : isChargeComponentZero, getRhoLmax, &
+                                   getChargeDensityAtPoint
    use InterpolationModule, only : FitInterp
    use MathParamModule, only : SQRT2
 !
@@ -3143,95 +3225,86 @@ endif
 !
    integer (kind=IntKind) :: id, lmax, jmax, ir, nr, jl, jmin
    integer (kind=IntKind) :: lmax_rho, jmax_rho
-   integer (kind=IntKind) :: nga, ngb, ngc, ng, i, j, k
+   integer (kind=IntKind) :: ng, i, j, k, nlocal, comm, p, n
 !
-   real (kind=RealKind) :: posi(3), rmt, pot_r, pseudo_fft, vc_0, dps
-   real (kind=RealKind) :: dfp(3), dfp_total(3), dfp_corr(3)
+   real (kind=RealKind) :: pot_r, pseudo_fft, vc_0, dps
+   real (kind=RealKind) :: dfp(3), dfp_total(3), dfp_corr(3), buf(2)
    real (kind=RealKind), pointer :: r_mesh(:)
-   real (kind=RealKind), pointer :: p_den(:,:,:)
+!  real (kind=RealKind), pointer :: p_den(:,:,:)
+   real (kind=RealKind), allocatable :: p_den(:)
 !
    complex (kind=CmplxKind), pointer :: v_jl(:,:)
-   complex (kind=CmplxKind) :: v_L0, v_L1(3)
-!
-   type (FFT_struct), target :: FFT_data
+   complex (kind=CmplxKind), pointer :: p_fft_c(:)
 !
    real (kind=RealKind) :: t0, t1, t2
-!
-   interface
-      subroutine constructDensityOnGrid(density,data_type,lmax, is, &
-                                    grid_type,InitModeFFT,InitModeVis)
-         use KindParamModule, only : IntKind
-         implicit none
-         character (len=*), intent(in) :: density
-         character (len=*), intent(in) :: data_type
-         character (len=*), intent(in) :: grid_type
-         integer (kind=IntKind), intent(in) :: lmax
-         integer (kind=IntKind), intent(in) :: is
-         integer (kind=IntKind), intent(inout) :: InitModeFFT, InitModeVis
-      end subroutine constructDensityOnGrid
-   end interface
 !
 #ifdef TIMING
    t0 = getTime()
 #endif
-   nga = getNumGridA()
-   ngb = getNumGridB()
-   ngc = getNumGridC()
-   ng  = nga*ngb*ngc
+!  ng  = fft_grid%NumLocalGridPoints
+   ng  = getNumGridPoints('FFT',local_grid=.true.)
+   call allocateFunctionSpace( p_den, nlocal )
 !
 !  gather the charge density on FFT grid
 !
-   call constructDensityOnGrid( "Charge", "Pseudo", -1, -1, &
-              "UniformGrid", InitModeFFT, InitModeVis )
+!  -------------------------------------------------------------------
+   call constructDataOnGrid( 'FFT', 'Charge', 'Pseudo', getChargeDensityAtPoint, p_den )
+!  -------------------------------------------------------------------
 #ifdef TIMING
    t1 = getTime()
    write(6,*) "calFFTPseudoPot:: Time in UniformGrid: ",t1-t0
 #endif
 !
-   p_den => getDataStorage("Pseudo Electron Density on Uniform Mesh",      &
-                           nga, ngb, ngc, RealMark)
+!  p_den => getDataStorage(StorageKey, nga, ngb, ngc, RealMark)
 !
+!  This summation needs to be carried out over processors with grid
+!  distribution. - 05/15/18
    pseudo_fft = ZERO
-   do k = 1, ngc
-      do j = 1,ngb
-         do i = 1,nga
-            pseudo_fft = pseudo_fft + p_den(i,j,k)
-         enddo
-      enddo
+   do i = 1, ng
+      pseudo_fft = pseudo_fft + p_den(i)
    enddo
-   pseudo_fft = pseudo_fft/ng
+!
+   buf(1) = ng
+   buf(2) = pseudo_fft
+   comm = getParaFFTCommunicator(MyProc=p,NumProcs=n)
+   if (comm > 0) then ! For serial FFT, comm = -1.
+      call setCommunicator(comm,p,n)
+      call GlobalSum(buf,2)
+      call resetCommunicator()
+   endif
+!  The following buf(1) should be the total number of FFT grids.
+   pseudo_fft = buf(2)/buf(1)
 #ifdef DEBUG
    write(6,'(a,d16.8)') "Sum of pseudo charge density on uniform grid =",pseudo_fft
 #endif
    pseudo_fft = ZERO ! In priciple, pseudo_fft should be zero since the pseudo charge
                      ! is neutral. Here I set it to zero -ywg
 !
-   do k = 1, ngc
-      do j = 1,ngb
-         do i = 1,nga
-            p_den(i,j,k) = p_den(i,j,k) - pseudo_fft
-         enddo
-      enddo
+   do i = 1, ng
+      p_den(i) = p_den(i) - pseudo_fft
    enddo
 !
-   call setFFTStruct( nga, ngb, ngc, FFT_data )
-!
-   call calFFTTransform( p_den, FFT_data, 1 )
+   p_fft_c => fft_c
+!  -------------------------------------------------------------------
+   call performTransformR2C(p_den,p_fft_c)
+!  -------------------------------------------------------------------
 !
 #ifdef TIMING
    t2 = getTime()
    t1 = t2 - t1
-   write(6,*) "calFFTPseudoPot:: Time in FFTTransform: ",t1
+   write(6,*) "calFFTPseudoPot:: Time in performTransformR2C: ",t1
 #endif
-   dfp_total(1:3) = ZERO
+!  -------------------------------------------------------------------
+   call calPseudoDipoleField(p_fft_c, DF_Pseudo)
+!  -------------------------------------------------------------------
+   dfp_total = ZERO
    do id = 1,LocalNumAtoms
-      posi   = getLocalAtomPosition(id)
-!     ----------------------------------------------------------------
-      call calPseudoDipoleField( posi, FFT_data, dfp)
-!     ----------------------------------------------------------------
-      DF_Pseudo(1:3,id) =  dfp(1:3)
-      dfp_total(1:3) = dfp_total(1:3) + dfp(1:3)
+      dfp_total(1:3) = dfp_total(1:3) + DF_Pseudo(1:3,id)
+!     write(6,'(a,3d16.8)'),'DF_Pseudo = ',DF_Pseudo(1:3,id)
    enddo
+!
+!  Correction is made to ensure total force acting on the unit cell is zero.
+!  But I don't think this is necessary. -Yang
 !  dfp_corr(1:3) = -dfp_total(1:3)/real(LocalNumAtoms,kind=RealKind)
    dfp_corr = ZERO
    do id = 1,LocalNumAtoms
@@ -3243,6 +3316,9 @@ endif
    write(6,*) "calFFTPseudoPot:: Time in Dipole: ",t2
 #endif
 !
+!  -------------------------------------------------------------------
+   call calRadialInterpolation(p_fft_c,-2,60,iparam,v_interp)
+!  -------------------------------------------------------------------
    do id = 1,LocalNumAtoms
       lmax   = Potential(id)%lmax
       lmax_rho = getRhoLmax(id)
@@ -3251,17 +3327,10 @@ endif
       jmin = min(jmax,jmax_rho)
       nr     = Potential(id)%jend
       r_mesh => Potential(id)%Grid%r_mesh(1:nr)
-      rmt = r_mesh(Potential(id)%jmt)
-      posi   = getLocalAtomPosition(id)
       v_jl => Potential(id)%potL_Pseudo(1:nr,1:jmax)
       v_jl = CZERO
 !     ----------------------------------------------------------------
-      call calFFTRadialProj( lmax, nr, r_mesh, rmt, posi, FFT_data,   &
-                             -2, 60, v_jl)
-!ywg  call calPseudoPotAtSite(posi,FFT_data,v_L0,v_L1) ! This is commented out
-!on June 1, 2014, so to speed up the calculation
-!     ----------------------------------------------------------------
-!      call calFFTRadialProj( lmax, nr, r_mesh, posi, FFT_data, -2, v_jl)
+      call calRadialProjection(nr,r_mesh,iparam(:,id),v_interp(:,id),v_jl)
 !     ----------------------------------------------------------------
 !
       do jl = 1,jmax
@@ -3278,11 +3347,11 @@ endif
             Potential(id)%VcoulombR0 = Potential(id)%VcoulombR0 + vc_0*Y0
 !ywg        Potential(id)%VcoulombR0 = Potential(id)%VcoulombR0 +    &
 !ywg                                   real(V_L0,kind=RealKind)*Y0
-!           if ( print_level(1) >=0 ) then
-!              write(6,'(a,d15.8,a,d15.8)')'Pseudo Pot at Site = ',vc_0*Y0
+            if ( print_level(1) >=0 ) then
+               write(6,'(a,d15.8,a,d15.8)')'Pseudo Pot at Site = ',vc_0*Y0
 !ywg           write(6,'(a,d15.8,a,d15.8)')'Old Pseudo V0 = ',vc_0*Y0,  &
 !ywg                   ', New Pseudo V0 = ',real(V_L0,kind=RealKind)*Y0
-!           endif
+            endif
             vc_r0(3) = vc_0*Y0
          else if ( mofj(jl)==0 ) then
             do ir = 1,nr
@@ -3293,7 +3362,8 @@ endif
       enddo
    enddo
 !
-   call delFFTStruct(FFT_data)
+   deallocate(p_den)
+   nullify(p_fft_c)
 #ifdef TIMING
    t2 = getTime()
    t1 = t2 - t1
@@ -3307,123 +3377,85 @@ endif
 !  *******************************************************************
 !
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-   subroutine calPseudoDipoleField(posi, fft_in, dfp)
+   subroutine calPseudoDipoleField(p_fft_c, dfp)
 !  ===================================================================
    use MathParamModule, only : SQRTm1
-   use FFTTransformModule, only : FFT_struct
+!
+   use MPPModule, only : GlobalSum, setCommunicator, resetCommunicator
+!
+   use ParallelFFTModule, only : getNumLocalGridPoints,               &
+                                 getLocalIndexOfGridOrigin,           &
+                                 getGridPointCoord, getParaFFTCommunicator
+!
+   use SystemModule, only : getAtomPosition
+!
    implicit none
 !
-   real (kind=RealKind), intent(in) :: posi(3)
+   real (kind=RealKind), intent(out), target :: dfp(3,LocalNumAtoms)
+   real (kind=RealKind), target :: dfp_buf(3,GlobalNumAtoms)
+   real (kind=RealKind), pointer :: dfp_p(:,:)
+   real (kind=RealKind) :: posi(3)
+   real (kind=RealKind) :: kv2, kvec(3)
 !
-   type (FFT_struct), intent(in) :: fft_in
+   complex (kind=CmplxKind), intent(in) :: p_fft_c(:)
+   complex (kind=CmplxKind) :: expikR, cfact
 !
-   real (kind=RealKind), intent(out) :: dfp(3)
+   integer (kind=IntKind) :: idk, idk0, ng, comm, p, n, id, ig, na
 !
-   integer (kind=IntKind) :: i, j, k, ind_n, ng, n0
-   integer (kind=IntKind) :: ng_a, ng_b, ng_c
-!
-   integer (kind=IntKind) :: jconj, kconj, ind_bc, ind_k
-!
-   real (kind=RealKind) :: kv2, kfact, dfp0(3), dfp1(3)
-!
-   real (kind=RealKind), pointer :: p_kvec(:,:)
-   real (kind=RealKind), pointer :: p_fft_r(:)
-!
-#ifndef FFTW
-   complex (kind=CmplxKind), pointer :: p_ft(:)
-#endif
-   complex (kind=CmplxKind) :: expikR, theta_k, cfact
-!
-   ng_a = fft_in%nga
-   ng_b = fft_in%ngb
-   ng_c = fft_in%ngc
-   ng   = fft_in%ng
-!
-   p_kvec => fft_in%kvec(1:3,1:ng)
-#ifndef FFTW
-   p_fft_r => fft_in%fft_r(1:ng)
-   p_ft => fft_in%ft(1:ng_b*ng_c)
-#else
-   p_fft_r => fft_in%fft_r(1:(ng_a+2)*ng_b*ng_c)
-#endif
+   idk0 = getLocalIndexOfGridOrigin('K')
+   if (idk0 > 1 .or. idk0 < 0) then
+!     ----------------------------------------------------------------
+      call ErrorHandler('calPseudoDipoleField',                       &
+                        'Grid origin does not correspond to the first local index',idk0)
+!     ----------------------------------------------------------------
+   endif
 !
    cfact = -SQRTm1
-   dfp(1:3) = ZERO
-   ind_bc = 0
-   ind_n = 1
-   n0 = 2
-   do k = 1, ng_c
-      if (k == 1) then
-         kconj = 1
+!
+   comm = getParaFFTCommunicator(MyProc=p,NumProcs=n)
+   if (comm > 0) then ! For serial FFT, comm = -1.
+      na = GlobalNumAtoms
+      dfp_p => dfp_buf
+   else
+      na = LocalNumAtoms
+      dfp_p => dfp
+   endif
+!
+   dfp_p = ZERO
+   do ig = 1, na
+      if (comm > 0) then ! For serial FFT, comm = -1.
+         posi = getAtomPosition(ig)
       else
-         kconj = ng_c + 2 - k
+         posi = LocalAtomPosi(:,ig)
       endif
-!
-      dfp1(1:3) = ZERO
-      do j = 1, ng_b
-         if (j == 1) then
-            jconj = 1
-         else
-            jconj = ng_b + 2 - j
-         endif
-!
-         dfp0(1:3) = ZERO
-         ind_bc = ind_bc + 1
-         do i = n0, ng_a
-            ind_n = ind_n + 1
-            kv2 = p_kvec(1,ind_n)**2+p_kvec(2,ind_n)**2+p_kvec(3,ind_n)**2
-!           if (kv2 > TEN2m8) then
-#ifdef FFTW
-! *** Complex ***
-!              theta_k = fftw_in_c(ind_n)
-!
-! *** Real in-place ***
-               if (i <= ng_a/2+1) then
-                  ind_k = 2*i + (j-1)*(ng_a+2) + (k-1)*ng_b*(ng_a+2)
-             !    theta_k = cmplx(p_fft_r(ind_k-1),p_fft_r(ind_k),kind=CmplxKind)
-                  theta_k = cmplx(p_fft_r(ind_k-1),-p_fft_r(ind_k),kind=CmplxKind)
-               else
-                  ind_k = 2*(ng_a+2-i)+(jconj-1)*(ng_a+2)+(kconj-1)*ng_b*(ng_a+2)
-             !    theta_k = cmplx(p_fft_r(ind_k-1),-p_fft_r(ind_k),kind=CmplxKind)
-                  theta_k = cmplx(p_fft_r(ind_k-1),p_fft_r(ind_k),kind=CmplxKind)
-               endif
-!
-#else
-               if (i == ng_a/2+1) then
-                  theta_k = p_ft(ind_bc)
-               else if (i < ng_a/2+1) then
-                  ind_k = 2*i + (j-1)*ng_a + (k-1)*ng_b*ng_a
-                  theta_k = cmplx(p_fft_r(ind_k-1),p_fft_r(ind_k),kind=CmplxKind)
-               else
-                  ind_k = 2*(ng_a+2-i) + (jconj-1)*ng_a + (kconj-1)*ng_b*ng_a
-                  theta_k = cmplx(p_fft_r(ind_k-1),-p_fft_r(ind_k),kind=CmplxKind)
-               endif
-#endif
-!
-               expikR  = exp( -SQRTm1*(p_kvec(1,ind_n)*posi(1) + &
-                                       p_kvec(2,ind_n)*posi(2) + &
-                                       p_kvec(3,ind_n)*posi(3)) )
-               kfact = real(cfact*expikR*theta_k,kind=RealKind)/kv2
-               dfp0(1:3) = dfp0(1:3) + kfact*p_kvec(1:3,ind_n)
-!           endif
-         enddo
-         n0 = 1
-         dfp1(1:3) = dfp1(1:3) + dfp0(1:3)
+      do idk =idk0+1, numk_local
+         kvec = getGridPointCoord('K',idk)
+         kv2 = kvec(1)**2+kvec(2)**2+kvec(3)**2
+         expikR  = exp( -SQRTm1*(kvec(1)*posi(1) + kvec(2)*posi(2) + kvec(3)*posi(3)) )
+         dfp_p(:,ig) = dfp_p(:,ig) + real(cfact*expikR*p_fft_c(idk),kind=RealKind)*kvec/kv2
       enddo
-      dfp(1:3) = dfp(1:3) + dfp1(1:3)
    enddo
+   if (comm > 0) then ! For serial FFT, comm = -1.
+!     ----------------------------------------------------------------
+      call setCommunicator(comm,p,n)
+      call GlobalSum(dfp_buf,3,GlobalNumAtoms)
+      call resetCommunicator()
+!     ----------------------------------------------------------------
+      do id = 1, LocalNumAtoms
+         ig = GlobalIndex(id)
+         dfp(:,id) = dfp_p(:,ig)
+      enddo
+   endif
 !
 !  ===================================================================
 !  dfp is the gradient of V:
 !  dfp(1:3) = -4pi*e^2*sum_K [theta_K/K^2 * i*K * e^{iK*posi}]
 !           = 4pi*e^2 * sum_K [ Im[theta_K*e^{iK*posi}] * K /K^2 ]
 !  ===================================================================
-   dfp(1:3) = TWO*PI4*dfp(1:3)/real(ng,kind=RealKind)
-!
-   nullify(p_kvec, p_fft_r)
-#ifndef FFTW
-   nullify( p_ft)
-#endif
+!  dfp = TWO*PI4*dfp/real(ng,kind=RealKind)
+   dfp = TWO*PI4*dfp  ! The parallel FFT transformation already includes
+                      ! a factor of 1/ng
+!  ===================================================================
 !
    end subroutine calPseudoDipoleField
 !  ===================================================================
@@ -3453,18 +3485,17 @@ endif
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    subroutine calExchgCorrEnergy()
 !  ===================================================================
-   use DataServiceCenterModule, only : getDataStorage, RealMark
-   use ChargeDensityModule, only : getChargeDensity,                  &
-                                   getMomentDensity,                  &
+   use MPPModule, only : GlobalSum, setCommunicator, resetCommunicator
+!
+   use ChargeDensityModule, only : getChargeDensity, getMomentDensity, &
+                                   getChargeDensityAtPoint,           &
+                                   getMomentDensityAtPoint,           &
                                    isChargeComponentZero,             &
                                    getRhoLmax
    use ExchCorrFunctionalModule, only : getExchCorrEnDen
-   use FFTGridModule, only : getNumGridA, getNumGridB, getNumGridC,   &
-                             isVP_point
-   use FFTTransformModule, only : FFT_struct,                         &
-                                  setFFTStruct, delFFTStruct,         &
-                                  calFFTTransform, calFFTRadialProj
-   use AtomModule, only : getLocalAtomPosition
+   use Uniform3DGridModule, only : getNumGridPoints, isOnAtomicCellBoundary
+   use ParallelFFTModule, only : performTransformR2C, allocateFunctionSpace
+   use ParallelFFTModule, only : getParaFFTCommunicator
 !
    implicit none
 !
@@ -3472,13 +3503,14 @@ endif
    integer (kind=IntKind) :: jmin, lmin, l_rho, jmt, jmax, lmax
    integer (kind=IntKind) :: lmax_rho, jmax_rho
 !
-   integer (kind=IntKind) :: nga, ngb, ngc, ng, na, nb, nc, nn_av, nn
+   integer (kind=IntKind) :: ng, na, nb, nc, nn_av, nn, nlocal, comm, p, n
 !
-   real (kind=RealKind) :: r0, rmt, posi(3), r, r2, en_r
+   real (kind=RealKind) :: r0, r, r2, en_r, buf(3)
    real (kind=RealKind) ::  ac, bc, cc, en_av(n_spin_pola), rho_n, mom_n
    real (kind=RealKind), pointer :: E_tmp(:), r_mesh(:)
-   real (kind=RealKind), pointer :: p_rho(:,:,:), p_mom(:,:,:), p_Eexch(:,:,:)
+   real (kind=RealKind), pointer :: p_rho(:), p_mom(:), p_Eexch(:)
    real (kind=RealKind), allocatable :: dE1_r(:)
+   real (kind=RealKind), allocatable, target :: rhoData(:), momData(:), excData(:)
 #ifdef TIMING
    real (kind=RealKind) :: t0
 #endif
@@ -3486,91 +3518,71 @@ endif
    complex (kind=CmplxKind) :: E1_c0, dE1_c0
    complex (kind=CmplxKind), pointer :: rhol(:), moml(:)
    complex (kind=CmplxKind), pointer :: E_exc(:), Eexch_jl(:,:)
-!
-   type (FFT_struct), target :: FFT_data
-!
-   interface
-      subroutine constructDensityOnGrid(density,data_type,lmax, is,  &
-                                   grid_type,InitModeFFT,InitModeVis)
-         use KindParamModule, only : IntKind
-         implicit none
-         character (len=*), intent(in) :: density
-         character (len=*), intent(in) :: data_type
-         character (len=*), intent(in) :: grid_type
-         integer (kind=IntKind), intent(in) :: lmax
-         integer (kind=IntKind), intent(in) :: is
-         integer (kind=IntKind), intent(inout) :: InitModeFFT, InitModeVis
-      end subroutine constructDensityOnGrid
-   end interface
+   complex (kind=CmplxKind), pointer :: p_fft_c(:)
 !
 #ifdef TIMING
    t0 = getTime()
 #endif
    allocate( dE1_r(jend_max) )
 !
-   nga = getNumGridA()
-   ngb = getNumGridB()
-   ngc = getNumGridC()
-   ng  = nga*ngb*ngc
+!  ng = fft_grid%NumLocalGridPoints
+   ng = getNumGridPoints('FFT',local_grid=.true.)
+   call allocateFunctionSpace( rhoData, nlocal )
+   p_rho => rhoData
 !
-   call constructDensityOnGrid( "Charge", "TotalNew", -1, -1,           &
-                              "UniformGrid", InitModeFFT, InitModeVis )
-!
-   p_rho => getDataStorage("TotalNew Electron Density on Uniform Mesh", &
-                           nga, ngb, ngc, RealMark)
+   call constructDataOnGrid( 'FFT', 'Charge', 'TotalNew', getChargeDensityAtPoint, p_rho )
 !
    if ( n_spin_pola==2 ) then
-      call constructDensityOnGrid( "Moment", "TotalNew", -1, -1,         &
-                               "UniformGrid", InitModeFFT, InitModeVis )
-!
-      p_mom => getDataStorage("TotalNew Moment Density on Uniform Mesh", &
-                               nga, ngb, ngc, RealMark)
-!
+      call allocateFunctionSpace( momData, nlocal )
+      p_mom => momData
+      call constructDataOnGrid( 'FFT', 'Moment', 'TotalNew', getMomentDensityAtPoint, p_mom )
    endif
 !
    en_av(1:n_spin_pola) = ZERO
    if ( n_spin_pola==1 ) then
       nn = 0
       nn_av = 0
-      do nc = 1,ngc
-         do nb = 1,ngb
-            do na = 1,nga
-               nn = nn + 1
-               p_rho(na,nb,nc) = getExchCorrEnDen(p_rho(na,nb,nc),ZERO,1)
-               if ( isVP_Point(nn,1)==0 ) then
-                  nn_av = nn_av + 1
-                  en_av(1) = en_av(1) + p_rho(na,nb,nc)
-               endif
-            enddo
-         enddo
+      do nn = 1, ng
+         p_rho(nn) = getExchCorrEnDen(p_rho(nn),ZERO,1)
+         if ( isOnAtomicCellBoundary('FFT',nn,local_index=.true.) ) then
+            nn_av = nn_av + 1
+            en_av(1) = en_av(1) + p_rho(nn)
+         endif
       enddo
    else
       nn = 0
       nn_av = 0
-      do nc = 1,ngc
-         do nb = 1,ngb
-            do na = 1,nga
-               nn = nn + 1
-               rho_n = p_rho(na,nb,nc)
-               mom_n = p_mom(na,nb,nc)
-               p_rho(na,nb,nc) = getExchCorrEnDen(rho_n,mom_n,1)
-               p_mom(na,nb,nc) = getExchCorrEnDen(rho_n,mom_n,2)
-               if ( isVP_Point(nn,1)==0 ) then
-                  nn_av = nn_av + 1
-                  en_av(1) = en_av(1) + p_rho(na,nb,nc)
-                  en_av(2) = en_av(2) + p_mom(na,nb,nc)
-               endif
-            enddo
-         enddo
+      do nn = 1, ng
+         rho_n = p_rho(nn)
+         mom_n = p_mom(nn)
+         p_rho(nn) = getExchCorrEnDen(rho_n,mom_n,1)
+         p_mom(nn) = getExchCorrEnDen(rho_n,mom_n,2)
+         if ( isOnAtomicCellBoundary('FFT',nn,local_index=.true.) ) then
+            nn_av = nn_av + 1
+            en_av(1) = en_av(1) + p_rho(nn)
+            en_av(2) = en_av(2) + p_mom(nn)
+         endif
       enddo
    endif
-   if ( nn_av/=0 ) then
-      en_av = en_av/nn_av
+   buf(1) = nn_av
+   buf(2:2+n_spin_pola-1) = en_av(1:n_spin_pola)
+   comm = getParaFFTCommunicator(MyProc=p,NumProcs=n)
+   if (comm > 0) then ! For serial FFT, comm = -1.
+      call setCommunicator(comm,p,n)
+      call GlobalSum(buf,2+n_spin_pola)
+      call resetCommunicator()
+   endif
+   if ( buf(1) >= ONE ) then
+      en_av(1:n_spin_pola) = buf(2:2+n_spin_pola-1)/buf(1)   ! This average needs to be checked for parallel case 05/15/18
    else
       en_av = ZERO
    endif
 !
-!   write(6,*) "Surface Energy_XC Global average::",en_av
+!  write(6,*) "Surface Energy_XC Global average::",en_av
+!
+!  Note: I am not clear why we need to calculate en_av, the average
+!  exchange-correlation energy density on atomic cell surface.
+!  -Yang Wang, 07/10/2018
 !
    do id = 1,LocalNumAtoms
       jend = Potential(id)%n_Rpts
@@ -3585,7 +3597,6 @@ endif
       jmin = (lmin+1)*(lmin+2)/2
       r_mesh => Potential(id)%Grid%r_mesh(1:jend)
       r0 = r_mesh(ir0)
-      rmt = r_mesh(jmt)
       do ir = 1,jend
          sqrt_r(ir) =sqrt(r_mesh(ir))
       enddo
@@ -3647,32 +3658,29 @@ endif
 !  potential difference and construct the full spherical harmonics expansion
 !  of the exchange correlation potential.
 !  -------------------------------------------------------------------
+   p_fft_c => fft_c
 !
-   call setFFTStruct( nga, ngb, ngc, FFT_data )
+   call allocateFunctionSpace( excData, nlocal )
+   p_Eexch => excData
 !
    Potential(id)%enL_Exch = CZERO  ! set ZERO here
    do is = 1,n_spin_pola
-      call constructDensityOnGrid( "Potential", "En_XCHat", 0, is,        &
-                                "UniformGrid", InitModeFFT, InitModeVis )
-!
-      p_Eexch => getDataStorage("En_XCHat Potential on Uniform Mesh L00", &
-                                nga, ngb, ngc, RealMark)
+      p_Eexch = ZERO
+      call constructDataOnGrid( 'FFT', 'Potential', 'En_XCHat', getPotentialAtPoint, p_Eexch, lmax=0, spin=is )
 !
       if ( is == 2 ) then
          p_rho => p_mom
       endif
-      do nc = 1,ngc
-         do nb = 1,ngb
-            do na = 1,nga
-               p_Eexch(na,nb,nc) = p_rho(na,nb,nc)- p_Eexch(na,nb,nc)
-            enddo
-         enddo
+      do nn = 1, ng
+         p_Eexch(nn) = p_rho(nn) - p_Eexch(nn)
       enddo
 !
-      call calFFTTransform( p_Eexch, FFT_data, 1)
-!
+!     ----------------------------------------------------------------
+      call performTransformR2C(p_Eexch,p_fft_c)
+!     ----------------------------------------------------------------
+      call calRadialInterpolation(p_fft_c,0,80,iparam,v_interp)
+!     ---------------------------------------------------------------
       do id = 1,LocalNumAtoms
-!
          lmax   = Potential(id)%lmax
          lmax_rho = getRhoLmax(id)
          jmax_rho = ((lmax_rho+1)*(lmax_rho+2))/2
@@ -3680,17 +3688,10 @@ endif
          jmin = min(jmax,jmax_rho)
          jend = Potential(id)%jend
          r_mesh => Potential(id)%Grid%r_mesh(1:jend)
-         rmt = r_mesh(Potential(id)%jmt)
-         posi   = getLocalAtomPosition(id)
          Eexch_jl => Potential(id)%enL_Exch(1:jend,1:jmax,is)
-!        Eexch_jl = CZERO
-!
 !        ------------------------------------------------------------
-!         call calFFTRadialProj( lmax, jend, r_mesh, posi,            &
-!                                FFT_data, 0, Eexch_jl)
-!        ------------------------------------------------------------
-         call calFFTRadialProj( lmax, jend, r_mesh, rmt, posi,        &
-                                FFT_data,0, 80, Eexch_jl)
+         call calRadialProjection(jend,r_mesh,                       &
+                                  iparam(:,id),v_interp(:,id),Eexch_jl)
 !        ------------------------------------------------------------
 !
          LOOP_jl: do jl = 1,jmax
@@ -3712,14 +3713,15 @@ endif
          enddo LOOP_jl
 !
       enddo
-!
-      p_Eexch = ZERO
-!
    enddo
 !
    deallocate( dE1_r )
 !
-   call delFFTStruct(FFT_data)
+   nullify(p_fft_c, p_rho, p_mom, p_Eexch)
+   deallocate( rhoData, excData)
+   if (n_spin_pola == 2) then
+      deallocate( momData )
+   endif
 #ifdef TIMING
    t0 = getTime()-t0
    write(6,*) "calExchgCorrEnergy:: Time : ",t0
@@ -3733,12 +3735,12 @@ endif
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    subroutine calExchangeJl(id,ia,lmax_in)
 !  ===================================================================
-   use SphericalHarmonicsModule, only : calYlm
 !  use SystemSymmetryModule, only : getSymmetryFlags ! The symmetry break is likely 
 !                                                      caused by the calculation
 !                                                      of the ex-corr potential
-   use ChargeDensityModule, only : getChargeDensity,                  &
-                                   getMomentDensity,                  &
+   use ChargeDensityModule, only : getChargeDensity, getMomentDensity, &
+                                   getChargeDensityAtPoint,           &
+                                   getMomentDensityAtPoint,           &
                                    getRhoLmax
    use ExchCorrFunctionalModule, only : calExchangeCorrelation
    use ExchCorrFunctionalModule, only : getExchCorrEnDen
@@ -3885,19 +3887,23 @@ endif
             else
                it = (it0+1)/2
             endif
+!
+! The following code appears alright: theta corresonds to
+! Phi, and phi corresponds to Theta. Just a bad way in naming the variables. -Yang Wang
+!
             sint = sin(theta(it))
             cost = cos(theta(it))
             posi(1) = sint*sinp
             posi(2) = cost*sinp
             posi(3) = cosp
             posi(1:3) = r_mesh(ir)*posi(1:3)
-            rho = getChargeDensity( "TotalNew", id, ia, posi, -1)
+            rho = getChargeDensityAtPoint( 'TotalNew', id, ia, posi )
             if ( rho <= ZERO ) then
                cycle Loop_the01
             endif
             mom = ZERO
             if ( n_spin_pola==2 ) then
-               mom = getMomentDensity( "TotalNew", id, ia, posi, -1)
+               mom = getMomentDensityAtPoint( 'TotalNew', id, ia, posi )
             endif
             do is = 1,n_spin_pola
                call calExchangeCorrelation(rho,mom,is,pXC_rtp,eXC_rtp)
@@ -4203,11 +4209,11 @@ endif
 !
    complex (kind=CmplxKind), pointer :: potl_is(:,:,:), potl(:,:)
 !
-   if (isMTFP .and.  pot_type(1:5)=="Pseud") then
+   if (isMTFP .and. nocaseCompare(pot_type,"Pseudo") ) then
       call ErrorHandler('printPot_L','invalid potential type','Pseudo')
-   else if (isMTFP .and. pot_type(1:5)=="XCHat") then
+   else if (isMTFP .and. nocaseCompare(pot_type,"XCHat") ) then
       call ErrorHandler('printPot_L','invalid potential type','XCHat')
-   else if (isMTFP .and. pot_type(1:8)=="En_XCHat") then
+   else if (isMTFP .and. nocaseCompare(pot_type,"En_XCHat") ) then
       call ErrorHandler('printPot_L','invalid potential type','En_XCHat')
    endif
 !
@@ -4265,39 +4271,39 @@ endif
    endif
 !
    if ( present(pot_type) ) then
-      if ( pot_type(1:5) == "Total" ) then
+      if ( nocaseCompare(pot_type,"Total") ) then
          potl_is => Potential(i)%potL(:,:,:)
          flag_jl => Potential(i)%PotCompFlag
          ns = 2
-      else if ( pot_type(1:5) == "Tilda" ) then
+      else if ( nocaseCompare(pot_type,"Tilda") ) then
          potl => Potential(i)%potL_Tilda
          flag_jl => Potential(i)%potL_Tilda_flag
          ns = 1
-      else if ( pot_type(1:5) == "Coulo" ) then
+      else if ( nocaseCompare(pot_type,"Coulomb") ) then
          potl => Potential(i)%potL_Coulomb
          flag_jl => Potential(i)%potL_Coulomb_flag
          ns = 1
-      else if ( pot_type(1:5) == "Pseud" ) then
+      else if ( nocaseCompare(pot_type,"Pseudo") ) then
          potl => Potential(i)%potL_Pseudo
          flag_jl => Potential(i)%potL_Pseudo_flag
          ns = 1
-      else if ( pot_type(1:5) == "Madel" ) then
+      else if ( nocaseCompare(pot_type,"Madelung") ) then
          potl => Potential(i)%potL_Madelung
          flag_jl => Potential(i)%potL_Madelung_flag
          ns = 1
-      else if ( pot_type(1:5) == "Exchg" ) then
+      else if ( nocaseCompare(pot_type,"Exchg") ) then
          potl_is => Potential(i)%potL_Exch
          flag_jl => Potential(i)%potL_Exch_flag
          ns = 2
-      else if ( pot_type(1:5) == "XCHat" ) then
+      else if ( nocaseCompare(pot_type,"XCHat") ) then
          potl_is => Potential(i)%potL_XCHat
          flag_jl => Potential(i)%potL_XCHat_flag
          ns = 2
-      else if ( pot_type(1:8) == "En_Exchg" ) then
+      else if ( nocaseCompare(pot_type,"En_Exchg") ) then
          potl_is => Potential(i)%enL_Exch
          flag_jl => Potential(i)%potL_Exch_flag
          ns = 2
-      else if ( pot_type(1:8) == "En_XCHat" ) then
+      else if ( nocaseCompare(pot_type,"En_XCHat") ) then
          potl_is => Potential(i)%enL_XCHat
          flag_jl => Potential(i)%potL_XCHat_flag
          ns = 2
@@ -4409,7 +4415,7 @@ endif
 !  *******************************************************************
 !
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-   function getPoten_l2( id, ia, posi, potType ) result(pot)
+   function getPotentialAtPoint( potType, id, ia, posi, jmax_in, spin ) result(pot)
 !  ===================================================================
    use SphericalHarmonicsModule, only : calYlm
 !
@@ -4418,10 +4424,16 @@ endif
    use PotentialTypeModule, only : isMuffinTinPotential
 !
    use AtomModule, only : getLocalAtomicNumber
+!
+   use PolyhedraModule, only: isExternalPoint
+!
    implicit none
 !
+   character (len=*), intent(in) :: potType
+!
    integer (kind=IntKind), intent(in) :: id, ia
-   character (len=*), optional :: potType
+   integer (kind=IntKind), intent(in), optional :: jmax_in
+   integer (kind=IntKind), intent(in), optional :: spin
 !
    real (kind=RealKind), intent(in) :: posi(3)
 !
@@ -4432,7 +4444,6 @@ endif
 !
    complex (kind=CmplxKind) :: pot_in
    complex (kind=CmplxKind), pointer :: pot_l(:,:)
-   complex (kind=CmplxKind), allocatable :: ylm(:)
 !
    interface
       subroutine hunt(n,xx,x,jlo)
@@ -4446,163 +4457,35 @@ endif
    end interface
 !
    if (id < 1 .or. id > LocalNumAtoms) then
-      call ErrorHandler('getPoten_l','invalid id',id)
-   else if (isMTFP .and.  potType(1:5)=="Pseud") then
-      call ErrorHandler('getPoten_l2','invalid potential type','Pseudo')
-   else if (isMTFP .and. potType(1:5)=="XCHat") then
-      call ErrorHandler('getPoten_l2','invalid potential type','XCHat')
-   else if (isMTFP .and. potType(1:8)=="En_XCHat") then
-      call ErrorHandler('getPoten_l2','invalid potential type','En_XCHat')
+      call ErrorHandler('getPotentialAtPoint','invalid id',id)
+   else if (isMTFP) then
+      if ( nocaseCompare(potType,"Pseudo") .or. &
+           nocaseCompare(potType,"XCHat") .or.  &
+           nocaseCompare(potType,"En_XCHat") ) then
+         call ErrorHandler('getPotentialAtPoint','invalid potential type for MTFP case',potType)
+      endif
    endif
 !
-   jmax = Potential(id)%jmax
+   if (present(jmax_in)) then
+      if ( jmax_in<1 .or. jmax_in>Potential(id)%jmax ) then
+         call ErrorHandler('getPotentialAtPoint','invalid jmax_in',jmax_in)
+      endif
+      jmax = jmax_in
+   else
+      jmax = Potential(id)%jmax
+   endif
 !
    pot = ZERO
-   iend = Potential(id)%Grid%jend
-   r = sqrt( posi(1)*posi(1)+posi(2)*posi(2)+posi(3)*posi(3))
-   if (r > Potential(id)%Grid%r_mesh(iend)) then
+!
+   if ( isExternalPoint(id,posi(1),posi(2),posi(3)) ) then
       return
    endif
 !
-   r_mesh => Potential(id)%Grid%r_mesh(1:iend)
-!  -------------------------------------------------------------------
-   call hunt(iend,r_mesh(1:iend),r,ir)
-!  -------------------------------------------------------------------
-   if (ir > iend-(n_inter-1)/2) then
-      irp=iend-n_inter+1
-   else if (2*ir+1 > n_inter) then
-      irp=ir-(n_inter-1)/2
-   else
-      irp=1
-   endif
-!
-   if ( isMuffinTinPotential() .and. Potential(id)%jmax==1 ) then
-      jmt = Potential(id)%Grid%jmt
-      if ( ir > jmt ) then
-         return
-      else if ( ir>jmt-(n_inter-1)/2 ) then
-         irp = jmt-n_inter+1
-      endif
-   endif
-!
-   allocate( ylm((Potential(id)%lmax+1)**2))
-!  -------------------------------------------------------------------
-   call calYlm(posi,Potential(id)%lmax,ylm)
-!  -------------------------------------------------------------------
-!
-   do ns = 1,n_spin_pola
-      if ( present(potType) ) then
-         if ( potType(1:5)=="Tilda" ) then
-            pot_l => Potential(id)%potL_Tilda(1:iend,1:jmax)
-         else if ( potType(1:5)=="Coulo") then
-            pot_l => Potential(id)%potL_Coulomb(1:iend,1:jmax)
-         else if ( potType(1:5)=="Madel" ) then
-            pot_l => Potential(id)%potL_Madelung(1:iend,1:jmax)
-         else if ( potType(1:5)=="Total" ) then
-            pot_l => Potential(id)%potL(1:iend,1:jmax,ns)
-         else if ( potType(1:5)=="Pseud") then
-            pot_l => Potential(id)%potL_Pseudo(1:iend,1:jmax)
-         else if ( potType(1:5)=="Exchg") then
-            pot_l => Potential(id)%potL_Exch(1:iend,1:jmax,ns)
-         else if ( potType(1:5)=="XCHat") then
-            pot_l => Potential(id)%potL_XCHat(1:iend,1:jmax,ns)
-         else if ( potType(1:8)=="En_Exchg") then
-            pot_l => Potential(id)%enL_Exch(1:iend,1:jmax,ns)
-         else if ( potType(1:8)=="En_XCHat") then
-            pot_l => Potential(id)%enL_XCHat(1:iend,1:jmax,ns)
-         endif
-      else
-         pot_l => Potential(id)%potL(1:iend,1:jmax,ns)
-      endif
-!
-      do jl = jmax,1,-1
-         l = lofj(jl)
-!        -------------------------------------------------------------
-         call PolyInterp(n_inter, r_mesh(irp:irp+n_inter-1),           &
-                         pot_l(irp:irp+n_inter-1,jl), r, pot_in, err)
-!        -------------------------------------------------------------
-         kl = (l+1)*(l+1)-l+mofj(jl)
-         if (mofj(jl) == 0) then
-            pot = pot + real(pot_in*ylm(kl),RealKind)
-         else
-            pot = pot + TWO*real(pot_in*ylm(kl),RealKind)
-         endif
-      enddo
-   enddo
-   pot = pot/(ONE+real(n_spin_pola-1,kind=RealKind))
-!
-   deallocate( ylm )
-!
-   end function getPoten_l2
-!  ===================================================================
-!
-!  *******************************************************************
-!
-!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-   function getPoten_l3(id, ia, jmax_in, posi, potType, spin, VP_point ) result(pot)
-!  ===================================================================
-   use SphericalHarmonicsModule, only : calYlm
-!
-   use InterpolationModule, only : PolyInterp
-!
-   use PotentialTypeModule, only : isMuffinTinPotential
-!
-   use AtomModule, only : getLocalAtomicNumber
-   implicit none
-!
-   integer (kind=IntKind), intent(in) :: id, ia
-   integer (kind=IntKind), intent(in) :: jmax_in
-   integer (kind=IntKind), intent(in) :: spin
-   character (len=*), optional :: potType
-   integer (kind=IntKind), optional :: VP_point
-!
-   real (kind=RealKind), intent(in) :: posi(3)
-!
-   integer (kind=IntKind) :: iend, irp, ir, l, kl, jl, ns, jmt, jmax
-!
-   real (kind=RealKind) :: r, pot, err
-   real (kind=RealKind), pointer :: r_mesh(:)
-!
-   complex (kind=CmplxKind) :: pot_in
-   complex (kind=CmplxKind), pointer :: pot_l(:,:)
-   complex (kind=CmplxKind), allocatable :: ylm(:)
-!
-   interface
-      subroutine hunt(n,xx,x,jlo)
-         use KindParamModule, only : IntKind, RealKind
-         implicit none
-         integer (kind=IntKind), intent(in) :: n
-         integer (kind=IntKind), intent(inout) :: jlo
-         real (kind=RealKind), intent(in) :: xx(n)
-         real (kind=RealKind), intent(in) :: x
-      end subroutine hunt
-   end interface
-!
-   if (id < 1 .or. id > LocalNumAtoms) then
-      call ErrorHandler('getPoten_l3','invalid id',id)
-   else if (isMTFP .and.  potType(1:5)=="Pseud") then
-      call ErrorHandler('getPoten_l3','invalid potential type','Pseudo')
-   else if (isMTFP .and. potType(1:5)=="XCHat") then
-      call ErrorHandler('getPoten_l3','invalid potential type','XCHat')
-   else if (isMTFP .and. potType(1:8)=="En_XCHat") then
-      call ErrorHandler('getPoten_l3','invalid potential type','EN_XCHat')
-   endif
-!
-   if ( jmax_in<1 ) then
-      jmax = Potential(id)%jmax
-   else
-      jmax = jmax_in
-   endif
-!
-   pot = ZERO
    iend = Potential(id)%Grid%jend
    r = sqrt( posi(1)*posi(1)+posi(2)*posi(2)+posi(3)*posi(3))
    if ( r > Potential(id)%Grid%r_mesh(iend) ) then
       return
    endif
-   if ( present(VP_point) ) then
-       if ( VP_point<0 ) return
-   endif
 !
    r_mesh => Potential(id)%Grid%r_mesh(1:iend)
 !  -------------------------------------------------------------------
@@ -4625,35 +4508,33 @@ endif
       endif
    endif
 !
-   allocate( ylm((Potential(id)%lmax+1)**2))
 !  -------------------------------------------------------------------
-   call calYlm(posi,Potential(id)%lmax,ylm)
+   call calYlm(posi,Potential(id)%lmax,Ylm)
 !  -------------------------------------------------------------------
 !
-   if ( spin/=1 .and. spin/=2 ) then
+   if ( .not.present(spin) ) then
       do ns = 1,n_spin_pola
-         if ( present(potType) ) then
-            if ( potType(1:5)=="Tilda" ) then
-               pot_l => Potential(id)%potL_Tilda(1:iend,1:jmax)
-            else if ( potType(1:5)=="Madel") then
-               pot_l => Potential(id)%potL_Madelung(1:iend,1:jmax)
-            else if ( potType(1:5)=="Total" ) then
-               pot_l => Potential(id)%potL(1:iend,1:jmax,ns)
-            else if ( potType(1:5)=="Pseud") then
-               pot_l => Potential(id)%potL_Pseudo(1:iend,1:jmax)
-            else if ( potType(1:5)=="Exchg") then
-               pot_l => Potential(id)%potL_Exch(1:iend,1:jmax,ns)
-            else if ( potType(1:5)=="Coulo" ) then
-               pot_l => Potential(id)%potL_Coulomb(1:iend,1:jmax)
-            else if ( potType(1:5)=="XCHat") then
-               pot_l => Potential(id)%potL_XCHat(1:iend,1:jmax,ns)
-            else if ( potType(1:8)=="En_Exchg") then
-               pot_l => Potential(id)%enL_Exch(1:iend,1:jmax,ns)
-            else if ( potType(1:8)=="En_XCHat") then
-               pot_l => Potential(id)%enL_XCHat(1:iend,1:jmax,ns)
-            endif
-         else
+         if ( nocaseCompare(potType,"Tilda") ) then
+            pot_l => Potential(id)%potL_Tilda(1:iend,1:jmax)
+         else if ( nocaseCompare(potType,"Madelung") ) then
+            pot_l => Potential(id)%potL_Madelung(1:iend,1:jmax)
+         else if ( nocaseCompare(potType,"Total") ) then
             pot_l => Potential(id)%potL(1:iend,1:jmax,ns)
+         else if ( nocaseCompare(potType,"Pseudo") ) then
+            pot_l => Potential(id)%potL_Pseudo(1:iend,1:jmax)
+         else if ( nocaseCompare(potType,"Exchg") ) then
+            pot_l => Potential(id)%potL_Exch(1:iend,1:jmax,ns)
+         else if ( nocaseCompare(potType,"Coulomb") ) then
+            pot_l => Potential(id)%potL_Coulomb(1:iend,1:jmax)
+         else if ( nocaseCompare(potType,"XCHat") ) then
+            pot_l => Potential(id)%potL_XCHat(1:iend,1:jmax,ns)
+         else if ( nocaseCompare(potType,"En_Exchg") ) then
+            pot_l => Potential(id)%enL_Exch(1:iend,1:jmax,ns)
+         else if ( nocaseCompare(potType,"En_XCHat") ) then
+            pot_l => Potential(id)%enL_XCHat(1:iend,1:jmax,ns)
+         else
+            call ErrorHandler('getPotentialAtPoint','invalid potential type',potType)
+!           pot_l => Potential(id)%potL(1:iend,1:jmax,ns)
          endif
 !
          do jl = jmax,1,-1
@@ -4664,36 +4545,38 @@ endif
 !           ----------------------------------------------------------
             kl = (l+1)*(l+1)-l+mofj(jl)
             if (mofj(jl) == 0) then
-               pot = pot + real(pot_in*ylm(kl),RealKind)
+               pot = pot + real(pot_in*Ylm(kl),RealKind)
             else
-               pot = pot + TWO*real(pot_in*ylm(kl),RealKind)
+               pot = pot + TWO*real(pot_in*Ylm(kl),RealKind)
             endif
          enddo
       enddo
       pot = pot/(ONE+real(n_spin_pola-1,kind=RealKind))
    else
-      if ( present(potType) ) then
-         if ( potType(1:5)=="Tilda" ) then
-            pot_l => Potential(id)%potL_Tilda(1:iend,1:jmax)
-         else if ( potType(1:5)=="Madel") then
-            pot_l => Potential(id)%potL_Madelung(1:iend,1:jmax)
-         else if ( potType(1:5)=="Total" ) then
-            pot_l => Potential(id)%potL(1:iend,1:jmax,spin)
-         else if ( potType(1:5)=="Pseud") then
-            pot_l => Potential(id)%potL_Pseudo(1:iend,1:jmax)
-         else if ( potType(1:5)=="Exchg") then
-            pot_l => Potential(id)%potL_Exch(1:iend,1:jmax,spin)
-         else if ( potType(1:5)=="Coulo" ) then
-            pot_l => Potential(id)%potL_Coulomb(1:iend,1:jmax)
-         else if ( potType(1:5)=="XCHat") then
-            pot_l => Potential(id)%potL_XCHat(1:iend,1:jmax,spin)
-         else if ( potType(1:8)=="En_Exchg") then
-            pot_l => Potential(id)%enL_Exch(1:iend,1:jmax,spin)
-         else if ( potType(1:8)=="En_XCHat") then
-            pot_l => Potential(id)%enL_XCHat(1:iend,1:jmax,spin)
-         endif
-      else
+      if ( spin<1 .or. spin>2 ) then
+         call ErrorHandler('getPotentialAtPoint','invalid spin index',spin)
+      endif
+      if ( nocaseCompare(potType,"Tilda") ) then
+         pot_l => Potential(id)%potL_Tilda(1:iend,1:jmax)
+      else if ( nocaseCompare(potType,"Madelung") ) then
+         pot_l => Potential(id)%potL_Madelung(1:iend,1:jmax)
+      else if ( nocaseCompare(potType,"Total") ) then
          pot_l => Potential(id)%potL(1:iend,1:jmax,spin)
+      else if ( nocaseCompare(potType,"Pseudo") ) then
+         pot_l => Potential(id)%potL_Pseudo(1:iend,1:jmax)
+      else if ( nocaseCompare(potType,"Exchg") ) then
+         pot_l => Potential(id)%potL_Exch(1:iend,1:jmax,spin)
+      else if ( nocaseCompare(potType,"Coulomb") ) then
+         pot_l => Potential(id)%potL_Coulomb(1:iend,1:jmax)
+      else if ( nocaseCompare(potType,"XCHat") ) then
+         pot_l => Potential(id)%potL_XCHat(1:iend,1:jmax,spin)
+      else if ( nocaseCompare(potType,"En_Exchg") ) then
+         pot_l => Potential(id)%enL_Exch(1:iend,1:jmax,spin)
+      else if ( nocaseCompare(potType,"En_XCHat") ) then
+         pot_l => Potential(id)%enL_XCHat(1:iend,1:jmax,spin)
+      else
+         call ErrorHandler('getPotentialAtPoint','invalid potential type',potType)
+!        pot_l => Potential(id)%potL(1:iend,1:jmax,spin)
       endif
 !
       do jl = jmax,1,-1
@@ -4704,15 +4587,434 @@ endif
 !        -------------------------------------------------------------
          kl = (l+1)*(l+1)-l+mofj(jl)
          if (mofj(jl) == 0) then
-            pot = pot + real(pot_in*ylm(kl),RealKind)
+            pot = pot + real(pot_in*Ylm(kl),RealKind)
          else
-            pot = pot + TWO*real(pot_in*ylm(kl),RealKind)
+            pot = pot + TWO*real(pot_in*Ylm(kl),RealKind)
          endif
       enddo
    endif
 !
-   deallocate( ylm )
+   end function getPotentialAtPoint
+!  ===================================================================
 !
-   end function getPoten_l3
+!  *******************************************************************
+!
+!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+   subroutine calRadialInterpolation(p_fft_c,kpow,ninterp,            &
+                                     iparam_out,w_interp)
+!  ===================================================================
+   use BesselModule, only : SphericalBessel
+!
+   use SphericalHarmonicsModule, only : calYlmConjg
+!
+   use ChebyshevModule, only : calChebGrid
+!
+   use ParallelFFTModule, only : getNumLocalGridPoints,      &
+                                 getNumGlobalGridPoints,     &
+                                 getLocalIndexOfGridOrigin,  &
+                                 getGridPointCoord, getParaFFTCommunicator
+!
+   use MPPModule, only : GlobalSum, setCommunicator, resetCommunicator
+   use GroupCommModule, only : getGroupID, GlobalSumInGroup
+!
+   use SystemModule, only : getAtomPosition
+!
+   implicit none
+!
+   integer (kind=IntKind), intent(in) :: kpow, ninterp
+   integer (kind=IntKind) :: n_rmesh, idk, idk0, nnr, comm, p, n, nmax, aGID
+   integer (kind=IntKind) :: lmax, jmax, kl, jl, l, m, i, nr
+   integer (kind=IntKind) :: ir_lsq, na, ia, id, ig
+!
+   real (kind=RealKind) :: dummy, k2, rmt, kfact_r, kfact_i, r0
+   real (kind=RealKind) :: posi(3), kvec(3)
+   real (kind=RealKind), pointer :: r_interp(:)
+   real (kind=RealKind), target :: r_interp_global(n_interp_max*nr_int_max,GlobalNumAtoms)
+   real (kind=RealKind) :: dr_int(nr_int_max)
+   real (kind=RealKind) :: kri(n_interp_max*nr_int_max)
+   real (kind=RealKind), allocatable, target :: Bj_l(:)
+   real (kind=RealKind), pointer :: rmesh(:)
+   real (kind=RealKind), pointer ::  p_Bj_l(:,:)
+!
+   complex (kind=CmplxKind), intent(in) :: p_fft_c(:)
+   complex(kind=CmplxKind) :: expikr, kfact, i2l
+   complex(kind=CmplxKind), intent(out), target :: w_interp(:,:)
+   complex(kind=CmplxKind), target, allocatable :: w_interp_global(:,:)
+   complex(kind=CmplxKind), pointer :: pv_interp(:,:)
+!
+!  ===================================================================
+!  Interpolation parameters
+!  ===================================================================
+   integer (kind=IntKind), intent(out) :: iparam_out(:,:)
+   integer (kind=IntKind) :: n_interp, n_interp_in, nr_int
+   integer (kind=IntKind) :: d_ir(nr_int_max)
+   integer (kind=IntKind) :: iparam_global(4+nr_int_max,GlobalNumAtoms)
+!
+   interface
+      subroutine hunt(n,xx,x,jlo)
+         use KindParamModule, only : IntKind, RealKind
+         implicit none
+         integer (kind=IntKind), intent(in) :: n
+         integer (kind=IntKind), intent(inout) :: jlo
+         real (kind=RealKind), intent(in) :: xx(n)
+         real (kind=RealKind), intent(in) :: x
+      end subroutine hunt
+   end interface
+!
+!  ===================================================================
+!  Back FFT to compute the radial jl components of potential
+!  ===================================================================
+   if (kpow < 0) then
+      idk0 = getLocalIndexOfGridOrigin('K')
+      if ( idk0 > 1 .or. idk0 < 0) then
+!        -------------------------------------------------------------
+         call ErrorHandler('calRadialInterpolation',                  &
+                           'Grid origin does not correspond to the first local index',idk0)
+!        -------------------------------------------------------------
+      endif
+   else
+      idk0 = 0
+   endif
+!
+   n_interp  = ninterp
+   r_interp_global = ZERO
+   do id = 1, LocalNumAtoms
+      lmax   = Potential(id)%lmax
+      n_rmesh = Potential(id)%jend
+      rmesh => Potential(id)%Grid%r_mesh
+      rmt = rmesh(Potential(id)%jmt)
+!
+      ig = GlobalIndex(id)
+      r_interp => r_interp_global(:,ig)
+!
+!     ================================================================
+!     With increase of l_max, Gibs fenomena occurs at larger r.
+!     For different values of l_max define ranges to apply the Chebyshev fit,
+!     and use a linear square fit( order 3 polynomial )
+!     to extrapolate the Chebyshev fit to small r
+!     ================================================================
+      if (lmax > 8) then
+         nr_int = 3
+         dr_int(1) = rmesh(1)
+         dr_int(2) = HALF*rmt
+         dr_int(3) = rmt
+      else if (lmax > 4) then
+         nr_int = 2
+         dr_int(1) = rmesh(1)
+         dr_int(2) = HALF*rmt
+      else
+         nr_int = 1
+         dr_int(1) = rmesh(1)
+      endif
+!
+      do i = 1, nr_int
+         r0 = dr_int(i)
+!        -------------------------------------------------------------
+         call hunt(n_rmesh,rmesh,r0,ir_lsq)
+!        -------------------------------------------------------------
+         d_ir(i) = ir_lsq
+         dr_int(i) = rmesh(ir_lsq)
+!        -------------------------------------------------------------
+         call calChebGrid( rmesh(ir_lsq), rmesh(n_rmesh), n_interp,   &
+                           r_interp((i-1)*n_interp+1:i*n_interp) )
+!        -------------------------------------------------------------
+         if ( n_rmesh-ir_lsq+1 <= 10 ) then
+            n_interp_in = n_rmesh-ir_lsq+1
+         else
+            n_interp_in = 10
+         endif
+      enddo
+      iparam_out(1,id) = lmax
+      iparam_out(2,id) = n_interp
+      iparam_out(3,id) = n_interp_in
+      iparam_out(4,id) = nr_int
+      iparam_out(5:4+nr_int_max,id) = d_ir(1:nr_int_max)
+   enddo
+!
+   comm = getParaFFTCommunicator(MyProc=p,NumProcs=n)
+!
+   if (comm > 0) then
+      na = GlobalNumAtoms
+      iparam_global = 0
+      do id = 1, LocalNumAtoms
+         ig = GlobalIndex(id)
+         iparam_global(:,ig) = iparam_out(:,id)
+      enddo
+!     ================================================================
+!     Receive the data stored in iparam_out for the atoms distributed
+!     on other processors.
+!     ================================================================
+      aGID = getGroupID('Unit Cell')
+!     ----------------------------------------------------------------
+      call GlobalSumInGroup(aGID,iparam_global,                       &
+                            4+nr_int_max,GlobalNumAtoms)
+      call GlobalSumInGroup(aGID,r_interp_global,                     &
+                            n_interp_max*nr_int_max,GlobalNumAtoms)
+!     ----------------------------------------------------------------
+      lmax = 0
+      do ig = 1, GlobalNumAtoms
+         lmax = max(lmax,iparam_global(1,ig))
+      enddo
+      jmax = (lmax+1)*(lmax+2)/2
+      nmax = n_interp_max*nr_int_max*jmax
+      allocate(w_interp_global(nmax,GlobalNumAtoms))
+      w_interp_global = CZERO
+   else ! For serial FFT, comm = -1.
+      na = LocalNumAtoms
+      nmax = 0
+      lmax = 0
+      do id = 1, LocalNumAtoms
+         lmax = max(lmax,iparam_out(1,id))
+      enddo
+      w_interp = CZERO
+   endif
+   allocate(Bj_l(n_interp_max*nr_int_max*(lmax+1)))
+!
+   if ( kpow == -2) then
+!     dummy = TWO*PI4*PI4/real(ng,kind=RealKind)
+      dummy = TWO*PI4*PI4 ! parallel FFT implementatin already include 1/ng
+   else if (kpow == 0) then
+!     dummy = PI4/real(ng,kind=RealKind)
+      dummy = PI4 ! parallel FFT implementatin already include 1/ng
+   else
+!     ----------------------------------------------------------------
+      call ErrorHandler('calRadialInterpolation','Unconventional situation', &
+                        'kpow <> -2 && kpow <> 0. Needs checking!')
+!     ----------------------------------------------------------------
+   endif
+!
+   do ia = 1, na
+      if (comm > 0) then
+!        =============================================================
+!        In this case, pv_interp is to be calculated for all the atoms
+!        on the local processor
+!        =============================================================
+         posi = getAtomPosition(ia)
+         lmax = iparam_global(1,ia)
+         n_interp = iparam_global(2,ia)
+         n_interp_in = iparam_global(3,ia)
+         nr_int = iparam_global(4,ia)
+         d_ir(1:nr_int_max) = iparam_global(5:4+nr_int_max,ia)
+!
+         r_interp => r_interp_global(:,ia)
+!
+         nnr = n_interp*nr_int
+         jmax = (lmax+1)*(lmax+2)/2
+         pv_interp  => aliasArray2_c(w_interp_global(:,ia),nnr,jmax)
+      else ! For serial FFT, comm = -1.
+!        =============================================================
+!        In this case, pv_interp is to be calculated for the local atoms
+!        on the local processor
+!        =============================================================
+         posi = LocalAtomPosi(:,ia)
+         lmax = iparam_out(1,ia)
+         n_interp = iparam_out(2,ia)
+         n_interp_in = iparam_out(3,ia)
+         nr_int = iparam_out(4,ia)
+         d_ir(1:nr_int_max) = iparam_out(5:4+nr_int_max,ia)
+!
+         ig = GlobalIndex(ia)
+         r_interp => r_interp_global(:,ig)
+!
+         nnr = n_interp*nr_int
+         jmax = (lmax+1)*(lmax+2)/2
+         pv_interp  => aliasArray2_c(w_interp(:,ia),nnr,jmax)
+      endif
+      p_Bj_l(1:,0:) => aliasArray2_r(Bj_l, nnr, lmax+1)
+!
+      do idk = idk0+1, numk_local
+         kvec = getGridPointCoord('K',idk)
+         k2 = kvec(1)**2 + kvec(2)**2 + kvec(3)**2
+         expikR  = exp(  ( kvec(1)*posi(1) + kvec(2)*posi(2) + kvec(3)*posi(3) )*sqrtm1 )
+         do nr = 1,nnr
+            kri(nr) = sqrt(k2)*r_interp(nr)
+         enddo
+!
+         if (kpow == -2) then
+            kfact = (expikR*p_fft_c(idk))/k2
+         else if (kpow == 0) then
+            kfact = expikR*p_fft_c(idk)
+         else 
+            kfact = (expikR*p_fft_c(idk))*sqrt(k2)**kpow
+         endif
+         kfact_r = real(kfact,kind=RealKind)
+         kfact_i = -real(sqrtm1*kfact,kind=RealKind)
+!
+!        -------------------------------------------------------------
+         call calYlmConjg( kvec, lmax, Ylm )
+         call SphericalBessel( lmax, nnr, kri, p_Bj_l(1:nnr,0:lmax) )
+!        -------------------------------------------------------------
+!
+         do l = 0,lmax
+            if (mod(l,2) == 0) then
+               do m = 0,l
+                  kl = (l+1)*(l+1) -l + m
+                  jl = ((l+1)*(l+2))/2 -l + m
+                  pv_interp(1:nnr,jl) = pv_interp(1:nnr,jl) + kfact_r*Ylm(kl)*p_Bj_l(1:nnr,l)
+               enddo
+            else
+               do m = 0,l
+                  kl = (l+1)*(l+1) -l + m
+                  jl = ((l+1)*(l+2))/2 -l + m
+                  pv_interp(1:nnr,jl) = pv_interp(1:nnr,jl) + sqrtm1*kfact_i*Ylm(kl)*p_Bj_l(1:nnr,l)
+               enddo
+            endif
+         enddo
+      enddo
+!
+      i2l = dummy
+      do l = 0,lmax
+         do m = 0,l
+            jl = ((l+1)*(l+2))/2 - l + m
+            do i =1,nnr
+               pv_interp(i,jl) = i2l*pv_interp(i,jl)/(r_interp(i)**l)
+            enddo
+         enddo
+!        i2l = i2l*(-sqrtm1)  ! Mar 27, 2017 - Yang
+         i2l = i2l*sqrtm1
+      enddo
+   enddo
+!
+!  ===================================================================
+!  In parallel FFT case, a summation over all k-points, which are
+!  distributed across pocessors, needs to be performed.
+!  ===================================================================
+   if (comm > 0) then
+!     ================================================================
+!     In this case, w_interp_global is summed across all processors, 
+!     which, in effect, sums over the reciprocal uniform grid points.
+!     ----------------------------------------------------------------
+      call setCommunicator(comm,p,n)
+      call GlobalSum(w_interp_global,nmax,GlobalNumAtoms)
+      call resetCommunicator()
+!     ----------------------------------------------------------------
+      do id = 1, LocalNumAtoms
+         ig = GlobalIndex(id)
+!        -------------------------------------------------------------
+         call zcopy(nmax,w_interp_global(1,ig),1,w_interp(1,id),1)
+!        -------------------------------------------------------------
+      enddo
+      deallocate(w_interp_global)
+   endif
+   deallocate(Bj_l)
+   nullify(rmesh, r_interp, p_Bj_l, pv_interp)
+!
+   end subroutine calRadialInterpolation
+!  ===================================================================
+!
+!  *******************************************************************
+!
+!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+   subroutine calRadialProjection(n_rmesh,rmesh,iparam_in,w_interp,pv_jl)
+!  ===================================================================
+   use IntegerFactorsModule, only : lofj
+!
+   use ChebyshevModule, only : initChebyshevSeries, ChebyshevEval,    &
+                               endChebyshevSeries
+!
+   use InterpolationModule, only : LeastSqFitInterp, FitInterp
+!
+   implicit none
+!
+   integer (kind=IntKind), intent(in) :: n_rmesh
+   integer (kind=IntKind), intent(in) :: iparam_in(:)
+!
+   integer (kind=IntKind) :: nnr
+   integer (kind=IntKind) :: lmax, jmax, jl, l, i
+   integer (kind=IntKind) :: ir_lsq, ir_lsqm1
+!
+   real (kind=RealKind), intent(in) :: rmesh(n_rmesh)
+   real (kind=RealKind) :: r0
+!
+   complex(kind=CmplxKind), intent(in) :: w_interp(:)
+   complex(kind=CmplxKind), intent(out), target :: pv_jl(:,:)
+   complex(kind=CmplxKind), pointer :: pv_interp(:,:)
+   complex(kind=CmplxKind), pointer :: pv(:), pv0(:)
+!
+!  ===================================================================
+!  Interpolation parameters from subroutine calRadialInterpolation
+!  ===================================================================
+   integer (kind=IntKind) :: n_interp, n_interp_in, nr_int
+   integer (kind=IntKind) :: d_ir(nr_int_max)
+!
+   lmax = iparam_in(1)
+   n_interp = iparam_in(2)
+   n_interp_in = iparam_in(3)
+   nr_int = iparam_in(4)
+   d_ir(1:nr_int_max) = iparam_in(5:4+nr_int_max)
+!
+!  ===================================================================
+!  With increase of l_max, Gibs fenomena occurs at larger r.
+!  For different values of l_max define ranges to apply the Chebyshev fit,
+!  and use a linear square fit( order 3 polynomial )
+!  to extrapolate the Chebyshev fit to small r
+!  ===================================================================
+   jmax = (lmax+1)*(lmax+2)/2
+   nnr = n_interp*nr_int
+   pv_interp  => aliasArray2_c(w_interp,nnr,jmax)
+!
+   pv_jl = CZERO
+   do jl = 1, jmax
+      l = lofj(jl)
+      if (l <= 4) then
+         pv => pv_interp(1:n_interp,jl)
+         r0 = rmesh(d_ir(1))
+         ir_lsq = d_ir(1)
+      else if (l > 4 .and. l <= 8) then
+         pv => pv_interp(n_interp+1:2*n_interp,jl)
+         r0 = rmesh(d_ir(2))
+         ir_lsq = d_ir(2)
+      else
+         pv => pv_interp(2*n_interp+1:3*n_interp,jl)
+         r0 = rmesh(d_ir(3))
+         ir_lsq = d_ir(3)
+      endif
+!     ----------------------------------------------------------------
+      call initChebyshevSeries( n_interp, r0, rmesh(n_rmesh), &
+                               pv, chebv_struct(jl) )
+!     ----------------------------------------------------------------
+      pv => pv_jl(ir_lsq:n_rmesh,jl)
+!     ----------------------------------------------------------------
+      call ChebyshevEval( chebv_struct(jl), n_interp, n_rmesh-ir_lsq+1, &
+                          rmesh(ir_lsq:n_rmesh), pv )
+      call endChebyshevSeries(chebv_struct(jl))
+!     ----------------------------------------------------------------
+   enddo
+!
+   if (nr_int > 1) then
+      do jl = 1,jmax
+         l = lofj(jl)
+         if ( l<=4 ) then
+            ir_lsq = d_ir(1)
+            ir_lsqm1 = ir_lsq - 1
+         else if (l > 4 .and. l <= 8) then
+            ir_lsq = d_ir(2)
+            ir_lsqm1 = ir_lsq - 1
+         else
+            ir_lsq = d_ir(3)
+            ir_lsqm1 = ir_lsq - 1
+         endif
+         pv => pv_jl(1:ir_lsqm1,jl)
+         pv0 => pv_jl(ir_lsq:ir_lsq+n_interp_in-1,jl)
+!        -------------------------------------------------------------
+         call LeastSqFitInterp( n_interp_in, rmesh(ir_lsq:n_rmesh),   &
+                                pv0, ir_lsqm1, rmesh(1:ir_lsqm1), pv )
+!        -------------------------------------------------------------
+         do i = 1, n_rmesh
+            pv_jl(i,jl) = pv_jl(i,jl)*(rmesh(i)**l)
+         enddo
+      enddo
+   else
+      do jl = 1,jmax
+         l = lofj(jl)
+         do i = 1, n_rmesh
+            pv_jl(i,jl) = pv_jl(i,jl)*(rmesh(i)**l)
+         enddo
+      enddo
+   endif
+!
+   nullify( pv_interp, pv, pv0 )
+!
+   end subroutine calRadialProjection
 !  ===================================================================
 end Module PotentialGenerationModule

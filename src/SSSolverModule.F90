@@ -5716,9 +5716,11 @@ use MPPModule, only : MyPE, syncAllPEs
 !
    if (.not.Initialized) then
       call ErrorHandler('getSolutionRmeshSize','module not initialized')
-   else if (site < 1 .or. site > LocalNumSites) then
-      call ErrorHandler('getSolutionRmeshSize','invalid number of local atoms', &
-                        LocalNumSites)
+   else if (present(site)) then
+      if (site < 1 .or. site > LocalNumSites) then
+         call ErrorHandler('getSolutionRmeshSize','invalid number of local atoms', &
+                           LocalNumSites)
+      endif
    endif
 !
    if (present(site)) then

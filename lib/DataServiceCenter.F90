@@ -2242,7 +2242,7 @@ contains
    enddo
 !
    call ErrorHandler("searchStorage",                                 &
-                    trim(key)//": Data with the key is not found",key)
+                     "Data storage is not found",key,force_to_print=.true.)
 !
    end function searchStorage
 !  ===================================================================

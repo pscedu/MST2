@@ -407,6 +407,7 @@ program fourier_transform
    deallocate( kvec_fftw, ft_fftw, ft_fftwr, ft_fftwc, func_fftwr, ft_fftw_ip )
 #endif
 !
+   write(6,'(/)')
    LOOP_idm: do idm = 1, nt
       found = .false.
       LOOP_idk: do idk = 1, nt
@@ -416,11 +417,11 @@ program fourier_transform
             if (abs(ftm(idk)-ft_nr(idm)) > TEN2m6) then
                write(6,'(a)')'WARNING: abs(ftm-ft_nr) >> 0'
                write(6,'(3f10.5,3(2x,2d15.8))')kvec_nr(1:3,idm),      &
-                                               ftm(idk), ft_nr(idm), ft_a(idk)
+                                               ftm(idk), ft_nr(idm), ft_a(idm)
                stop 'Error'
             else
                write(6,'(3f10.5,3(2x,2d15.8))')kvec_nr(1:3,idm),      &
-                                               ftm(idk), ft_nr(idm), ft_a(idk)
+                                               ftm(idk), ft_nr(idm), ft_a(idm)
             endif
             found = .true.
             exit LOOP_idk

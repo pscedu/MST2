@@ -285,7 +285,8 @@ contains
          call ErrorHandler('solveQuadraticEquation',                  &
                            'ZGEEV failure, QM is ill conditioned',info)
       endif
-      EigenVectorL = conjg(EigenVectorL)
+      EigenVectorL = conjg(EigenVectorL)   ! The left eigenvector given by zgeev
+                                           ! is a complex conjugate with transpose
    endif
 !
    end subroutine solveQuadraticEquation
@@ -413,15 +414,15 @@ contains
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    function getEigenVector(a,i) result(v)
 !  ===================================================================
-!  Note: For eigenvector (u,v) of the quadratic matrix, u is an eigenvector 
+!  Note: For eigenvector (u1,u2) of the quadratic matrix, u1 is an eigenvector 
 !        of the following matrix 
 !             A = lamda^2 + lamda*(S2^{inv}*S1) + S2^{inv}*S0
-!        If u is the right-hand side eigenvector of A, it is also the
+!        If u1 is the right-hand side eigenvector of A, it is also the
 !        right-hand side eigenvector of S2*A
-!        If v is the left-hand side eigenvector of A, v*S2inv is then
-!        the left-hand side eigenvector of S2*A.
-!        It is therefore necessary to pass S2inv out to the caller.
-!  *******************************************************************
+!        If u2 is the left-hand side eigenvector of A, u2*S2inv is then
+!        the left-hand side eigenvector of S2*A, and it is therefore
+!        necessary for result v to include S2inv if a = 'L'.
+!  ******************************************************************
    implicit   none
 !
    character (len=1), intent(in), optional :: a
@@ -474,16 +475,16 @@ contains
    function getEigenMatrix(i) result(a)
 !  ===================================================================
 !
-!  Returns: a = vr((n-1)*ndim:n*ndim,i) * vl(i,(m-1)*ndim:m*ndim)
+!  Returns: a = vr((n-1)*ndim+1:n*ndim,i) * vl(i,(m-1)*ndim+1:m*ndim)
 !
 !  Here: vr = EigenVectorR is the right-side eigenvector
-!        vl = EigenVectorL^{T} is the left-side eigenvector
+!        vl = EigenVectorL is the left-side eigenvector
 !  *******************************************************************
    implicit   none
 !
    integer (kind=IntKind), intent(in) :: i
 !
-   integer (kind=IntKind) :: j, k, k0, m0
+   integer (kind=IntKind) :: j, k, k0, m0, n0, n02
 !
    complex (kind=CmplxKind), pointer :: a(:,:)
    complex (kind=CmplxKind) :: c
@@ -497,13 +498,13 @@ contains
       k0 = m0
    else
       m0 = (i-1)*ndim2
-      k0 = m0+ndim
+      k0 = m0 + ndim
    endif
 !
    do k = 1, ndim
       c = CZERO
       do j = 1, ndim
-         c = c + EigenVectorL(k0+j)*S2inv(j,k)
+         c = c + EigenVectorL(k0+j)*S2inv(j,k)  ! Multiplied by S2^{-1}
       enddo
       do j = 1, ndim
          EigenMatrix(j,k) = EigenVectorR(m0+j)*c

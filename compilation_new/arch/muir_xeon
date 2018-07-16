@@ -1,5 +1,5 @@
 CUDA_PATH = /lvol/cuda
-MKLROOT = /lvol/intel/composer_xe_2013.1.117/mkl
+MKLROOT = /lvol/intel/compilers_and_libraries_2016.3.210/linux/mkl
 MKLPATH = $(MKLROOT)/lib/intel64
 #=====================================================================
 # Compilers and archiver tool
@@ -96,12 +96,17 @@ endif
 #=====================================================================
 # 5 Make Settings
 #   Use_FFTW     = 1, use the FFTW3 package for Fourier transformation
-#                  0, otherwise
+#                  0, otherwise (This stops working now...)
+#   If p3dfft is available, enable it for running parallel FFT
 #=====================================================================
 Use_FFTW = 1
 ifeq "$(Use_FFTW)" "1"
-   FFTW_INC = $(MKLROOT)/include/fftw
-   FFT_FLAG = -DFFTW -I$(FFTW_INC)
+#  FFTW_INC = $(MKLROOT)/include/fftw
+   FFTW_INC = /lvol/packages/fftw-3.3.6-pl2/include
+   FFT_FLAG = -DFFTW -I$(FFTW_INC) -DP3DFFT -I/lvol/packages/p3dfft-2.7.5/include
+   ADDLIBS += -L/lvol/packages/fftw-3.3.6-pl2/lib -lfftw3_mpi -lfftw3 -L/lvol/packages/p3dfft-2.7.5/lib -lp3dfft
+#  FFT_FLAG = -DFFTW -I$(FFTW_INC)
+#  ADDLIBS += -L/lvol/packages/fftw-3.3.6-pl2/lib -lfftw3_mpi -lfftw3
 endif
 
 #=====================================================================

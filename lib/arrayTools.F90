@@ -1,6 +1,7 @@
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    function aliasCmplx2Real(a,n) result(b)
 !  ===================================================================
+   use KindParamModule, only : IntKind, RealKind
    use ErrorHandlerModule, only : WarningHandler, ErrorHandler
    implicit none
 !
@@ -22,6 +23,7 @@
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    function aliasReal2Cmplx(a,n) result(b)
 !  ===================================================================
+   use KindParamModule, only : IntKind, CmplxKind
    use ErrorHandlerModule, only : WarningHandler, ErrorHandler
    implicit none
 !
@@ -45,6 +47,7 @@
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    subroutine copyReal2Cmplx(a,b,n)
 !  ===================================================================
+   use KindParamModule, only : IntKind, RealKind, CmplxKind
    implicit none
 !
    integer (kind=IntKind), intent(in) :: n
@@ -60,6 +63,7 @@
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    subroutine copyCmplx2Real(a,b,n)
 !  ===================================================================
+   use KindParamModule, only : IntKind, RealKind, CmplxKind
    use ErrorHandlerModule, only : ErrorHandler
    implicit none
 !
@@ -192,6 +196,7 @@
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    function aliasArray4_i(array,n1,n2,n3,n4)       result(parray)
 !  ===================================================================
+   use KindParamModule, only : IntKind
    implicit none
 !
    integer(kind=IntKind), intent(in) :: n1,n2,n3,n4
@@ -255,6 +260,7 @@
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    function aliasArray4_r(array,n1,n2,n3,n4)       result(parray)
 !  ===================================================================
+   use KindParamModule, only : IntKind, RealKind
    implicit none
 !
    integer(kind=IntKind), intent(in) :: n1,n2,n3,n4
@@ -318,6 +324,7 @@
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    function aliasArray4_c(array,n1,n2,n3,n4)       result(parray)
 !  ===================================================================
+   use KindParamModule, only : IntKind, CmplxKind
    implicit none
 !
    integer(kind=IntKind), intent(in) :: n1,n2,n3,n4
@@ -333,6 +340,7 @@
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    function aliasArray1_s(array,n1)                    result(parray)
 !  ===================================================================
+   use KindParamModule, only : IntKind
    implicit none
 !
    integer (kind=IntKind), intent(in) :: n1
@@ -348,6 +356,7 @@
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    function aliasArray2_s(array,n1,n2)                result(parray)
 !  ===================================================================
+   use KindParamModule, only : IntKind
    implicit none
 !
    integer (kind=IntKind), intent(in) :: n1, n2
@@ -364,6 +373,7 @@
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    function aliasArray3_s(array,n1,n2,n3)             result(parray)
 !  ===================================================================
+   use KindParamModule, only : IntKind
    implicit none
 !
    integer (kind=IntKind), intent(in) :: n1, n2, n3
@@ -380,6 +390,7 @@
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
    function aliasArray4_s(array,n1,n2,n3,n4)             result(parray)
 !  ===================================================================
+   use KindParamModule, only : IntKind
    implicit none
 !
    integer (kind=IntKind), intent(in) :: n1, n2, n3, n4

@@ -54,15 +54,16 @@ public:: initChargeDensity,         &
          getVPMomSize,              &
          setVPCharge,               &
          setVPMomSize,              &
-         updateTotalDensity
+         updateTotalDensity,        &
+         getChargeDensityAtPoint,   &
+         getMomentDensityAtPoint
 !
    interface getChargeDensity
-      module procedure getChrgDen_L, getChrgDen_Lj, &
-                       getChrgDen_r, getChrgDen_r_s
+      module procedure getChrgDen_L, getChrgDen_Lj
    end interface getChargeDensity
 !
    interface getMomentDensity
-      module procedure getMomDen_L, getMomDen_Lj, getMomDen_r
+      module procedure getMomDen_L, getMomDen_Lj
    end interface getMomentDensity
 !
    interface getMultipoleMoment
@@ -169,6 +170,14 @@ private
    complex(kind=CmplxKind), allocatable, target :: ws_ylm(:), ws_den(:,:)
 !
    type (ChargeDensityStruct), allocatable, target :: ChargeDensityList(:)
+!
+   interface
+      function nocaseCompare(s1,s2) result(t)
+         character (len=*), intent(in) :: s1
+         character (len=*), intent(in) :: s2
+         logical :: t
+      end function nocaseCompare
+   end interface
 !
 contains
 !  ===================================================================
@@ -894,20 +903,20 @@ contains
                         " needs to be in itialized first")
    else if ( id<1 .or. id> LocalNumAtoms ) then
       call ErrorHandler("getSphChargeDensity"," Invalid local atom index",id)
-   else if (isMTFP .and. densityType(1:5)=="Pseud" ) then
+   else if (isMTFP .and. nocaseCompare(densityType,"Pseudo") ) then
       call ErrorHandler("getSphChargeDensity"," Invalid potential type",'Pseudo')
    endif
 !
    p_CDL => ChargeDensityList(id)
    nr = p_CDL%NumRPts+1
 !
-   if ( densityType(1:5)=="Pseud" ) then
+   if ( nocaseCompare(densityType,"Pseudo") ) then
       p_den => p_CDL%rhoSph_Pseudo(1:nr,ia)
-   else if ( densityType(1:5)=="Tilda" ) then
+   else if ( nocaseCompare(densityType,"Tilda") ) then
       p_den => p_CDL%rhoSph_Tilda(1:nr,ia)
-   else if ( densityType(1:8)=="TotalNew" ) then
+   else if ( nocaseCompare(densityType,"TotalNew") ) then
       p_den => p_CDL%rhoSph_Total(1:nr,ia)
-   else if ( densityType(1:8)=="TotalOld" ) then
+   else if ( nocaseCompare(densityType,"TotalOld") ) then
       p_den => p_CDL%rhoSph_TotalOld(1:nr,ia)
    else
       call ErrorHandler("getChrgDen_Sph","Undefined charge type")
@@ -938,7 +947,7 @@ contains
                         " needs to be in itialized first")
    else if ( id<1 .or. id> LocalNumAtoms ) then
       call ErrorHandler("getChrgDen_L"," Invalid local atom index",id)
-   else if (isMTFP .and. densityType(1:5)=="Pseud" ) then
+   else if (isMTFP .and. nocaseCompare(densityType,"Pseudo") ) then
       call ErrorHandler("getChrgDen_L"," Invalid potential type",'Pseudo')
    else if (isMTFP .and. densityType(1:5)=="ValPs" ) then
       call ErrorHandler("getChrgDen_L"," Invalid potential type",'ValPs')
@@ -948,17 +957,17 @@ contains
    jmax = p_CDL%jmax
    nr   = p_CDL%NumRPts
 !
-   if ( densityType(1:5)=="Pseud" ) then
+   if ( nocaseCompare(densityType,"Pseudo") ) then
          p_den => p_CDL%rhoL_Pseudo(1:nr,1:jmax,ia)
-   else if ( densityType(1:5)=="Tilda" ) then
+   else if ( nocaseCompare(densityType,"Tilda") ) then
          p_den => p_CDL%rhoL_Tilda(1:nr,1:jmax,ia)
-   else if ( densityType(1:5)=="ValPs" ) then
+   else if (nocaseCompare(densityType,"ValPs") ) then
          p_den => p_CDL%rhoL_ValPseudo(1:nr,1:jmax,ia)
-   else if ( densityType(1:7)=="Valence" ) then
+   else if ( nocaseCompare(densityType,"Valence") ) then
          p_den => p_CDL%rhoL_Valence(1:nr,1:jmax,ia)
-   else if ( densityType(1:8)=="TotalNew" ) then
+   else if ( nocaseCompare(densityType,"TotalNew") ) then
          p_den => p_CDL%rhoL_Total(1:nr,1:jmax,ia)
-   else if ( densityType(1:8)=="TotalOld" ) then
+   else if ( nocaseCompare(densityType,"TotalOld") ) then
          p_den => p_CDL%rhoL_TotalOld(1:nr,1:jmax,ia)
    else
       call ErrorHandler("getChrgDen_L","Undefined charge type")
@@ -990,9 +999,9 @@ contains
                         " needs to be in itialized first")
    else if ( id<1 .or. id> LocalNumAtoms ) then
       call ErrorHandler("getChrgDen_Lj"," Invalid local atom index",id)
-   else if (isMTFP .and. densityType(1:5)=="Pseud" ) then
+   else if (isMTFP .and. nocaseCompare(densityType,"Pseudo") ) then
       call ErrorHandler("getChrgDen_Lj"," Invalid potential type",'Pseudo')
-   else if (isMTFP .and. densityType(1:5)=="ValPs" ) then
+   else if (isMTFP .and. nocaseCompare(densityType,"ValPs") ) then
       call ErrorHandler("getChrgDen_Lj"," Invalid potential type",'ValPs')
    endif
 !
@@ -1004,17 +1013,17 @@ contains
       call ErrorHandler("getChrgDen_Lj"," Invalid jl ", jl)
    endif
 !
-   if ( densityType(1:5)=="Pseud" ) then
+   if ( nocaseCompare(densityType,"Pseudo") ) then
          p_den => p_CDL%rhoL_Pseudo(1:nr,jl,ia)
-   else if ( densityType(1:5)=="Tilda" ) then
+   else if ( nocaseCompare(densityType,"Tilda") ) then
          p_den => p_CDL%rhoL_Tilda(1:nr,jl,ia)
-   else if ( densityType(1:5)=="ValPs" ) then
+   else if ( nocaseCompare(densityType,"ValPs") ) then
          p_den => p_CDL%rhoL_ValPseudo(1:nr,jl,ia)
-   else if ( densityType(1:7)=="Valence" ) then
+   else if ( nocaseCompare(densityType,"Valence") ) then
          p_den => p_CDL%rhoL_Valence(1:nr,jl,ia)
-   else if ( densityType(1:8)=="TotalNew" ) then
+   else if ( nocaseCompare(densityType,"TotalNew") ) then
          p_den => p_CDL%rhoL_Total(1:nr,jl,ia)
-   else if ( densityType(1:8)=="TotalOld" ) then
+   else if ( nocaseCompare(densityType,"TotalOld") ) then
          p_den => p_CDL%rhoL_TotalOld(1:nr,jl,ia)
    else
       call ErrorHandler("getChrgDen_Lj","Undefined charge type")
@@ -1026,8 +1035,7 @@ contains
 !  *******************************************************************
 !
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-   function getChrgDen_r( densityType, id, ia, posi, jmax_in,         &
-                          vp_point, n_mult)                result(rho)
+   function getChargeDensityAtPoint(densityType, id, ia, posi, jmax_in, n_mult) result(rho)
 !  ===================================================================
    use MathParamModule, only : ZERO, TWO
 !
@@ -1035,19 +1043,19 @@ contains
 !
    use InterpolationModule, only : PolyInterp
 !
-   use PolyhedraModule, only: isExternalPoint, isSurfacePoint
+   use PolyhedraModule, only: getPointLocationFlag
 !
    implicit none
 !
    character(len=*), intent(in) :: densityType
 !
    integer (kind=IntKind), intent(in) :: id, ia
-   integer (kind=IntKind), intent(in) :: jmax_in
-   integer (kind=IntKind), optional :: vp_point
-   integer (kind=IntKind), optional :: n_mult
+   integer (kind=IntKind), intent(in), optional :: jmax_in
+   integer (kind=IntKind), intent(in), optional :: n_mult
 !
    real (kind=RealKind), intent(in) :: posi(3)
 !
+   integer (kind=IntKind) :: VP_point
    integer (kind=IntKind) :: jl, ir, is, irp, l, kl
    integer (kind=IntKind) :: iend, kmax, nr, jmax
 !
@@ -1071,22 +1079,25 @@ contains
    end interface
 !
    if (.not.Initialized) then
-      call ErrorHandler('getChrgDen_r',                    &
+      call ErrorHandler('getChargeDensityAtPoint',                    &
                         'Carge Density Module is not initialized')
    else if (id < 1 .or. id > LocalNumAtoms) then
-      call ErrorHandler('getChrgDen_r','Invalid atom index',id)
-   else if (isMTFP .and. densityType(1:5)=="Pseud" ) then
+      call ErrorHandler('getChargeDensityAtPoint','Invalid atom index',id)
+   else if (isMTFP .and. nocaseCompare(densityType,"Pseudo") ) then
       call ErrorHandler("getChrgDen_Lj"," Invalid potential type",'Pseudo')
-   else if (isMTFP .and. densityType(1:5)=="ValPs" ) then
+   else if (isMTFP .and. nocaseCompare(densityType,"ValPs") ) then
       call ErrorHandler("getChrgDen_Lj"," Invalid potential type",'ValPs')
    endif
 !
    p_CDL => ChargeDensityList(id)
 !
-   if ( jmax_in<1 ) then
-      jmax = p_CDL%jmax
+   if ( present(jmax_in) ) then
+      if (jmax_in < 1 .or. jmax_in > p_CDL%jmax) then
+         call ErrorHandler('getChargeDensityAtPoint','Invalid jmax value',jmax_in)
+      endif
+      jmax = jmax_in
    else
-      jmax = min(jmax_in,p_CDL%jmax)
+      jmax = p_CDL%jmax
    endif
 !
    nr = p_CDL%NumRpts
@@ -1117,11 +1128,12 @@ contains
 !
    den_l = CZERO
 !
-   if (present(vp_point) .and. present(n_mult) ) then
-      if ( n_mult<1 ) then ! .and. vp_point/=1 ) then
-         call ErrorHandler("getChrgDen_r",'Invalid n_mult',n_mult)
+   if ( present(n_mult) ) then
+      if ( n_mult<1 ) then 
+         call ErrorHandler("getChargeDensityAtPoint",'Invalid n_mult',n_mult)
       endif
-      if ( densityType(1:5)=="Pseud" ) then
+      VP_point = getPointLocationFlag(id, posi(1), posi(2), posi(3))
+      if ( nocaseCompare(densityType,"Pseudo") ) then
          if ( VP_point == 1 .or. VP_point == 0 ) then
             do jl = 1,p_CDL%jmax
                den_l(1:n_inter,jl) = p_CDL%rhoL_Pseudo(irp:irp+n_inter-1,jl,ia)
@@ -1129,17 +1141,8 @@ contains
          else  ! ouside Voronoi polyhedra, overlaping semicore charges
             rho = ZERO
             return
-            fact = real(n_mult,kind=RealKind)/Y0
-            jmax=1
-            do is = 1,n_spin_pola
-               do ir = 1, n_inter
-                  den_l(ir,1) = cmplx(fact*(p_CDL%rho_Core(irp+ir-1,is,ia) +  &
-                                     p_CDL%rho_SemiCore(irp+ir-1,is,ia)),ZERO,&
-                                     kind=CmplxKind)
-               enddo
-            enddo
          endif
-      else if ( densityType(1:5)=="ValPs" ) then
+      else if ( nocaseCompare(densityType,"ValPs") ) then
          if ( VP_point >= 0 ) then
             do jl = 1,p_CDL%jmax
                den_l(1:n_inter,jl) = p_CDL%rhoL_ValPseudo(irp:irp+n_inter-1,jl,ia)
@@ -1148,11 +1151,11 @@ contains
             rho = ZERO
             return
          endif
-      else if ( densityType(1:5)=="Tilda" ) then
+      else if ( nocaseCompare(densityType,"Tilda") ) then
          do jl = 1,p_CDL%jmax
             den_l(1:n_inter,jl) = p_CDL%rhoL_Tilda(irp:irp+n_inter-1,jl,ia)
          enddo
-      else if ( densityType(1:7)=="Valence" ) then
+      else if ( nocaseCompare(densityType,"Valence") ) then
          if ( VP_point >= 0 ) then
             do jl = 1,p_CDL%jmax
                den_l(1:n_inter,jl) = p_CDL%rhoL_Valence(irp:irp+n_inter-1,jl,ia)
@@ -1161,59 +1164,95 @@ contains
             rho = ZERO
             return
          endif
-      else if ( densityType(1:8)=="TotalNew" ) then
+      else if ( nocaseCompare(densityType,"TotalNew") ) then
          if ( VP_point == 1 .or. VP_point == 0 ) then
             do jl = 1,p_CDL%jmax
                den_l(1:n_inter,jl) = p_CDL%rhoL_Total(irp:irp+n_inter-1,jl,ia)
             enddo
          else  ! ouside Voronoi polyhedra, overlaping semicore charges
-            rho = ZERO
-!            return
+!           rho = ZERO
+!           return
             fact = real(n_mult,kind=RealKind)/Y0
             do is = 1,n_spin_pola
                do ir = 1, n_inter
-                  den_l(ir,1) = cmplx(fact*(p_CDL%rho_Core(irp+ir-1,is,ia) +  &
+                  den_l(ir,1) = den_l(ir,1) +                                 &
+                                cmplx(fact*(p_CDL%rho_Core(irp+ir-1,is,ia) +  &
                                      p_CDL%rho_SemiCore(irp+ir-1,is,ia)),ZERO,&
                                      kind=CmplxKind)
                enddo
             enddo
          endif
-      else if ( densityType(1:8)=="TotalOld" ) then
+         if (VP_point == 0) then ! For points on the cell bounday, since den_l contains
+                                 ! the core density, it needs to be corrected
+            fact = real(n_mult-1,kind=RealKind)/Y0
+            do is = 1,n_spin_pola
+               do ir = 1, n_inter
+                  den_l(ir,1) = den_l(ir,1) +                                 &
+                                cmplx(fact*(p_CDL%rho_Core(irp+ir-1,is,ia) +  &
+                                     p_CDL%rho_SemiCore(irp+ir-1,is,ia)),ZERO,&
+                                     kind=CmplxKind)
+               enddo
+            enddo
+         endif
+      else if ( nocaseCompare(densityType,"TotalOld") ) then
          if ( VP_point == 1 .or. VP_point == 0 ) then
             do jl = 1,p_CDL%jmax
                den_l(1:n_inter,jl) = p_CDL%rhoL_TotalOld(irp:irp+n_inter-1,jl,ia)
             enddo
+         else ! include core density outside the atomic cell
+            fact = real(n_mult,kind=RealKind)/Y0
+            jmax=1
+            do is = 1,n_spin_pola
+               do ir = 1, n_inter
+                  den_l(ir,1) = den_l(ir,1) +                                 &
+                                cmplx(fact*(p_CDL%rho_Core(irp+ir-1,is,ia) +  &
+                                     p_CDL%rho_SemiCore(irp+ir-1,is,ia)),ZERO,&
+                                     kind=CmplxKind)
+               enddo
+            enddo
+         endif
+         if (VP_point == 0) then ! For points on the cell bounday, since den_l contains
+                                 ! the core density, it needs to be corrected
+            fact = real(n_mult-1,kind=RealKind)/Y0
+            do is = 1,n_spin_pola
+               do ir = 1, n_inter
+                  den_l(ir,1) = den_l(ir,1) +                                 &
+                                cmplx(fact*(p_CDL%rho_Core(irp+ir-1,is,ia) +  &
+                                     p_CDL%rho_SemiCore(irp+ir-1,is,ia)),ZERO,&
+                                     kind=CmplxKind)
+               enddo
+            enddo
          endif
       else
-         call ErrorHandler("getChrgDen_r","Undefined charge type")
+         call ErrorHandler("getChargeDensityAtPoint","Undefined charge type")
       endif
    else
-      if ( densityType(1:5)=="Pseud" ) then
+      if ( nocaseCompare(densityType,"Pseudo") ) then
          do jl = 1,p_CDL%jmax
             den_l(1:n_inter,jl) = p_CDL%rhoL_Pseudo(irp:irp+n_inter-1,jl,ia)
          enddo
-      else if ( densityType(1:5)=="ValPs" ) then
+      else if ( nocaseCompare(densityType,"ValPs") ) then
          do jl = 1,p_CDL%jmax
             den_l(1:n_inter,jl) = p_CDL%rhoL_ValPseudo(irp:irp+n_inter-1,jl,ia)
          enddo
-      else if ( densityType(1:5)=="Tilda" ) then
+      else if ( nocaseCompare(densityType,"Tilda") ) then
          do jl = 1,p_CDL%jmax
             den_l(1:n_inter,jl) = p_CDL%rhoL_Tilda(irp:irp+n_inter-1,jl,ia)
          enddo
-      else if ( densityType(1:7)=="Valence" ) then
+      else if ( nocaseCompare(densityType,"Valence") ) then
          do jl = 1,p_CDL%jmax
             den_l(1:n_inter,jl) = p_CDL%rhoL_Valence(irp:irp+n_inter-1,jl,ia)
          enddo
-      else if ( densityType(1:8)=="TotalNew" ) then
+      else if ( nocaseCompare(densityType,"TotalNew") ) then
          do jl = 1,p_CDL%jmax
             den_l(1:n_inter,jl) = p_CDL%rhoL_Total(irp:irp+n_inter-1,jl,ia)
          enddo
-      else if ( densityType(1:8)=="TotalOld" ) then
+      else if ( nocaseCompare(densityType,"TotalOld") ) then
          do jl = 1,p_CDL%jmax
             den_l(1:n_inter,jl) = p_CDL%rhoL_TotalOld(irp:irp+n_inter-1,jl,ia)
          enddo
       else
-         call ErrorHandler("getChrgDen_r","Undefined charge type")
+         call ErrorHandler("getChargeDensityAtPoint","Undefined charge type")
       endif
    endif
 !
@@ -1233,153 +1272,7 @@ contains
       endif
    enddo
 !
-   end function getChrgDen_r
-!  ===================================================================
-!
-!  *******************************************************************
-!
-!  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-   function getChrgDen_r_s( densityType, id, ia, posi, surf, jmax_in) result(rho)
-!  ===================================================================
-   use MathParamModule, only : ZERO, TWO
-!
-   use SphericalHarmonicsModule, only : calYlm
-!
-   use InterpolationModule, only : PolyInterp
-!
-   use PolyhedraModule, only: isSurfacePoint
-!
-   implicit none
-!
-   character(len=*), intent(in) :: densityType
-   character(len=*), intent(in) :: surf
-!
-   integer (kind=IntKind), intent(in) :: id, ia
-   integer (kind=IntKind), intent(in) :: jmax_in
-!
-   real (kind=RealKind), intent(in) :: posi(3)
-!
-   integer (kind=IntKind) :: jl, ir, is, irp, l, kl
-   integer (kind=IntKind) :: iend, kmax, nr, jmax
-!
-   real (kind=RealKind) :: rho, err, r
-!
-   complex (kind=CmplxKind) :: rho_in
-   complex (kind=CmplxKind), pointer :: ylm(:), den_l(:,:)
-!
-   type (ChargeDensityStruct), pointer :: p_CDL
-!
-   interface
-      subroutine hunt(n,xx,x,jlo)
-         use KindParamModule, only : IntKind, RealKind
-         implicit none
-         integer (kind=IntKind), intent(in) :: n
-         integer (kind=IntKind), intent(inout) :: jlo
-         real (kind=RealKind), intent(in) :: xx(n)
-         real (kind=RealKind), intent(in) :: x
-      end subroutine hunt
-   end interface
-!
-   if (.not.Initialized) then
-      call ErrorHandler('getChrgDen_r',                    &
-                        'Carge Density Module is not initialized')
-   else if (id < 1 .or. id > LocalNumAtoms) then
-      call ErrorHandler('getChrgDen_r','Invalid atom index',id)
-   else if (isMTFP .and. densityType(1:5)=="Pseud" ) then
-      call ErrorHandler("getChrgDen_r"," Invalid potential type",'Pseudo')
-   endif
-!
-   p_CDL => ChargeDensityList(id)
-!
-   if ( jmax_in<1 ) then
-      jmax = p_CDL%jmax
-   else
-      jmax = min(jmax_in,p_CDL%jmax)
-   endif
-!
-   nr = p_CDL%NumRpts
-   r = sqrt(posi(1)*posi(1)+posi(2)*posi(2)+posi(3)*posi(3))
-   if (r > p_CDL%r_mesh(nr)+TEN2m6 ) then
-      rho = ZERO
-      return
-   endif
-!
-   kmax = (p_CDL%lmax+1)*(p_CDL%lmax+1)
-   ylm => ws_ylm(1:kmax)
-   den_l => ws_den(1:n_inter,1:p_CDL%jmax)
-!  -------------------------------------------------------------------
-   call calYlm(posi,p_CDL%lmax,ylm)
-!  -------------------------------------------------------------------
-!
-   iend = p_CDL%NumRpts
-!  -------------------------------------------------------------------
-   call hunt(iend,p_CDL%r_mesh(1:iend),r,ir)
-!  -------------------------------------------------------------------
-   if (ir > iend-(n_inter-1)/2) then
-      irp=iend-n_inter+1
-   else if (2*ir+1 > n_inter) then
-      irp=ir-(n_inter-1)/2
-   else
-      irp=1
-   endif
-!
-   den_l = CZERO
-!
-   if ( isSurfacePoint(id, posi(1), posi(2), posi(3)) ) then
-      if ( densityType(1:5)=="Pseud" ) then
-         do is = 1,n_spin_pola
-            do ir = 1, n_inter
-               den_l(ir,1) = den_l(ir,1) + p_CDL%rho_Core(irp+ir-1,is,ia)/Y0 +  &
-                                      p_CDL%rho_SemiCore(irp+ir-1,is,ia)/Y0
-            enddo
-         enddo
-      else if ( densityType(1:5)=="Tilda" ) then
-         do jl = 1,p_CDL%jmax
-            den_l(1:n_inter,jl) = p_CDL%rhoL_Tilda(irp:irp+n_inter-1,jl,ia)
-         enddo
-      else if ( densityType(1:7)=="Valence" ) then
-         do jl = 1, p_CDL%jmax
-            den_l(1:n_inter,jl) = p_CDL%rhoL_Valence(irp:irp+n_inter-1,jl,ia)
-         enddo
-      else if ( densityType(1:8)=="TotalNew" ) then
-         do is = 1,n_spin_pola
-            do ir = 1, n_inter
-               den_l(ir,1) = den_l(ir,1) + p_CDL%rho_Core(irp+ir-1,is,ia)/Y0 +  &
-                                       p_CDL%rho_SemiCore(irp+ir-1,is,ia)/Y0
-            enddo
-         enddo
-      else if ( densityType(1:8)=="TotalOld" ) then
-         do is = 1,n_spin_pola
-            do ir = 1, n_inter
-               den_l(ir,1) = den_l(ir,1) + p_CDL%rho_Core(irp+ir-1,is,ia)/Y0 +  &
-                                       p_CDL%rho_SemiCore(irp+ir-1,is,ia)/Y0
-            enddo
-         enddo
-      else
-         call ErrorHandler("getChrgDen_r_s","Undefined charge type")
-      endif
-   else
-      rho = ZERO
-      return
-   endif
-!
-   rho = ZERO
-!
-   do jl = jmax,1,-1
-      l = lofj(jl)
-!     ----------------------------------------------------------------
-      call PolyInterp(n_inter, p_CDL%r_mesh(irp:irp+n_inter-1), &
-                      den_l(1:n_inter,jl), r, rho_in, err)
-!     ----------------------------------------------------------------
-      kl = (l+1)*(l+1)-l+mofj(jl)
-      if (mofj(jl) == 0) then
-         rho = rho + real(rho_in*ylm(kl),RealKind)
-      else
-         rho = rho + TWO*real(rho_in*ylm(kl),RealKind)
-      endif
-   enddo
-!
-   end function getChrgDen_r_s
+   end function getChargeDensityAtPoint
 !  ===================================================================
 !
 !  *******************************************************************
@@ -1404,20 +1297,20 @@ contains
                         " needs to be in itialized first")
    else if ( id<1 .or. id> LocalNumAtoms ) then
       call ErrorHandler("getMomDen_Sph"," Invalid local atom index",id)
-   else if (isMTFP .and. densityType(1:5)=="Pseud" ) then
+   else if (isMTFP .and. nocaseCompare(densityType,"Pseudo") ) then
       call ErrorHandler("getSphMomentDensity"," Invalid potential type",'Pseudo')
    endif
 !
    p_CDL => ChargeDensityList(id)
    nr = p_CDL%NumRPts+1
 !
-   if ( densityType(1:5)=="Pseud" ) then
+   if ( nocaseCompare(densityType,"Pseudo") ) then
       p_den => p_CDL%momSph_Pseudo(1:nr,ia)
-   else if ( densityType(1:5)=="Tilda" ) then
+   else if ( nocaseCompare(densityType,"Tilda") ) then
       p_den => p_CDL%momSph_Tilda(1:nr,ia)
-   else if ( densityType(1:8)=="TotalNew" ) then
+   else if ( nocaseCompare(densityType,"TotalNew") ) then
       p_den => p_CDL%momSph_Total(1:nr,ia)
-   else if ( densityType(1:8)=="TotalOld" ) then
+   else if ( nocaseCompare(densityType,"TotalOld") ) then
       p_den => p_CDL%momSph_TotalOld(1:nr,ia)
    else
       call ErrorHandler("getMomDen_Sph","Undefined moment type")
@@ -1448,7 +1341,7 @@ contains
                         " needs to be in itialized first")
    else if ( id<1 .or. id> LocalNumAtoms ) then
       call ErrorHandler("getMomDen_L"," Invalid local atom index",id)
-   else if (isMTFP .and. momType(1:5)=="Pseud" ) then
+   else if (isMTFP .and. nocaseCompare(momType,"Pseudo") ) then
       call ErrorHandler("getMomDen_L"," Invalid potential type",'Pseudo')
    endif
 !
@@ -1456,15 +1349,15 @@ contains
    jmax = p_CDL%jmax
    nr   = p_CDL%NumRPts
 !
-   if ( momType(1:5)=="Pseud" ) then
+   if ( nocaseCompare(momType,"Pseudo") ) then
          p_mom => p_CDL%momL_Pseudo(1:nr,1:jmax,ia)
-   else if ( momType(1:5)=="Tilda" ) then
+   else if ( nocaseCompare(momType,"Tilda") ) then
          p_mom => p_CDL%momL_Tilda(1:nr,1:jmax,ia)
-   else if ( momType(1:7)=="Valence" ) then
+   else if ( nocaseCompare(momType,"Valence") ) then
          p_mom => p_CDL%momL_Valence(1:nr,1:jmax,ia)
-   else if ( momType(1:8)=="TotalNew" ) then
+   else if ( nocaseCompare(momType,"TotalNew") ) then
          p_mom => p_CDL%momL_Total(1:nr,1:jmax,ia)
-   else if ( momType(1:8)=="TotalOld" ) then
+   else if ( nocaseCompare(momType,"TotalOld") ) then
          p_mom => p_CDL%momL_TotalOld(1:nr,1:jmax,ia)
    else
       call ErrorHandler("getMomDen_L","Undefined moment type")
@@ -1496,7 +1389,7 @@ contains
                         " needs to be in itialized first")
    else if ( id<1 .or. id> LocalNumAtoms ) then
       call ErrorHandler("getMomDen_Lj"," Invalid local atom index",id)
-   else if (isMTFP .and. densityType(1:5)=="Pseud" ) then
+   else if (isMTFP .and. nocaseCompare(densityType,"Pseudo") ) then
       call ErrorHandler("getMomDen_Lj"," Invalid potential type",'Pseudo')
    endif
 !
@@ -1508,15 +1401,15 @@ contains
       call ErrorHandler("getMomDen_L"," Invalid jl ", jl)
    endif
 !
-   if ( densityType(1:5)=="Pseud" ) then
+   if ( nocaseCompare(densityType,"Pseudo") ) then
          p_den => p_CDL%momL_Pseudo(1:nr,jl,ia)
-   else if ( densityType(1:5)=="Tilda" ) then
+   else if ( nocaseCompare(densityType,"Tilda") ) then
          p_den => p_CDL%momL_Tilda(1:nr,jl,ia)
-   else if ( densityType(1:7)=="Valence" ) then
+   else if ( nocaseCompare(densityType,"Valence") ) then
          p_den => p_CDL%momL_Valence(1:nr,jl,ia)
-   else if ( densityType(1:8)=="TotalNew" ) then
+   else if ( nocaseCompare(densityType,"TotalNew") ) then
          p_den => p_CDL%momL_Total(1:nr,jl,ia)
-   else if ( densityType(1:8)=="TotalOld" ) then
+   else if ( nocaseCompare(densityType,"TotalOld") ) then
          p_den => p_CDL%momL_TotalOld(1:nr,jl,ia)
    else
       call ErrorHandler("getMomDen_Lj","Undefined moment type")
@@ -1528,8 +1421,7 @@ contains
 !  *******************************************************************
 !
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-   function getMomDen_r(momentType, id, ia, posi, jmax_in, vp_point, n_mult) &
-                                                           result(mom)
+   function getMomentDensityAtPoint(momentType, id, ia, posi, jmax_in, n_mult) result(mom)
 !  ===================================================================
    use MathParamModule, only : ZERO, TWO
 !
@@ -1537,17 +1429,17 @@ contains
 !
    use InterpolationModule, only : PolyInterp
 !
-   use PolyhedraModule, only: isExternalPoint, isSurfacePoint
+   use PolyhedraModule, only: getPointLocationFlag
 !
    implicit none
 !
    character(len=*), intent(in) :: momentType
 !
    integer (kind=IntKind), intent(in) :: id, ia
-   integer (kind=IntKind), intent(in) :: jmax_in
-   integer (kind=IntKind), optional :: vp_point
-   integer (kind=IntKind), optional :: n_mult
+   integer (kind=IntKind), intent(in), optional :: jmax_in
+   integer (kind=IntKind), intent(in), optional :: n_mult
 !
+   integer (kind=IntKind) :: VP_point
    integer (kind=IntKind) :: jl, ir, irp, l, kl, iend
    integer (kind=IntKind) :: kmax, nr, is, isig, jmax
 !
@@ -1576,16 +1468,19 @@ contains
                         'Carge Density Module is not initialized')
    else if (id < 1 .or. id > LocalNumAtoms) then
       call ErrorHandler('getMomDen_r','Invalid atom index',id)
-   else if (isMTFP .and. momentType(1:5)=="Pseud" ) then
+   else if (isMTFP .and. nocaseCompare(momentType,"Pseudo") ) then
       call ErrorHandler("getMomDen_r"," Invalid potential type",'Pseudo')
    endif
 !
    p_CDL => ChargeDensityList(id)
 !
-   if ( jmax_in<1 ) then
-      jmax = p_CDL%jmax
+   if ( present(jmax_in) ) then
+      if (jmax_in < 1 .or. jmax_in > p_CDL%jmax) then
+         call ErrorHandler('getMomDen_r','Invalid jmax value',jmax_in)
+      endif
+      jmax = jmax_in
    else
-      jmax = min(jmax_in,p_CDL%jmax)
+      jmax = p_CDL%jmax
    endif
 !
    nr = p_CDL%NumRpts
@@ -1615,11 +1510,12 @@ contains
    endif
 !
    den_l = CZERO
-   if (present(vp_point) .and. present(n_mult) ) then
+   if ( present(n_mult) ) then
       if ( n_mult<1 ) then
-         call ErrorHandler("getChrgDen_r",'Invalid n_mult',n_mult)
+         call ErrorHandler("getMomentDensityAtPoint",'Invalid n_mult',n_mult)
       endif
-      if ( momentType(1:8)=="TotalNew" ) then
+      VP_point = getPointLocationFlag(id, posi(1), posi(2), posi(3))
+      if ( nocaseCompare(momentType,"TotalNew") ) then
          if ( VP_point == 1 ) then
             do jl = 1,jmax
                den_l(1:n_inter,jl) = p_CDL%momL_Total(irp:irp+n_inter-1,jl,ia)
@@ -1629,8 +1525,8 @@ contains
             do is = 1,n_spin_pola
                isig = 3-2*is
                do ir = 1, n_inter
-                  den_l(ir,1) = den_l(ir,1) + isig*p_CDL%rho_Core(irp+ir-1,is,ia)/Y0 +  &
-                                           isig*p_CDL%rho_SemiCore(irp+ir-1,is,ia)/Y0
+                  den_l(ir,1) = den_l(ir,1) + isig*fact*(p_CDL%rho_Core(irp+ir-1,is,ia) +  &
+                                                         p_CDL%rho_SemiCore(irp+ir-1,is,ia))
                enddo
             enddo
             do jl = 1,p_CDL%jmax
@@ -1642,33 +1538,33 @@ contains
             do is = 1,n_spin_pola
                isig = 3-2*is
                do ir = 1, n_inter
-                  den_l(ir,1) = den_l(ir,1) + isig*p_CDL%rho_Core(irp+ir-1,is,ia)/Y0 +  &
-                                           isig*p_CDL%rho_SemiCore(irp+ir-1,is,ia)/Y0
+                  den_l(ir,1) = den_l(ir,1) + isig*fact*(p_CDL%rho_Core(irp+ir-1,is,ia) +  &
+                                                         p_CDL%rho_SemiCore(irp+ir-1,is,ia))
                enddo
             enddo
          endif
       else
-         call ErrorHandler("getChrgDen_r","Undefined charge type")
+         call ErrorHandler("getMomentDensityAtPoint","Undefined charge type")
       endif
    else
-      if ( momentType(1:5)=="Pseud" ) then
+      if ( nocaseCompare(momentType,"Pseudo") ) then
          do jl = 1,jmax
             den_l(1:n_inter,jl) = p_CDL%momL_Pseudo(irp:irp+n_inter-1,jl,ia)
          enddo
-      else if ( momentType(1:5)=="Tilda" ) then
+      else if ( nocaseCompare(momentType,"Tilda") ) then
          do jl = 1,p_CDL%jmax
             den_l(1:n_inter,jl) = p_CDL%momL_Tilda(irp:irp+n_inter-1,jl,ia)
          enddo
-      else if ( momentType(1:8)=="TotalNew" ) then
+      else if ( nocaseCompare(momentType,"TotalNew") ) then
          do jl = 1,jmax
             den_l(1:n_inter,jl) = p_CDL%momL_Total(irp:irp+n_inter-1,jl,ia)
          enddo
-      else if ( momentType(1:8)=="TotalOld" ) then
+      else if ( nocaseCompare(momentType,"TotalOld") ) then
          do jl = 1,jmax
             den_l(1:n_inter,jl) = p_CDL%momL_TotalOld(irp:irp+n_inter-1,jl,ia)
          enddo
       else
-         call ErrorHandler("getChrgDen_r","Undefined charge type")
+         call ErrorHandler("getMomentDensityAtPoint","Undefined charge type")
       endif
    endif
 !
@@ -1688,7 +1584,7 @@ contains
       endif
    enddo
 !
-   end function getMomDen_r
+   end function getMomentDensityAtPoint
 !  ===================================================================
 !
 !  *******************************************************************
@@ -3336,7 +3232,7 @@ contains
 !
    complex (kind=CmplxKind), pointer :: denl(:,:,:)
 !
-   if (isMTFP .and. den_type(1:5) == "Pseud") then
+   if (isMTFP .and. nocaseCompare(den_type,"Pseudo") ) then
       call ErrorHandler('printChargeDensity_L','Invalid density type','Pseudo')
    endif
 !
@@ -3383,15 +3279,15 @@ contains
    r_mesh => ChargeDensityList(id)%r_mesh(1:NumRs)
    jmax =  ChargeDensityList(id)%jmax
    if ( present(den_type) ) then
-      if ( den_type(1:5) == "Tilda" ) then
+      if ( nocaseCompare(den_type,"Tilda") ) then
          denl => ChargeDensityList(id)%rhoL_Tilda
-      else if ( den_type(1:5) == "Pseud" ) then
+      else if ( nocaseCompare(den_type,"Pseudo") ) then
          denl => ChargeDensityList(id)%rhoL_Pseudo
-      else if ( den_type(1:7) == "Valence" ) then
+      else if ( nocaseCompare(den_type,"Valence") ) then
          denl => ChargeDensityList(id)%rhoL_Valence
-      else if ( den_type(1:8) == "TotalNew" ) then
+      else if ( nocaseCompare(den_type,"TotalNew") ) then
          denl => ChargeDensityList(id)%rhoL_Total
-      else if ( den_type(1:8) == "TotalOld" ) then
+      else if ( nocaseCompare(den_type,"TotalOld") ) then
          denl => ChargeDensityList(id)%rhoL_TotalOld
       else
          denl => ChargeDensityList(id)%rhoL_Total
@@ -3473,7 +3369,7 @@ contains
 !
    complex (kind=CmplxKind), pointer :: denl(:,:,:)
 !
-   if (isMTFP .and. den_type(1:5) == "Pseud") then
+   if (isMTFP .and. nocaseCompare(den_type,"Pseudo")) then
       call ErrorHandler('printMomentDensity_L','Invalid density type','Pseudo')
    endif
 !
@@ -3520,15 +3416,15 @@ contains
    r_mesh => ChargeDensityList(id)%r_mesh(1:NumRs)
    jmax =  ChargeDensityList(id)%jmax
    if ( present(den_type) ) then
-      if ( den_type(1:5) == "Tilda" ) then
+      if ( nocaseCompare(den_type,"Tilda") ) then
          denl => ChargeDensityList(id)%momL_Tilda
-      else if ( den_type(1:5) == "Pseud" ) then
+      else if ( nocaseCompare(den_type,"Pseudo") ) then
          denl => ChargeDensityList(id)%momL_Pseudo
-      else if ( den_type(1:7) == "Valence" ) then
+      else if ( nocaseCompare(den_type,"Valence") ) then
          denl => ChargeDensityList(id)%momL_Valence
-      else if ( den_type(1:8) == "TotalNew" ) then
+      else if ( nocaseCompare(den_type,"TotalNew") ) then
          denl => ChargeDensityList(id)%momL_Total
-      else if ( den_type(1:8) == "TotalOld" ) then
+      else if ( nocaseCompare(den_type,"TotalOld") ) then
          denl => ChargeDensityList(id)%momL_TotalOld
       else
          denl => ChargeDensityList(id)%momL_Total

@@ -26,6 +26,7 @@ program testFFTGrid
    use PolyhedraModule, only : getNeighborDistance
    use PolyhedraModule, only : printPolyhedron
    use PolyhedraModule, only : printPolyhedronBoundary
+   use PolyhedraModule, only : getPointLocationFlag
 !
    use SurfElementsModule, only : initSurfElements, endSurfElements,  &
                                   genGaussPoints, genGaussSphHarmonics
@@ -72,6 +73,7 @@ program testFFTGrid
    use AtomModule, only : getStepFuncLmax, setTruncPotLmax, setPotLmax
    use AtomModule, only : getPotLmax, getKKRLmax, getPhiLmax, getRhoLmax
    use AtomModule, only : getGridData, getLocalEvecOld, getAtomRmtIn
+   use AtomModule, only : getLocalAtomPosition
 !
    use SphericalHarmonicsModule, only : initSphericalHarmonics
    use SphericalHarmonicsModule, only : endSphericalHarmonics
@@ -80,6 +82,7 @@ program testFFTGrid
 !
    use RadialGridModule, only : initRadialGrid, endRadialGrid
    use RadialGridModule, only : genRadialGrid, printRadialGrid
+   use RadialGridModule, only : getGrid
 !
    use MadelungModule, only : initMadelung, endMadelung
 !
@@ -93,18 +96,19 @@ program testFFTGrid
 !
    use PublicTypeDefinitionsModule, only : GridStruct
 !
-   use RadialGridModule, only : getGrid
-!
    use TimerModule, only : getTime
 !  *******************************************************************
 !  ******  For different testing purposes, add necessary   *********** 
 !  ******  module usage after the following line.          ***********
 !  *******************************************************************
-   use SystemModule, only : getUniformGridParam
-   use PublicTypeDefinitionsModule, only : FFTGridStruct
-   use FFTGridModule, only : initFFTGrid, setFFTGrid, endFFTGrid, printFFTGrid
-   use FFTGridModule, only : getFFTGrid
-   use FFTTransformModule, only : initFFTTransform, endFFTTransform
+   use SystemModule, only : getUniformGridParam, getBravaisLattice
+   use PublicTypeDefinitionsModule, only : UniformGridStruct
+   use Uniform3DGridModule, only : initUniform3DGrid, endUniform3DGrid, printUniform3DGrid
+   use Uniform3DGridModule, only : createUniform3DGrid, insertAtomsInGrid
+   use Uniform3DGridModule, only : getUniform3DGrid, createProcessorMesh
+   use Uniform3DGridModule, only : distributeUniformGrid
+!  use FFTTransformModule, only : initFFTTransform, endFFTTransform
+!  use FFTTransformModule, only : getProcessorMesh
 !
    implicit none
 !
@@ -122,10 +126,12 @@ program testFFTGrid
    integer (kind=IntKind), allocatable :: lmax_step(:)
    integer (kind=IntKind), allocatable :: ngr(:), ngt(:)
    integer (kind=IntKind), allocatable :: GlobalIndex(:)
+   integer (kind=IntKind) :: grid_start(3), grid_end(3)
 !
    integer (kind=IntKind), parameter :: funit = 11
 !
    real (kind=RealKind), allocatable :: AtomPosition(:,:)
+   real (kind=RealKind), allocatable :: LocalAtomPosi(:,:)
    real (kind=RealKind), allocatable :: evec(:,:)
    real (kind=RealKind), pointer :: bravais(:,:)
 !
@@ -140,9 +146,9 @@ program testFFTGrid
    integer (kind=IntKind) :: i, id, ig, is, ie_loc, ie_glb
    integer (kind=IntKind) :: eGID, aGID, NumPEsInGroup, comm
 !
-   type (FFTGridStruct), pointer:: fftgp
+   type (UniformGridStruct), pointer:: fftgp
    integer (kind=IntKind) :: ng_uniform(3)
-   real (kind=RealKind) :: radius
+   real (kind=RealKind), allocatable :: radius(:)
 !
 !  ===================================================================
 !  Initialize modules and data
@@ -154,25 +160,42 @@ program testFFTGrid
    call initializeModules()
 !  -------------------------------------------------------------------
 !
-   call initFFTGrid(istop, node_print_level)
+   call initUniform3DGrid(istop, node_print_level)
    ng_uniform(1:3) = getUniformGridParam()
    t1 = getTime()
-   call setFFTGrid( ng_uniform(1), ng_uniform(2), ng_uniform(3),   &
-                    bravais, radius )
+!  -------------------------------------------------------------------
+   call createUniform3DGrid('FFT', ng_uniform(1), ng_uniform(2), ng_uniform(3), bravais)
+!  -------------------------------------------------------------------
+!  call initFFTTransform(fftgp%nga, fftgp%ngb, fftgp%ngc, bravais)
+!  -------------------------------------------------------------------
+!  call createProcessorMesh('FFT', getProcessorMesh())
+!  grid_start = 1; grid_end = ng_uniform
+!  call distributeUniformGrid('FFT',grid_start,grid_end)
+   call distributeUniformGrid('FFT')
+!  -------------------------------------------------------------------
+!
+   allocate(radius(LocalNumAtoms))
+   do i = 1, LocalNumAtoms
+      radius(i) = getOutscrSphRadius(i)
+      write(6,'(a,i5,2x,d15.8)')'i,radius = ',i,radius(i)
+   enddo
+!
+!  -------------------------------------------------------------------
+   call insertAtomsInGrid('FFT', LocalNumAtoms, LocalAtomPosi,        &
+                          GlobalIndex, getPointLocationFlag, radius)
+!  -------------------------------------------------------------------
    write(6,'(/,a,f12.5,a)') 'set FFT grid time: ',getTime() - t1,' sec.'
    if (node_print_level >= 0) then
-      call printFFTGrid()
+      call printUniform3DGrid('FFT')
    endif
-   fftgp => getFFTGrid()
-!  -------------------------------------------------------------------
-   call initFFTTransform(fftgp%nga, fftgp%ngb, fftgp%ngc, bravais)
-!  -------------------------------------------------------------------
+   fftgp => getUniform3DGrid('FFT')
 !
 !  ===================================================================
 !  finish the process
 !  -------------------------------------------------------------------
-   call endFFTGrid()
-   call endFFTTransform()
+   deallocate(radius)
+   call endUniform3DGrid()
+!  call endFFTTransform()
    call finishProcess()
 !  -------------------------------------------------------------------
 !
@@ -210,8 +233,10 @@ contains
    node_print_level = getStandardOutputLevel()
 !
    allocate(atom_print_level(1:LocalNumAtoms))
+   allocate(LocalAtomPosi(3,LocalNumAtoms))
    do i=1,LocalNumAtoms
       atom_print_level(i) = getStandardOutputLevel(i)
+      LocalAtomPosi(1:3,i)=getLocalAtomPosition(i)
    enddo
 !
 !  ===================================================================

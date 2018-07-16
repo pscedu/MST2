@@ -7,7 +7,8 @@ PublicTypeDefinitionsModule.o \
 PublicParamDefinitionsModule.o \
 AdaptIntegrationModule.o \
 MatrixBlockInversionModule.o \
-BinvMatrix.o
+BinvMatrix.o \
+WriteFunctionModule.o
 
 BasicRoutines = \
 readPositionData.o \
@@ -52,8 +53,8 @@ SurfElementsModule.o \
 SpinRotationModule.o \
 SSSolverModule.o \
 SCPolesModule.o \
-FFTGridModule.o \
-FFTTransformModule.o \
+Uniform3DGridModule.o \
+ParallelFFTModule.o \
 KreinModule.o \
 DiracSolverModule.o \
 RelScattererModule.o \
@@ -68,7 +69,6 @@ ConvergenceCheckModule.o \
 MixingModule.o \
 TestPotentialModule.o \
 BookKeepingModule.o \
-VisualGridModule.o \
 ForceModule.o \
 RelSSSolverModule.o \
 
@@ -91,8 +91,7 @@ GFMethodModule.o
 Routines = \
 setupLizNeighbor.o \
 buildSendTable.o \
-constructDensityOnGrid.o \
-printDensityOnGrid.o \
+constructDataOnGrid.o \
 printDataOnGrid.o \
 printDataOnLine.o \
 updatePotential.o \
@@ -114,7 +113,10 @@ print_threads.o \
 convertGijToRel.o \
 gaspari_gyorffy_formula.o \
 printMomentVsCoreSplit.o \
-polyfermi.o
+polyfermi.o \
+fetchVisualDomainParameters.o \
+printDensityOnGrid.o \
+printPotentialOnGrid.o
 
 .SUFFIXES:	.o .f .c .f90 .F90
 

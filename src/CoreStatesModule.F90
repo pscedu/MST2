@@ -77,8 +77,8 @@ private
       real (kind=RealKind), pointer :: ec(:,:,:)
       real (kind=RealKind), pointer :: ecorv(:,:)
       real (kind=RealKind), pointer :: esemv(:,:)
-      real (kind=RealKind), pointer :: corden(:,:,:)
-      real (kind=RealKind), pointer :: semden(:,:,:)
+      real (kind=RealKind), pointer :: corden(:,:,:) ! deep core density, without r^2
+      real (kind=RealKind), pointer :: semden(:,:,:) ! semi core density, without r^2
       real (kind=RealKind), pointer :: OldCore(:,:,:)
       real (kind=RealKind), pointer :: r_mesh(:)
       real (kind=RealKind), pointer :: core_ke(:,:)
@@ -126,8 +126,11 @@ private
    integer (kind=IntKind) :: NumPEsInGroup
    integer (kind=IntKind) :: MyPEinGroup
    integer (kind=IntKind) :: LargeRsMult
+   integer (kind=IntKind) :: lmax_core = 0
 !
    real (kind=RealKind) :: MyLightSpeed
+   real (kind=RealKind) :: cinv
+   real (kind=RealKind) :: c2inv
    real (kind=RealKind) :: evbot
    real (kind=RealKind) :: etopcor
    real (kind=RealKind) :: rhoint_deep
@@ -202,9 +205,13 @@ contains
    n_spin_pola = ns
    if (isNonRelativistic) then
       MyLightSpeed=LightSpeed*TEN2p10
+      cinv=ONE/MyLightSpeed
+!     cinv = ZERO  ! 02/11/18 -Yang
    else
       MyLightSpeed=LightSpeed
+      cinv=ONE/MyLightSpeed
    endif
+   c2inv=cinv*cinv
    allocate( Core(LocalNumAtoms), DataSize(LocalNumAtoms) )
 !
    stop_routine = istop
@@ -426,14 +433,14 @@ contains
          Core(id)%numc(ia)=getNumCoreStates(an)
       enddo
 !
-      do ia = 1, Core(id)%NumSpecies
-         an = getLocalAtomNickName(id,ia)
-         do ic=1, Core(id)%numc(ia)
-            Core(id)%nc(ic,ia)=getCoreStateN(an,ic)
-            Core(id)%lc(ic,ia)=getCoreStateL(an,ic)
-            Core(id)%kc(ic,ia)=getCoreStateKappa(an,ic)
-         enddo
-      enddo
+!     do ia = 1, Core(id)%NumSpecies
+!        an = getLocalAtomNickName(id,ia)
+!        do ic=1, Core(id)%numc(ia)
+!           Core(id)%nc(ic,ia)=getCoreStateN(an,ic)
+!           Core(id)%lc(ic,ia)=getCoreStateL(an,ic)
+!           Core(id)%kc(ic,ia)=getCoreStateKappa(an,ic)
+!        enddo
+!     enddo
    enddo
 !
    end subroutine readCoreStates
@@ -529,7 +536,8 @@ contains
       read(funit,'(2i5)') numc,nrcor
       do j=1,numc
          if (j <= getNumCoreStates(an)) then
-            read(funit,'(3i5,f12.5,1x,a)')nc,lc,kc,ThisC%ec(j,is,ia),dummy
+            read(funit,'(3i5,f12.5,1x,a)')ThisC%nc(j,ia),ThisC%lc(j,ia), &
+                                          ThisC%kc(j,ia),ThisC%ec(j,is,ia),dummy
 !           if (ThisC%nc(j,ia) /= nc) then
 !              call ErrorHandler(sname,'nc <> ThisC%nc',nc, ThisC%nc(j,ia))
 !           else if (ThisC%lc(j,ia) /= lc) then
@@ -628,12 +636,15 @@ contains
    use DataServiceCenterModule, only : getDataStorage,        &
                                        isDataStorageExisting, &
                                        RealType, ComplexType, &
-                                       RealMark, ComplexMark
+                                       RealMark, ComplexMark, &
+                                       IntegerMark, IntegerType
 !
    use AtomModule, only : getLocalAtomNickName
 !
    use ChemElementModule, only : MaxLenOfAtomName
    use ChemElementModule, only : getNumCoreStates
+   use ChemElementModule, only : getCoreStateN, getCoreStateL,&
+                                 getCoreStateKappa, getCoreStateSymbol
 !
    implicit none
 !
@@ -643,7 +654,8 @@ contains
    integer (kind=IntKind), intent(in) :: funit
    integer (kind=IntKind), intent(in) :: id, ia
 !
-   integer (kind=IntKind) :: ic, is, data_sz, numc
+   integer (kind=IntKind) :: ic, is, data_sz, numc, n
+   integer (kind=IntKind), pointer :: pc0(:,:,:)
 !
    real (kind=RealKind), pointer :: ec0(:,:,:)
 !
@@ -655,8 +667,15 @@ contains
          ec0 => getDataStorage( id, 'OldEstimatedCoreEnergy',         &
                                 Core(id)%MaxNumc, n_spin_pola,        &
                                 Core(id)%NumSpecies, RealMark )
+         pc0 => getDataStorage( id, 'OldEstimatedCoreStates',         &
+                                Core(id)%MaxNumc, n_spin_pola,        &
+                                Core(id)%NumSpecies, IntegerMark )
          do is = 1,n_spin_pola
             do ic = 1, numc
+               n = pc0(ic,is,ia)
+               Core(id)%nc(ic,ia)=getCoreStateN(an,n)
+               Core(id)%lc(ic,ia)=getCoreStateL(an,n)
+               Core(id)%kc(ic,ia)=getCoreStateKappa(an,n)
                Core(id)%ec(ic,is,ia) = ec0(ic,is,ia)
             enddo
          enddo
@@ -795,7 +814,10 @@ contains
                                        getDataStorage,        &
                                        isDataStorageExisting, &
                                        RealType, ComplexType, &
-                                       RealMark, ComplexMark
+                                       RealMark, ComplexMark, &
+                                       IntegerMark, IntegerType
+!
+   use ChemElementModule, only : getCoreStateIndex
 !
    use InterpolationModule, only : FitInterp
 !
@@ -807,6 +829,7 @@ contains
    integer (kind=IntKind) :: is, ig, i, j, ir
    integer (kind=IntKind) :: nr, nws, nend, last, last2, nmult, jmt, jend_plus_n
    integer (kind=IntKind) :: DataSize(LocalNumAtoms)
+   integer (kind=IntKind), pointer :: pc0(:,:,:)
 !
    real (kind=RealKind), optional, intent(out) :: evb
    real (kind=RealKind), allocatable :: wrk1(:),wrk2(:)
@@ -832,7 +855,7 @@ contains
       last = max(last,Core(id)%rsize)
       DataSize(id) = Core(id)%MaxNumc*n_spin_pola*Core(id)%NumSpecies
       if (Core(id)%MaxNumc < 1) then
-         DataSize(id) = 1
+         DataSize(id) = n_spin_pola
       endif
    enddo
    allocate(vr_t(1:last))
@@ -842,6 +865,8 @@ contains
 !     ---------------------------------------------------------------
       call createDataStorage(LocalNumAtoms,'NewEstimatedCoreEnergy',  &
                              DataSize,RealType)
+      call createDataStorage(LocalNumAtoms,'NewEstimatedCoreStates',  &
+                             DataSize,IntegerType)
 !     ---------------------------------------------------------------
    endif
 !
@@ -890,6 +915,9 @@ contains
 !                          at (or somewhat further than) the cell boundary, 
 !                          or on (or somewhat further than) the Wigner-Seitz 
 !                          sphere surface.
+!     Notice the difference in the definition of last2 between this version 
+!     and earlier versions. This difference causes the difference in the semi-core
+!     kinetic energy and ultimately the difference in the total energy.
 !     ================================================================
       if (isMuffinTinPotential() .or. isFullPotential() ) then
          last2 = Core(id)%Grid%jend   !  Definition of last2:
@@ -1054,11 +1082,17 @@ contains
          ec0  => getDataStorage( id, 'NewEstimatedCoreEnergy',        &
                                  Core(id)%MaxNumc,n_spin_pola,        &
                                  Core(id)%NumSpecies,RealMark )
+         pc0  => getDataStorage( id, 'NewEstimatedCoreStates',        &
+                                 Core(id)%MaxNumc,n_spin_pola,        &
+                                 Core(id)%NumSpecies,IntegerMark )
       endif
       do ia = 1, Core(id)%NumSpecies
          do is = 1, n_spin_pola
             do i = 1,Core(id)%numc(ia)
                ec0(i,is,ia) = Core(id)%ec(i,is,ia)
+               pc0(i,is,ia) = getCoreStateIndex(Core(id)%nc(i,ia),    &
+                                                Core(id)%lc(i,ia),    &
+                                                Core(id)%kc(i,ia))
             enddo
          enddo
       enddo
@@ -1299,6 +1333,8 @@ contains
 !  ===================================================================
    use InterpolationModule, only: getInterpolation
 !
+   use WriteFunctionModule, only : writeFunction
+!
    use ChemElementModule, only : MaxLenOfAtomName
    use ChemElementModule, only : setConfiguration
    use ChemElementModule, only : getZtot, getZcor, getZsem
@@ -1311,6 +1347,9 @@ contains
    character (len=MaxLenOfAtomName) :: an
    character (len=6), parameter :: sname='corslv'
 !
+   character (len=4) :: state_string
+   character (len=10) :: spin_string
+!
    integer, intent(in) :: nws, last, last2
 !
    integer, intent(in) :: id,ia,is
@@ -1318,7 +1357,7 @@ contains
    integer :: j
    integer :: ndeep
    integer :: kappa
-   integer :: jmt, num_cores, num_electrons
+   integer :: jmt, num_cores, num_electrons, occ, npt, lpt
 !
    real (kind=RealKind), intent(in) :: h
    real (kind=RealKind), intent(in) :: r(last)
@@ -1373,6 +1412,7 @@ contains
    jmt=Core(id)%jcore
    num_cores = 0; num_electrons = 0
    ndeep = 0
+   npt = -1; lpt = -1
    LOOP_i: do i = 1, Core(id)%numc(ia)
       fac1=(3-n_spin_pola)*abs(Core(id)%kc(i,ia))
       ndeep=ndeep+fac1
@@ -1434,6 +1474,51 @@ contains
       do j=1,last2
          ftmp(j)=ftmp(j)*gnrm/r(j)    ! get rid off factor r^2
       enddo
+      if (print_level > 0 .and. (npt /= Core(id)%nc(i,ia) .or. lpt /= Core(id)%lc(i,ia))) then
+         if (Core(id)%lc(i,ia) > 3) then
+!           ----------------------------------------------------------
+            call ErrorHandler(sname,'Core state l > 3',Core(id)%lc(i,ia))
+!           ----------------------------------------------------------
+         endif
+         if(isNonRelativistic) then
+            occ = (3-n_spin_pola)*(2*Core(id)%lc(i,ia)+1)
+         else
+            occ = (3-n_spin_pola)*abs(Core(id)%kc(i,ia))
+         endif
+         lpt = Core(id)%lc(i,ia)
+         npt = Core(id)%nc(i,ia)
+         if (occ < 10) then
+            if (Core(id)%lc(i,ia) == 0) then
+               write(state_string,'(i1,a,i1)')Core(id)%nc(i,ia),'s',occ
+            else if (Core(id)%lc(i,ia) == 1) then
+               write(state_string,'(i1,a,i1)')Core(id)%nc(i,ia),'p',occ
+            else if (Core(id)%lc(i,ia) == 2) then
+               write(state_string,'(i1,a,i1)')Core(id)%nc(i,ia),'d',occ
+            else if (Core(id)%lc(i,ia) == 3) then
+               write(state_string,'(i1,a,i1)')Core(id)%nc(i,ia),'f',occ
+            endif
+         else
+            if (Core(id)%lc(i,ia) == 0) then
+               write(state_string,'(i1,a,i2)')Core(id)%nc(i,ia),'s',occ
+            else if (Core(id)%lc(i,ia) == 1) then
+               write(state_string,'(i1,a,i2)')Core(id)%nc(i,ia),'p',occ
+            else if (Core(id)%lc(i,ia) == 2) then
+               write(state_string,'(i1,a,i2)')Core(id)%nc(i,ia),'d',occ
+            else if (Core(id)%lc(i,ia) == 3) then
+               write(state_string,'(i1,a,i2)')Core(id)%nc(i,ia),'f',occ
+            endif
+         endif
+         if (n_spin_pola == 1) then
+            spin_string = '_NonPola'
+         else if (is == 1) then
+            spin_string = '_SpinUp'
+         else
+            spin_string = '_SpinDown'
+         endif
+!        -------------------------------------------------------------
+         call writeFunction('Core_'//trim(state_string)//spin_string,last2,r,ftmp(1:),2)
+!        -------------------------------------------------------------
+      endif
       if(ndeep > ndeepz)then
          do j=1,Core(id)%Grid%jmt
             Core(id)%semden(j,is,ia)=Core(id)%semden(j,is,ia) + fac1*ftmp(j)
@@ -1602,7 +1687,8 @@ contains
 !  ===================================================================
 !  first power of small r expansion
 !  ===================================================================
-   gam=sqrt(dk*dk-FOUR*z*z/(MyLightSpeed*MyLightSpeed))
+!  gam=sqrt(dk*dk-FOUR*z*z/(MyLightSpeed*MyLightSpeed))
+   gam=sqrt(dk*dk-FOUR*z*z*c2inv)      ! 02/11/18 -Yang
 !
 !  ===================================================================
 !  slope of the wavefcns at the origine
@@ -1821,9 +1907,11 @@ contains
    real (kind=RealKind) :: rgr
 !
 !  ==================================================================
-   zalfa=TWO*z/MyLightSpeed
+!  zalfa=TWO*z/MyLightSpeed
+   zalfa=TWO*z*cinv  ! 02/11/18 -Yang
    term1=-zalfa
-   term2=zalfa/r(1)+(v-en)/MyLightSpeed
+!  term2=zalfa/r(1)+(v-en)/MyLightSpeed
+   term2=zalfa/r(1)+(v-en)*cinv  ! 02/11/18 -Yang
 !
    do j=1,ipdeq2
       rg(j)=ZERO
@@ -1831,7 +1919,8 @@ contains
    enddo
 !
    if( dk .le. ZERO ) then
-      ratfg=(dk-gam)/zalfa
+!     ratfg=(dk-gam)/zalfa
+      ratfg=(dk-gam)*MyLightSpeed*HALF/z ! 02/11/18 -Yang  Careful!!!
    else
       ratfg=zalfa/(dk+gam)
    endif
@@ -1990,7 +2079,8 @@ contains
 !  ===================================================================
 !  first power of small r expansion
 !  ===================================================================
-   gam=sqrt(dk*dk-FOUR*z*z/(MyLightSpeed*MyLightSpeed))
+!  gam=sqrt(dk*dk-FOUR*z*z/(MyLightSpeed*MyLightSpeed))
+   gam=sqrt(dk*dk-FOUR*z*z*c2inv) ! 02/11/18 -Yang
 !
 !  ===================================================================
 !  slope of the wavefcns at the origine
@@ -2173,8 +2263,6 @@ contains
    real (kind=RealKind), intent(in) :: dk
 !
    real (kind=RealKind) :: mass
-   real (kind=RealKind) :: cinv
-   real (kind=RealKind) :: c2inv
    real (kind=RealKind) :: ak
    real (kind=RealKind) :: sgnk
    real (kind=RealKind) :: factor
@@ -2185,8 +2273,6 @@ contains
    complex (kind=CmplxKind) :: p
    complex (kind=CmplxKind) :: mil
 !
-   cinv=ONE/MyLightSpeed
-   c2inv=cinv*cinv
    mass=(ONE + en*c2inv)
    p=sqrt(cmplx(en*mass,ZERO,CmplxKind) )
 !
@@ -2279,8 +2365,10 @@ contains
 !  ===================================================================
 !  initial values for inward integration
 !  ===================================================================
-   p=sqrt(-en*(one+en/(MyLightSpeed*MyLightSpeed)))
-   pq=-p/(MyLightSpeed+en/MyLightSpeed)
+!  p=sqrt(-en*(one+en/(MyLightSpeed*MyLightSpeed)))
+   p=sqrt(-en*(one+en*c2inv)) ! 02/11/18 -Yang
+!  pq=-p/(MyLightSpeed+en/MyLightSpeed)
+   pq=-p*cinv/(ONE+en*c2inv) ! 02/11/18 -Yang
    do j = nmax-ipdeq+1, nmax
       rg(j)=exp(-p*r(j))
       rf(j)=pq*rg(j)
@@ -2325,6 +2413,7 @@ contains
 !     ================================================================
       er=en*r(j)
       emvoc=(er-rv(j))/MyLightSpeed
+!     emvoc=(er-rv(j))*cinv ! 02/11/18 -Yang  Careful!!!
       drg(ipdeq)=-dk*dpr+(MyLightSpeed*r(j)+emvoc)*dqr
       drf(ipdeq)=dk*dqr-emvoc*dpr
 !
@@ -2495,6 +2584,7 @@ contains
 !        =============================================================
          er=en*r(j)
          emvoc=(er-rv(j))/MyLightSpeed
+!        emvoc=(er-rv(j))*cinv ! 02/11/18 -Yang  Careful!!!
          drg(ipdeq)=-dk*dpr+(MyLightSpeed*r(j)+emvoc)*dqr
          drf(ipdeq)=dk*dqr-emvoc*dpr
 !
@@ -3103,49 +3193,66 @@ contains
 !  *******************************************************************
 !
 !  ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-   subroutine printCoreDensity(denType, den, id, ia, nrs, r_mesh)
+   subroutine printCoreDensity(id)
 !  ===================================================================
-   use MPPModule, only : MyPE
    use MathParamModule, only: Ten2m8
+   use Atom2ProcModule, only : getGlobalIndex
+   use WriteFunctionModule, only : writeFunction
 !
    implicit none
 !
-   character (len=*), intent(in) :: denType
-!
-   integer (kind=IntKind), intent(in) :: id, ia, nrs
-!
-   real (kind=RealKind), pointer :: r_mesh(:)
-!
-   real (kind=RealKind), pointer :: den(:,:)
-!
+   character (len=6) :: denFlag
+   character (len=2) :: specFlag
    character(len=20) :: file_den
-   integer (kind=IntKind) :: lenDenName
-   integer (kind=IntKind) :: ir, funit
-   integer (kind=IntKind) :: offset = 100000
+   character(len=20) :: sname = 'printCoreDensity'
 !
-   if (MyPE /= 0) then
-     return
-   endif
-   lenDenName = len(denType)+1
-   file_den(1:20) = "                    "
-   file_den(1:lenDenName) = trim(denType)//"_"
+   integer (kind=IntKind), intent(in) :: id
+   integer (kind=IntKind) :: ia
 !
-   if ( id == 1 ) then
-      write(file_den(lenDenName+1:lenDenName+6),'(i6)') offset+MyPE+id+(ia-1)
-      file_den(lenDenName+1:lenDenName+1) = 'n'
-      funit = 55+MyPE+id+(ia-1)
-      open(unit=funit,file=trim(file_den),status='unknown')
-      write(funit,'(a,$)') "#Ind     r_mesh   (lm):"
-      write(funit,'(a)') "  "
-      do ir = 1, nrs
-         if ( n_spin_pola==2 ) then
-            write(funit,'(i4,2(1x,d16.8))') id, r_mesh(ir), den(ir,1)+den(ir,2)
-         else
-            write(funit,'(i4,2(1x,d16.8))') id, r_mesh(ir), den(ir,1)
-         endif
+   real (kind=RealKind), pointer :: den(:,:), r_mesh(:)
+   real (kind=RealKind), allocatable :: total_den(:,:)
+!
+   integer (kind=IntKind) :: funit, nrs, is, ir
+!
+   funit = id*100
+   write(denFlag,'(i6)')100000+getGlobalIndex(id)
+   denFlag(1:1) = 'n'
+   nrs = Core(id)%rsize
+   r_mesh => Core(id)%r_mesh
+   allocate(total_den(nrs,n_spin_pola))
+   do ia = 1, Core(id)%NumSpecies
+      write(specFlag,'(i2)')10+ia
+      specFlag(1:1) = 'c'
+!
+      den => Core(id)%corden(:,:,ia)
+      funit = funit + 1
+      file_den = 'DeepCore'//'_'//denFlag//specFlag
+!     ----------------------------------------------------------------
+      call writeFunction(file_den,nrs,n_spin_pola,r_mesh,den)
+!     ----------------------------------------------------------------
+!
+      den => Core(id)%semden(:,:,ia)
+      funit = funit + 1
+      file_den = 'SemiCore'//'_'//denFlag//specFlag
+!     ----------------------------------------------------------------
+      call writeFunction(file_den,nrs,n_spin_pola,r_mesh,den)
+!     ----------------------------------------------------------------
+!
+      do is = 1, n_spin_pola
+         do ir = 1, nrs
+            total_den(ir,is) = Core(id)%semden(ir,is,ia) + Core(id)%corden(ir,is,ia)
+         enddo
       enddo
-      write(funit,'(a)') " "
-      close(funit)
+      funit = funit + 1
+      file_den = 'TotalCore'//'_'//denFlag//specFlag
+!     ----------------------------------------------------------------
+      call writeFunction(file_den,nrs,n_spin_pola,r_mesh,total_den)
+!     ----------------------------------------------------------------
+   enddo
+   deallocate(total_den)
+!
+   if (sname == stop_routine) then
+      call StopHandler(sname)
    endif
 !
    end subroutine printCoreDensity
