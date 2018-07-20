@@ -2,6 +2,6 @@
 ! this routine is automatically generated at compilation time
 ! DO NOT EDIT 
 ! 
-   write(myunit,'("# ",t5,a,t30,": ",a)') "username",trim("yangwang")
-   write(myunit,'("# ",t5,a,t30,": ",a)') "system name",trim("Yangs-MacBook-Pro-2.local")
-   write(myunit,'("# ",t5,a,t30,": ",a)') "code compiled",trim("Monday, June 26 2017 15:04:44")
+   write(myunit,'("# ",t5,a,t30,": ",a)') "username",trim("ywg")
+   write(myunit,'("# ",t5,a,t30,": ",a)') "system name",trim("yangmac.psc.edu")
+   write(myunit,'("# ",t5,a,t30,": ",a)') "code compiled",trim("Friday, July 20 2018 16:28:20")
