@@ -10,7 +10,7 @@ Current File Path          ::  ./
 Current File Name          ::  i_lsms_V
 Info Table File Name       ::  info_table_V
 No. Iterations (> 0)       ::  60
-Method of SCF Calculation  ::  1
+Method of SCF Calculation  ::  2
    -2. Single Site         -----------
    -1. ScreenKKR-LSMS      -----------(Broken)
     0. Screen-KKR          -----------(Broken)
