@@ -1,6 +1,6 @@
 Current working directory: /lvol/home/ywg/pscedu/MST2/sample/Cu/LSMS/L4MT
 Execution command: /home/ywg/MST2dev/bin/mst2
-Execution starts at 10:47:27, 08-14-2018 on    16 nodes of muir6.psc.edu
+Execution starts at 15:47:55, 09-18-2018 on     4 nodes of muir6.psc.edu
 #-------------------------------------------------------------------------------
 #
 #
@@ -15,13 +15,13 @@ Execution starts at 10:47:27, 08-14-2018 on    16 nodes of muir6.psc.edu
 #
 #   username                 : ywg
 #   system name              : muir6.psc.edu
-#   code compiled            : Monday, August 13 2018 16:10:49
+#   code compiled            : Monday, September 17 2018 16:06:12
 #-------------------------------------------------------------------------------
             Number of atoms on each processor:                  1
             Number of k-points on each processor:               1
             Number of redundant k-points on each processor:     0
-            Number of energies on each processor:              15
-            Number of redundant energies on each processor:    14
+            Number of energies on each processor:               9
+            Number of redundant energies on each processor:     2
 
 ================================================================================
 
@@ -331,6 +331,52 @@ rend                                   = 0.3354135379118D+01
 rws                                    = 0.2618335350019D+01
 ============================================================
 
+--------------------------------------------------------------------------------
+
+                        *********************************
+                        * Output from printStepFunction *
+                        *********************************
+
+Polyhedron Index:                     1
+Lmax for the Step Function:           8
+Number of Critical Points:            4
+Number of Radial Gaussian Points:    81
+Number of Theta  Gaussian Points:    60
+Inner Bounding Sphere Radius:     2.36881
+Outer Bounding Sphere Radius:     3.35000
+
+Non-zero (l,m) components of the step function
+     ( 0, 0)
+     ( 4, 0)
+     ( 4, 4)
+     ( 6, 0)
+     ( 6, 4)
+     ( 8, 0)
+     ( 8, 4)
+     ( 8, 8)
+
+========================================
+Critical Radial Point Table
+========================================
+Critical R Point         Radius
+----------------------------------------
+        1                2.36881
+        2                2.73526
+        3                2.90119
+        4                3.35000
+========================================
+
+--------------------------------------------------------------------------------
+
+                       **********************************
+                       *  Output from testStepFunction  *
+                       **********************************
+
+Polyhedron Index:           1
+Exact Cell Volume:          0.751907500000D+02
+Calculated Cell Volume:     0.751907496172D+02
+================================================================================
+
  Real Space Lattice:: nm1,nm2,nm3   =     3    3    3
                       Rs cut radius =    9.74093
                       Number of Rs  =   343
@@ -351,7 +397,7 @@ rws                                    = 0.2618335350019D+01
 calSymmetryFlags::   Flags, StepFunction
 
    l   m flag          Re[stepf]                  Im[stepf]        
-   0   0   1    0.35613654067734D-05    0.00000000000000D+00
+   0   0   1    0.35397980977034D+01    0.00000000000000D+00
    1   0   0    0.00000000000000D+00    0.00000000000000D+00
    1   1   0    0.00000000000000D+00    0.00000000000000D+00
    2   0   0    0.00000000000000D+00    0.00000000000000D+00
@@ -361,22 +407,22 @@ calSymmetryFlags::   Flags, StepFunction
    3   1   0    0.00000000000000D+00    0.00000000000000D+00
    3   2   0    0.00000000000000D+00    0.00000000000000D+00
    3   3   0    0.00000000000000D+00    0.00000000000000D+00
-   4   0   1    0.62323785271388D-05    0.00000000000000D+00
+   4   0   1    0.56658713372467D+00    0.00000000000000D+00
    4   1   0    0.00000000000000D+00    0.00000000000000D+00
    4   2   0    0.00000000000000D+00    0.00000000000000D+00
    4   3   0    0.00000000000000D+00    0.00000000000000D+00
-   4   4   1    0.37245585681204D-05    0.47772901805896D-19
+   4   4   1    0.33860058024766D+00    0.42577229676458D-14
    5   0   0    0.00000000000000D+00    0.00000000000000D+00
    5   1   0    0.00000000000000D+00    0.00000000000000D+00
    5   2   0    0.00000000000000D+00    0.00000000000000D+00
    5   3   0    0.00000000000000D+00    0.00000000000000D+00
    5   4   0    0.00000000000000D+00    0.00000000000000D+00
    5   5   0    0.00000000000000D+00    0.00000000000000D+00
-   6   0   1    0.16050797732232D-05    0.00000000000000D+00
+   6   0   1    0.45772674025260D+00    0.00000000000000D+00
    6   1   0    0.00000000000000D+00    0.00000000000000D+00
    6   2   0    0.00000000000000D+00    0.00000000000000D+00
    6   3   0    0.00000000000000D+00    0.00000000000000D+00
-   6   4   1   -0.30028293251300D-05   -0.38515669754332D-19
+   6   4   1   -0.85632831992939D+00   -0.11042344208850D-13
    6   5   0    0.00000000000000D+00    0.00000000000000D+00
    6   6   0    0.00000000000000D+00    0.00000000000000D+00
    7   0   0    0.00000000000000D+00    0.00000000000000D+00
@@ -387,15 +433,15 @@ calSymmetryFlags::   Flags, StepFunction
    7   5   0    0.00000000000000D+00    0.00000000000000D+00
    7   6   0    0.00000000000000D+00    0.00000000000000D+00
    7   7   0    0.00000000000000D+00    0.00000000000000D+00
-   8   0   1    0.75713307799286D-05    0.00000000000000D+00
+   8   0   1   -0.43776314993380D+00    0.00000000000000D+00
    8   1   0    0.00000000000000D+00    0.00000000000000D+00
    8   2   0    0.00000000000000D+00    0.00000000000000D+00
    8   3   0    0.00000000000000D+00    0.00000000000000D+00
-   8   4   1    0.28472043720255D-05    0.36519551614040D-19
+   8   4   1   -0.16462114798912D+00   -0.20912567287577D-14
    8   5   0    0.00000000000000D+00    0.00000000000000D+00
    8   6   0    0.00000000000000D+00    0.00000000000000D+00
    8   7   0    0.00000000000000D+00    0.00000000000000D+00
-   8   8   1    0.43380674920871D-05    0.11128365856036D-18
+   8   8   1   -0.25082064875066D+00   -0.65374112552473D-14
 ------------------------------------------------------------
 
 
@@ -408,7 +454,7 @@ calSymmetryFlags::   Flags, q_Value
 Starting Fermi energy read from the potential:  0.64820389
 
 ================================================================================
-Time:: Start-up         :     0.21000Sec
+Time:: Start-up         :     0.34700Sec
 --------------------------------------------------------------------------------
  SD_Loop::           1
 
@@ -546,140 +592,86 @@ Number of Eneregy Mesh =    30
 ================================================================================
  In solveSingleScattering, solving irregular solution is enabled.
 
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.586000 Sec
+invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    3.120000 Sec
 
 returnMultipleSiteDOS: energy =   -0.399993760183    0.002557452109, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =  -16.787934221686   -0.026553287939
                        Int [Z*Tau*Z-Z*J] on VP         =  -19.173740229021   -0.029615512465
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    0.008452174062
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    0.009426910402
-ie =   1 , Time:      1.98900
+ie =   1 , Time:      3.86600
 
-invertBlockMatrix     :: Using  LU: Block size =    537, Time=    1.535000 Sec
+invertBlockMatrix     :: Using  LU: Block size =    537, Time=    3.051000 Sec
+
+returnMultipleSiteDOS: energy =   -0.391107544517    0.096135480839, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =  -16.771673286828   -1.004304290397
+                       Int [Z*Tau*Z-Z*J] on VP         =  -19.155451736155   -1.119906072475
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    0.319679984370
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    0.356477174466
+ie =   5 , Time:      3.75100
+
+invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    3.103000 Sec
+
+returnMultipleSiteDOS: energy =   -0.309615929997    0.294230613259, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =  -16.612283463586   -3.262240175792
+                       Int [Z*Tau*Z-Z*J] on VP         =  -18.978397165843   -3.631381429015
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    1.038403299061
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    1.155904609360
+ie =   9 , Time:      3.80300
+
+invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    3.105000 Sec
+
+returnMultipleSiteDOS: energy =   -0.079984637279    0.482733379935, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =  -16.010189113759   -6.556095547088
+                       Int [Z*Tau*Z-Z*J] on VP         =  -18.330514543939   -7.261725122518
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    2.086870027404
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    2.311478897247
+ie =  13 , Time:      3.81100
+
+invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    3.104000 Sec
 
 returnMultipleSiteDOS: energy =    0.249546742854    0.508867814163, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =  -14.205464255466  -10.726735061140
                        Int [Z*Tau*Z-Z*J] on VP         =  -16.446037347862  -11.773314045098
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    3.414425816435
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    3.747562253701
-ie =  17 , Time:      1.90000
+ie =  17 , Time:      3.81600
 
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.583000 Sec
-
-returnMultipleSiteDOS: energy =    0.328188528583    0.482733379935, id =   1
-                       Int [Z*Tau*Z-Z*J] on MT         =  -13.366557503950  -11.872033812232
-                       Int [Z*Tau*Z-Z*J] on VP         =  -15.578456079897  -12.991211917118
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    3.778985731542
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    4.135231186727
-ie =  18 , Time:      1.94200
-
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.587000 Sec
-
-returnMultipleSiteDOS: energy =    0.399840544185    0.445702899604, id =   1
-                       Int [Z*Tau*Z-Z*J] on MT         =  -12.279886095281  -13.022596987009
-                       Int [Z*Tau*Z-Z*J] on VP         =  -14.457922797099  -14.203614392210
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    4.145221364752
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    4.521150880583
-ie =  19 , Time:      1.94400
-
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.584000 Sec
-
-returnMultipleSiteDOS: energy =    0.462618353926    0.400111847819, id =   1
-                       Int [Z*Tau*Z-Z*J] on MT         =  -10.883487040111  -14.134367286713
-                       Int [Z*Tau*Z-Z*J] on VP         =  -13.021830057390  -15.362602174439
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    4.499108842314
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    4.890068149632
-ie =  20 , Time:      1.94000
-
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.582000 Sec
+invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    3.100000 Sec
 
 returnMultipleSiteDOS: energy =    0.515393183296    0.348674657495, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =   -9.112069428194  -15.135061379244
                        Int [Z*Tau*Z-Z*J] on VP         =  -11.204975764320  -16.391678780638
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    4.817639665012
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    5.217633407026
-ie =  21 , Time:      1.93800
+ie =  21 , Time:      3.79900
 
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.583000 Sec
-
-returnMultipleSiteDOS: energy =    0.557819821301    0.294230613259, id =   1
-                       Int [Z*Tau*Z-Z*J] on MT         =   -6.910063031067  -15.912950901288
-                       Int [Z*Tau*Z-Z*J] on VP         =   -8.953281130936  -17.175126451122
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    5.065249590237
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    5.467012545849
-ie =  22 , Time:      1.93800
-
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.581000 Sec
-
-returnMultipleSiteDOS: energy =    0.590274158434    0.239512666609, id =   1
-                       Int [Z*Tau*Z-Z*J] on MT         =   -4.258659983874  -16.307682461365
-                       Int [Z*Tau*Z-Z*J] on VP         =   -6.251544308136  -17.549907202937
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    5.190896548199
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    5.586308964303
-ie =  23 , Time:      1.93800
-
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.581000 Sec
-
-returnMultipleSiteDOS: energy =    0.613720226761    0.186967345385, id =   1
-                       Int [Z*Tau*Z-Z*J] on MT         =   -1.224388094165  -16.115087449308
-                       Int [Z*Tau*Z-Z*J] on VP         =   -3.172280330235  -17.312064569552
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    5.129591651831
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    5.510601302741
-ie =  24 , Time:      1.93800
-
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.579000 Sec
+invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    3.114000 Sec
 
 returnMultipleSiteDOS: energy =    0.629533915964    0.138641165685, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =    1.972753638771  -15.135888353370
                        Int [Z*Tau*Z-Z*J] on VP         =    0.057190919067  -16.266995422680
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    4.817902899052
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    5.177945461545
-ie =  25 , Time:      1.93600
+ie =  25 , Time:      3.80700
 
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.579000 Sec
-
-returnMultipleSiteDOS: energy =    0.639311435821    0.096135480839, id =   1
-                       Int [Z*Tau*Z-Z*J] on MT         =    4.923382346177  -13.310478952951
-                       Int [Z*Tau*Z-Z*J] on VP         =    3.021826640351  -14.364387810027
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    4.236857040566
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    4.572326648909
-ie =  26 , Time:      1.93600
-
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.580000 Sec
-
-returnMultipleSiteDOS: energy =    0.644686252167    0.060620369894, id =   1
-                       Int [Z*Tau*Z-Z*J] on MT         =    7.156215332886  -10.897239375779
-                       Int [Z*Tau*Z-Z*J] on VP         =    5.250149323608  -11.873889399608
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    3.468699025422
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    3.779576383348
-ie =  27 , Time:      1.93700
-
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.578000 Sec
-
-returnMultipleSiteDOS: energy =    0.647170825786    0.032890668457, id =   1
-                       Int [Z*Tau*Z-Z*J] on MT         =    8.445424743608   -8.456187326982
-                       Int [Z*Tau*Z-Z*J] on VP         =    6.522676223627   -9.364550270755
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    2.691688025600
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    2.980828930846
-ie =  28 , Time:      1.93500
-
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.580000 Sec
+invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    3.112000 Sec
 
 returnMultipleSiteDOS: energy =    0.648031437055    0.013443863798, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =    8.964273526509   -6.535560168661
                        Int [Z*Tau*Z-Z*J] on VP         =    7.022030682363   -7.390374170488
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    2.080333413434
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    2.352429161064
-ie =  29 , Time:      1.93700
+ie =  29 , Time:      3.80000
 
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.573000 Sec
+invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    3.107000 Sec
 
 returnMultipleSiteDOS: energy =    0.648197651487    0.002557452109, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =    9.083353153825   -5.424256388407
                        Int [Z*Tau*Z-Z*J] on VP         =    7.127071600854   -6.245857905012
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    1.726594433625
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    1.988118318864
-ie =  30 , Time:      1.92900
+ie =  30 , Time:      3.81800
 
 The IDOS of the MS term
 id =  1, is =  1, MS    IDOS_mt =  0.10311660D+02, MS    IDOS_ws =  0.11000000D+02
@@ -689,7 +681,7 @@ id =  1, is =  1, IDOS_mt =  0.10311660D+02, IDOS_ws =  0.11000000D+02
 
 M.S. Term DOS at the last energy:  0.64820389D+00 0.00000000D+00
 
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.586000 Sec
+invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    3.122000 Sec
 
 returnMultipleSiteDOS: energy =    0.648203891304    0.000000000000, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =    9.091969530962   -5.162265361679
@@ -728,12 +720,12 @@ id =  1, is =  1, MS+SS  DOS_mt =  0.10311660D+02, MS+SS  DOS_ws =  0.11000000D+
                        * Output from updateValenceCharge *
                        ***********************************
 
-id =   1, Charge_MT =   10.3116600218461443
+id =   1, Charge_MT =   10.3116600218461478
           Charge_VP =   11.0000000000000000
 
-Number of Electrons outside MT-sphere  =    0.6883399781538557
+Number of Electrons outside MT-sphere  =    0.6883399781538522
 Magnetic moment outside MT-sphere      =    0.0000000000000000
-Electron density outside MT-sphere     =    0.0352751252031280
+Electron density outside MT-sphere     =    0.0352751252031279
 
 --------------------------------------------------------------------------------
 
@@ -786,7 +778,7 @@ Electron density outside MT-sphere     =    0.0352751252031280
 
 
 --------------------------------------------------------------------------------
-Time:: calValenceStates :    31.05500Sec
+Time:: calValenceStates :    38.13900Sec
 
 --------------------------------------------------------------------------------
 
@@ -835,9 +827,9 @@ Time:: calValenceStates :    31.05500Sec
           ecorev             =     -1829.38711613154
           evssum             =       -36.49002826920
           Kinetic E          =      3271.96943965691
-          Coulomb E(rho)     =      1415.25304047254
+          Coulomb E(rho)     =      1415.25304047253
           Coulomb E(Z_rho)   =     -7834.02831706938
-          Coulomb E          =     -6418.77527659684
+          Coulomb E          =     -6418.77527659685
           Exch E             =      -128.39315535426
           pterm1             =        41.55803267795
           ezpt/spin          =         0.00269458669
@@ -927,8 +919,8 @@ Time:: IO for VisualGrid :     0.00000Sec
 
 
 ================================================================================
-Time:: Iteration      1 :    31.08400Sec
-Time:: Cummulative      :    31.30100Sec
+Time:: Iteration      1 :    38.19400Sec
+Time:: Cummulative      :    38.56000Sec
 ================================================================================
 
 --------------------------------------------------------------------------------
@@ -959,17 +951,17 @@ Tau-Matrix Size  =  2175 x  2175
 Atom: Cu, Spin: 1, Total Single Atom DOS at Energy =  0.64820384:
 SS_DOS          =    4.64142969(ws)   3.91068566(mt)
 
-invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    1.583000 Sec
+invertBlockMatrix     :: Using  LU: Block size =   2150, Time=    3.106000 Sec
 
 Atom: Cu, Spin: 1, Total Atom in Crystal DOS at Energy =  0.64820384:
 MS_DOS          =   -0.83724316(ws)  -0.62428454(mt)
 MS_DOS + SS_DOS =    3.80418653(ws)   3.28640112(mt)
 
 ================================================================================
-Time:: Job total        :    33.29700Sec
+Time:: Job total        :    42.44700Sec
 --------------------------------------------------------------------------------
   Run Ending! 
 
-Execution ends at 10:48:00, 08-14-2018
+Execution ends at 15:48:37, 09-18-2018
 --------------------------------------------------------------------------------
 End of a successful run......!

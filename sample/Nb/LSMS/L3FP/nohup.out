@@ -11,15 +11,15 @@
              *                                                      *
              ********************************************************
   
- CHARACTER_BYTES =             1
- INTEGER_BYTES   =             4
- REAL_BYTES      =             8
- COMPLEX_BYTES   =            16
- ADDRESS_BYTES   =             8
+ CHARACTER_BYTES =            1
+ INTEGER_BYTES   =            4
+ REAL_BYTES      =            8
+ COMPLEX_BYTES   =           16
+ ADDRESS_BYTES   =            8
   
- Number of Procs =             8
+ Number of Procs =            8
   
-Execution starts at 00:32:53, 07-27-2018 on     8 nodes
+Execution starts at 21:43:05, 09-18-2018 on     8 nodes
 #-------------------------------------------------------------------------------
 #
 #
@@ -34,7 +34,7 @@ Execution starts at 00:32:53, 07-27-2018 on     8 nodes
 #
 #   username                 : ywg
 #   system name              : muir6.psc.edu
-#   code compiled            : Wednesday, July 18 2018 14:02:04
+#   code compiled            : Monday, September 17 2018 16:06:12
 #-------------------------------------------------------------------------------
 
  The Position Data File: ./position.dat
@@ -57,11 +57,18 @@ The number of processors in each box :    1
 The number of repeats along k-dimen. :    8
 The number of repeats along e-dimen. :    1
 Dimension of the box :    1 x    1 x    1
-MyPE =     0, NumEs, NumEsPerBox =    30   30MyPE =     1, NumEs, NumEsPerBox =    30   30
+MyPE =     0, NumEs, NumEsPerBox =    30   30
+MyPE =     0, NumKs, NumKsPerBox =    16    2
+MyPE =     0, K index =     1    2
+K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16
+Process =     0    0    1    1    2    2    3    3    4    4    5    5    6    6    7    7
+MyPE =     3, NumEs, NumEsPerBox =    30   30
+MyPE =     1, NumEs, NumEsPerBox =    30   30
+MyPE =     1, NumKs, NumKsPerBox =    16    2
+MyPE =     1, K index =     3    4
 MyPE =     2, NumEs, NumEsPerBox =    30   30
-MyPE =     2, NumKs, NumKsPerBox =    16    2MyPE =     3, NumEs, NumEsPerBox =    30   30
-MyPE =     3, NumKs, NumKsPerBox =    16    2
-MyPE =     3, K index =     7    8
+MyPE =     2, NumKs, NumKsPerBox =    16    2
+MyPE =     2, K index =     5    6
 MyPE =     4, NumEs, NumEsPerBox =    30   30
 MyPE =     4, NumKs, NumKsPerBox =    16    2
 MyPE =     4, K index =     9   10
@@ -71,19 +78,13 @@ MyPE =     5, K index =    11   12
 MyPE =     6, NumEs, NumEsPerBox =    30   30
 MyPE =     6, NumKs, NumKsPerBox =    16    2
 MyPE =     6, K index =    13   14
-MyPE =     1, NumKs, NumKsPerBox =    16    2
-MyPE =     1, K index =     3    4
-
-MyPE =     2, K index =     5    6
-
-MyPE =     0, NumKs, NumKsPerBox =    16    2MyPE =     7, NumEs, NumEsPerBox =    30   30
-
-MyPE =     0, K index =     1    2
-K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16
-Process =     0    0    1    1    2    2    3    3    4    4    5    5    6    6    7    7
+MyPE =     7, NumEs, NumEsPerBox =    30   30
 MyPE =     7, NumKs, NumKsPerBox =    16    2
 MyPE =     7, K index =    15   16
+MyPE =     3, NumKs, NumKsPerBox =    16    2
+MyPE =     3, K index =     7    8
 
 ================================================================================
 
 The number of processes that write output data:      1
+ Running on            1 threads

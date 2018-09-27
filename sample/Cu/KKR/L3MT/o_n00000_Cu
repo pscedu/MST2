@@ -1,6 +1,6 @@
-Current working directory: /lvol/home/ywg/MST2dev/sample/Cu/KKR/L3MT
+Current working directory: /lvol/home/ywg/pscedu/MST2/sample/Cu/KKR/L3MT
 Execution command: /home/ywg/MST2dev/bin/mst2
-Execution starts at 16:34:49, 08-02-2018 on     8 nodes of muir6.psc.edu
+Execution starts at 15:46:49, 09-18-2018 on     4 nodes of muir6.psc.edu
 #-------------------------------------------------------------------------------
 #
 #
@@ -15,12 +15,12 @@ Execution starts at 16:34:49, 08-02-2018 on     8 nodes of muir6.psc.edu
 #
 #   username                 : ywg
 #   system name              : muir6.psc.edu
-#   code compiled            : Thursday, August 02 2018 16:15:48
+#   code compiled            : Monday, September 17 2018 16:06:12
 #-------------------------------------------------------------------------------
             Number of atoms on each processor:                  1
             Number of k-points on each processor:              15
             Number of redundant k-points on each processor:     0
-            Number of energies on each processor:              15
+            Number of energies on each processor:              30
             Number of redundant energies on each processor:     0
 
 ================================================================================
@@ -125,12 +125,10 @@ Lmax for each LIZ shell:    3   3   3   3   3   3   3   3
 Number of r-mesh less or equal than Rmt:  1001
 Number of r-mesh greater than Rmt      :     0
 Ratio of r-mesh steps, hin and hout    :     1
-Maximum Rmt         :    0.00000
-Maximum Core Radius :    0.00000
 ================================================================================
- setupLIZ :: Number of cell shifts:          343
-                             nXmax:            3            3            3
-                             nXmin:           -3           -3           -3
+ setupLIZ :: Number of cell shifts:         343
+                             nXmax:           3           3           3
+                             nXmin:          -3          -3          -3
 
 --------------------------------------------------------------------------------
 
@@ -432,6 +430,52 @@ rend                                   = 0.3354135379118D+01
 rws                                    = 0.2618335350019D+01
 ============================================================
 
+--------------------------------------------------------------------------------
+
+                        *********************************
+                        * Output from printStepFunction *
+                        *********************************
+
+Polyhedron Index:                     1
+Lmax for the Step Function:           8
+Number of Critical Points:            4
+Number of Radial Gaussian Points:    81
+Number of Theta  Gaussian Points:    60
+Inner Bounding Sphere Radius:     2.36881
+Outer Bounding Sphere Radius:     3.35000
+
+Non-zero (l,m) components of the step function
+     ( 0, 0)
+     ( 4, 0)
+     ( 4, 4)
+     ( 6, 0)
+     ( 6, 4)
+     ( 8, 0)
+     ( 8, 4)
+     ( 8, 8)
+
+========================================
+Critical Radial Point Table
+========================================
+Critical R Point         Radius
+----------------------------------------
+        1                2.36881
+        2                2.73526
+        3                2.90119
+        4                3.35000
+========================================
+
+--------------------------------------------------------------------------------
+
+                       **********************************
+                       *  Output from testStepFunction  *
+                       **********************************
+
+Polyhedron Index:           1
+Exact Cell Volume:          0.751907500000D+02
+Calculated Cell Volume:     0.751907496172D+02
+================================================================================
+
  Real Space Lattice:: nm1,nm2,nm3   =     3    3    3
                       Rs cut radius =    9.74093
                       Number of Rs  =   343
@@ -452,7 +496,7 @@ rws                                    = 0.2618335350019D+01
 calSymmetryFlags::   Flags, StepFunction
 
    l   m flag          Re[stepf]                  Im[stepf]        
-   0   0   1    0.35613654067734D-05    0.00000000000000D+00
+   0   0   1    0.35397980977034D+01    0.00000000000000D+00
    1   0   0    0.00000000000000D+00    0.00000000000000D+00
    1   1   0    0.00000000000000D+00    0.00000000000000D+00
    2   0   0    0.00000000000000D+00    0.00000000000000D+00
@@ -462,22 +506,22 @@ calSymmetryFlags::   Flags, StepFunction
    3   1   0    0.00000000000000D+00    0.00000000000000D+00
    3   2   0    0.00000000000000D+00    0.00000000000000D+00
    3   3   0    0.00000000000000D+00    0.00000000000000D+00
-   4   0   1    0.62323785268436D-05    0.00000000000000D+00
+   4   0   1    0.56658713372467D+00    0.00000000000000D+00
    4   1   0    0.00000000000000D+00    0.00000000000000D+00
    4   2   0    0.00000000000000D+00    0.00000000000000D+00
    4   3   0    0.00000000000000D+00    0.00000000000000D+00
-   4   4   1    0.37245585681204D-05    0.47524888987201D-19
+   4   4   1    0.33860058024766D+00    0.42577229676458D-14
    5   0   0    0.00000000000000D+00    0.00000000000000D+00
    5   1   0    0.00000000000000D+00    0.00000000000000D+00
    5   2   0    0.00000000000000D+00    0.00000000000000D+00
    5   3   0    0.00000000000000D+00    0.00000000000000D+00
    5   4   0    0.00000000000000D+00    0.00000000000000D+00
    5   5   0    0.00000000000000D+00    0.00000000000000D+00
-   6   0   1    0.16050797725137D-05    0.00000000000000D+00
+   6   0   1    0.45772674025260D+00    0.00000000000000D+00
    6   1   0    0.00000000000000D+00    0.00000000000000D+00
    6   2   0    0.00000000000000D+00    0.00000000000000D+00
    6   3   0    0.00000000000000D+00    0.00000000000000D+00
-   6   4   1   -0.30028293251300D-05   -0.38315716194121D-19
+   6   4   1   -0.85632831992939D+00   -0.11042344208850D-13
    6   5   0    0.00000000000000D+00    0.00000000000000D+00
    6   6   0    0.00000000000000D+00    0.00000000000000D+00
    7   0   0    0.00000000000000D+00    0.00000000000000D+00
@@ -487,16 +531,16 @@ calSymmetryFlags::   Flags, StepFunction
    7   4   0    0.00000000000000D+00    0.00000000000000D+00
    7   5   0    0.00000000000000D+00    0.00000000000000D+00
    7   6   0    0.00000000000000D+00    0.00000000000000D+00
-   7   7   0   -0.77993370311693D-17    0.67006984924499D-18
-   8   0   1    0.75713307793201D-05    0.00000000000000D+00
+   7   7   0    0.00000000000000D+00    0.00000000000000D+00
+   8   0   1   -0.43776314993380D+00    0.00000000000000D+00
    8   1   0    0.00000000000000D+00    0.00000000000000D+00
    8   2   0    0.00000000000000D+00    0.00000000000000D+00
    8   3   0    0.00000000000000D+00    0.00000000000000D+00
-   8   4   1    0.28472043720255D-05    0.36329961361667D-19
+   8   4   1   -0.16462114798912D+00   -0.20912567287577D-14
    8   5   0    0.00000000000000D+00    0.00000000000000D+00
    8   6   0    0.00000000000000D+00    0.00000000000000D+00
    8   7   0    0.00000000000000D+00    0.00000000000000D+00
-   8   8   1    0.43380674920871D-05    0.11070655426418D-18
+   8   8   1   -0.25082064875066D+00   -0.65374112552473D-14
 ------------------------------------------------------------
 
 
@@ -509,9 +553,9 @@ calSymmetryFlags::   Flags, q_Value
 Starting Fermi energy read from the potential:  0.65258310
 
 ================================================================================
-Time:: Start-up         :     0.33500Sec
+Time:: Start-up         :     0.54200Sec
 --------------------------------------------------------------------------------
- SD_Loop::            1
+ SD_Loop::           1
 
 --------------------------------------------------------------------------------
 
@@ -680,108 +724,213 @@ Number of Eneregy Mesh =    30
 
 returnMultipleSiteDOS: energy =   -0.399993734114    0.002568136697, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =  -13.765121068288   -0.025886344668
-                       Int [Z*Tau*Z-Z*J] on VP         =  -15.563450075491   -0.028701517995
+                       Int [Z*Tau*Z-Z*J] on VP         =  -15.563450075490   -0.028701517995
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    0.008239879425
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    0.009135976926
-ie =   1 , Time:      0.05900
+ie =   1 , Time:      0.09000
+
+returnMultipleSiteDOS: energy =   -0.399826825268    0.013500029911, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =  -13.764792797030   -0.136093534709
+                       Int [Z*Tau*Z-Z*J] on VP         =  -15.563072749201   -0.150893327264
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    0.043319917544
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    0.048030837827
+ie =   2 , Time:      0.07500
 
 returnMultipleSiteDOS: energy =   -0.398962618515    0.033028079921, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =  -13.763092049578   -0.333154758835
                        Int [Z*Tau*Z-Z*J] on VP         =  -15.561118137812   -0.369377383720
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    0.106046453367
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    0.106046453366
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    0.117576472971
-ie =   3 , Time:      0.05100
+ie =   3 , Time:      0.06500
+
+returnMultipleSiteDOS: energy =   -0.396467664782    0.060873631204, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =  -13.758172060890   -0.615097340064
+                       Int [Z*Tau*Z-Z*J] on VP         =  -15.555466450720   -0.681937097268
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    0.195791564308
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    0.217067319816
+ie =   4 , Time:      0.07500
 
 returnMultipleSiteDOS: energy =   -0.391070393392    0.096537118076, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =  -13.747477427853   -0.979136893487
                        Int [Z*Tau*Z-Z*J] on VP         =  -15.543194932658   -1.085406855220
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    0.311668953124
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    0.345495732548
-ie =   5 , Time:      0.05100
+ie =   5 , Time:      0.06500
+
+returnMultipleSiteDOS: energy =   -0.381252024766    0.139220384244, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =  -13.727837000969   -1.421846047922
+                       Int [Z*Tau*Z-Z*J] on VP         =  -15.520705966651   -1.575828634049
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    0.452587653685
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    0.501601833149
+ie =   6 , Time:      0.07400
 
 returnMultipleSiteDOS: energy =   -0.365372268733    0.187748462276, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =  -13.695539271533   -1.939342922753
                        Int [Z*Tau*Z-Z*J] on VP         =  -15.483851546716   -2.148634779963
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    0.617312025013
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    0.683931692261
-ie =   7 , Time:      0.05100
+ie =   7 , Time:      0.07300
+
+returnMultipleSiteDOS: energy =   -0.341828246831    0.240513308669, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =  -13.646349993928   -2.527540973866
+                       Int [Z*Tau*Z-Z*J] on VP         =  -15.428006553044   -2.798911475235
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    0.804541279716
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    0.890921193121
+ie =   8 , Time:      0.07100
 
 returnMultipleSiteDOS: energy =   -0.309238321150    0.295459857336, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =  -13.575422055188   -3.182461535553
                        Int [Z*Tau*Z-Z*J] on VP         =  -15.348025759998   -3.521748164340
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    1.013008969166
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    1.121007257359
-ie =   9 , Time:      0.05300
+ie =   9 , Time:      0.07500
+
+returnMultipleSiteDOS: energy =   -0.266634432066    0.350131359274, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =  -13.477051989544   -3.900575580234
+                       Int [Z*Tau*Z-Z*J] on VP         =  -15.238021897248   -4.312631202333
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    1.241591768996
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    1.372753147167
+ie =  10 , Time:      0.07600
 
 returnMultipleSiteDOS: energy =   -0.213639118683    0.401783445189, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =  -13.344257078744   -4.679103658102
                        Int [Z*Tau*Z-Z*J] on VP         =  -15.090929457462   -5.167791352380
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    1.489404952853
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    1.644959077198
-ie =  11 , Time:      0.05400
+ie =  11 , Time:      0.07200
+
+returnMultipleSiteDOS: energy =   -0.150599034226    0.447564968419, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =  -13.168172278121   -5.516183503165
+                       Int [Z*Tau*Z-Z*J] on VP         =  -14.897857856565   -6.084393264649
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    1.755855743061
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    1.936722527568
+ie =  12 , Time:      0.07300
 
 returnMultipleSiteDOS: energy =   -0.078647669025    0.484750155625, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =  -12.937273067005   -6.410816792724
                        Int [Z*Tau*Z-Z*J] on VP         =  -14.647254616925   -7.060464986281
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    2.040626363637
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    2.247415806188
-ie =  13 , Time:      0.05300
+ie =  13 , Time:      0.06600
+
+returnMultipleSiteDOS: energy =    0.000322668340    0.510993774952, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =  -12.636418698606   -7.362513684552
+                       Int [Z*Tau*Z-Z*J] on VP         =  -14.323889318036   -8.094483766940
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    2.343560892956
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    2.576554206571
+ie =  14 , Time:      0.07700
 
 returnMultipleSiteDOS: energy =    0.083786287464    0.524572302141, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =  -12.245696705603   -8.370540048572
                        Int [Z*Tau*Z-Z*J] on VP         =  -13.907651479718   -9.184528330355
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    2.664425650158
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    2.923526167487
-ie =  15 , Time:      0.05300
+ie =  15 , Time:      0.07400
+
+returnMultipleSiteDOS: energy =    0.168796816495    0.524572302141, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =  -11.739063243892   -9.432623245020
+                       Int [Z*Tau*Z-Z*J] on VP         =  -13.372165873726  -10.326862121541
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    3.002497231537
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    3.287142306544
+ie =  16 , Time:      0.07300
 
 returnMultipleSiteDOS: energy =    0.252260435618    0.510993774952, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =  -11.082842412496  -10.542883313034
-                       Int [Z*Tau*Z-Z*J] on VP         =  -12.683298676391  -11.513726281494
+                       Int [Z*Tau*Z-Z*J] on VP         =  -12.683298676390  -11.513726281494
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    3.355903987421
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    3.664932902214
-ie =  17 , Time:      0.05400
+ie =  17 , Time:      0.07400
+
+returnMultipleSiteDOS: energy =    0.331230772984    0.484750155625, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =  -10.234304325018  -11.688634634936
+                       Int [Z*Tau*Z-Z*J] on VP         =  -11.797791480544  -12.730007567750
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    3.720607960290
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    4.052087260009
+ie =  18 , Time:      0.06500
 
 returnMultipleSiteDOS: energy =    0.403182138184    0.447564968419, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =   -9.140847499137  -12.845573280495
                        Int [Z*Tau*Z-Z*J] on VP         =  -10.662576978037  -13.948334159384
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    4.088872968880
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    4.439892658727
-ie =  19 , Time:      0.05300
+ie =  19 , Time:      0.07700
+
+returnMultipleSiteDOS: energy =    0.466222222642    0.401783445189, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =   -7.740881485505  -13.970799398429
+                       Int [Z*Tau*Z-Z*J] on VP         =   -9.215911418676  -15.122115856533
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    4.447043566410
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    4.813518977151
+ie =  20 , Time:      0.06500
 
 returnMultipleSiteDOS: energy =    0.519217536025    0.350131359274, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =   -5.968529807854  -14.993322712508
                        Int [Z*Tau*Z-Z*J] on VP         =   -7.392484293511  -16.176284221243
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    4.772522846135
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    5.149071189340
-ie =  21 , Time:      0.05400
+ie =  21 , Time:      0.07600
+
+returnMultipleSiteDOS: energy =    0.561821425108    0.295459857336, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =   -3.765984122909  -15.802692562472
+                       Int [Z*Tau*Z-Z*J] on VP         =   -5.136344453836  -16.996522577019
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    5.030153270958
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    5.410161167011
+ie =  22 , Time:      0.06400
 
 returnMultipleSiteDOS: energy =    0.594411350789    0.240513308669, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =   -1.109692612705  -16.239480104521
                        Int [Z*Tau*Z-Z*J] on VP         =   -2.427718407509  -17.420863392000
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    5.169187063754
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    5.545233043531
-ie =  23 , Time:      0.05300
+ie =  23 , Time:      0.07600
+
+returnMultipleSiteDOS: energy =    0.617955372692    0.187748462276, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =    1.942249011066  -16.099333830211
+                       Int [Z*Tau*Z-Z*J] on VP         =    0.669287179196  -17.245370546481
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    5.124577119129
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    5.489371935848
+ie =  24 , Time:      0.06500
 
 returnMultipleSiteDOS: energy =    0.633835128725    0.139220384244, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =    5.183389850781  -15.178675636636
-                       Int [Z*Tau*Z-Z*J] on VP         =    3.940778357909  -16.271453076085
+                       Int [Z*Tau*Z-Z*J] on VP         =    3.940778357909  -16.271453076084
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    4.831522514318
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    5.179364376693
-ie =  25 , Time:      0.05400
+ie =  25 , Time:      0.07500
+
+returnMultipleSiteDOS: energy =    0.643653497350    0.096537118076, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =    8.221067886755  -13.401343498857
+                       Int [Z*Tau*Z-Z*J] on VP         =    6.988273363616  -14.432544672431
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    4.265780123831
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    4.594021652024
+ie =  26 , Time:      0.07100
 
 returnMultipleSiteDOS: energy =    0.649050768740    0.060873631204, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =   10.602067495870  -10.993460234542
                        Int [Z*Tau*Z-Z*J] on VP         =    9.361073197474  -11.964683387862
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    3.499327076023
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    3.808477007415
-ie =  27 , Time:      0.05300
+ie =  27 , Time:      0.06700
+
+returnMultipleSiteDOS: energy =    0.651545722473    0.033028079921, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =   12.157312449443   -8.477643086297
+                       Int [Z*Tau*Z-Z*J] on VP         =   10.908511662345   -9.391798023268
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    2.698517605906
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    2.989502159848
+ie =  28 , Time:      0.07900
 
 returnMultipleSiteDOS: energy =    0.652409929226    0.013500029911, id =   1
                        Int [Z*Tau*Z-Z*J] on MT         =   12.864779014647   -6.273520623487
                        Int [Z*Tau*Z-Z*J] on VP         =   11.589673329210   -7.135445540946
                        Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    1.996923635634
                        Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    2.271282858009
-ie =  29 , Time:      0.05300
+ie =  29 , Time:      0.07600
+
+returnMultipleSiteDOS: energy =    0.652576838073    0.002568136697, id =   1
+                       Int [Z*Tau*Z-Z*J] on MT         =   11.782786090143   -5.699106946072
+                       Int [Z*Tau*Z-Z*J] on VP         =   10.416914811799   -6.958786281691
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    1.814082083354
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    2.215050469303
+ie =  30 , Time:      0.07400
 
 The IDOS of the MS term
 id =  1, is =  1, MS    IDOS_mt =  0.10325010D+02, MS    IDOS_ws =  0.11000000D+02
@@ -792,10 +941,10 @@ id =  1, is =  1, IDOS_mt =  0.10325010D+02, IDOS_ws =  0.11000000D+02
 M.S. Term DOS at the last energy:  0.65258310D+00 0.10000000D-02
 
 returnMultipleSiteDOS: energy =    0.652583103959    0.001000000000, id =   1
-                       Int [Z*Tau*Z-Z*J] on MT         =   14.787212456914   -7.386248372194
-                       Int [Z*Tau*Z-Z*J] on VP         =   14.320247202532   -9.306814689140
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    2.351115878678
-                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    2.962451124434
+                       Int [Z*Tau*Z-Z*J] on MT         =   14.787212456912   -7.386248372188
+                       Int [Z*Tau*Z-Z*J] on VP         =   14.320247202530   -9.306814689133
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on MT} =    2.351115878676
+                       Im{-Int [Z*Tau*Z-Z*J]/pi on VP} =    2.962451124432
 id =  1, is =  1, M.Site DOS_mt =  0.47022318D+01, M.Site DOS_ws =  0.59249022D+01
 
 M.S.+S.S. DOS at the last energy:  0.65258310D+00 0.10000000D-02
@@ -809,9 +958,9 @@ id =  1, is =  1, MS+SS  DOS_mt =  0.47022318D+01, MS+SS  DOS_ws =  0.59249022D+
 
 
 At Old Fermi Energy
-    GLOBAL VP Int[n(e)] per Atom       =   11.000000364455
-    GLOBAL (Val-Int[n(e)]) per Site    =   -0.000000364455
-    Fermi Energy DOS per Site          =    5.924902248868
+    GLOBAL VP Int[n(e)] per Atom       =   11.000000364454
+    GLOBAL (Val-Int[n(e)]) per Site    =   -0.000000364454
+    Fermi Energy DOS per Site          =    5.924902248863
     Specific Heat Coefficient per Site =    0.000000000782
     Magnetic Susceptibility per Site   =    0.000000000000
     Num Valence Electrons per Atom     =   11.000000000000
@@ -828,12 +977,12 @@ id =  1, is =  1, MS+SS  DOS_mt =  0.10325010D+02, MS+SS  DOS_ws =  0.11000000D+
                        * Output from updateValenceCharge *
                        ***********************************
 
-id =   1, Charge_MT =   10.3250100610235584
+id =   1, Charge_MT =   10.3250100610235620
           Charge_VP =   11.0000000000000000
 
-Number of Electrons outside MT-sphere  =    0.6749899389764416
+Number of Electrons outside MT-sphere  =    0.6749899389764380
 Magnetic moment outside MT-sphere      =    0.0000000000000000
-Electron density outside MT-sphere     =    0.0345909802770800
+Electron density outside MT-sphere     =    0.0345909802770799
 
 --------------------------------------------------------------------------------
 
@@ -886,7 +1035,7 @@ Electron density outside MT-sphere     =    0.0345909802770800
 
 
 --------------------------------------------------------------------------------
-Time:: calValenceStates :     0.87300Sec
+Time:: calValenceStates :     2.29200Sec
 
 --------------------------------------------------------------------------------
 
@@ -897,23 +1046,23 @@ Time:: calValenceStates :     0.87300Sec
   Fermi Energy (Ryd)                   =     0.65258304245
 
 --------------------------------------------------------------------------------
- Charge Density :: Valence Charge in MT-Sphere  =     10.32501016610929     
- Charge Density :: Valence Charge in VP         =     11.00000008833782     
+ Charge Density :: Valence Charge in MT-Sphere  =    10.3250101661093     
+ Charge Density :: Valence Charge in VP         =    11.0000000883378     
 
 --------------------------------------------------------------------------------
- Charge Density :: DeepCore Charge in MT-Sphere =     9.999999890846622     
- Charge Density :: DeepCore Charge in WS-Sphere =     9.999999890846627     
- Charge Density :: DeepCore Charge in EX-Sphere =     9.999999890846627     
- Charge Density :: DeepCore Charge in MT        =     9.999999890846622     
- Charge Density :: DeepCore Charge in VP        =     9.999999890846627     
- Charge Density :: SemiCore Charge in MT-Sphere =     7.996144159050764     
- Charge Density :: SemiCore Charge in WS-Sphere =     8.000000025201182     
- Charge Density :: SemiCore Charge in EX-Sphere =     8.000000025201182     
- Charge Density :: SemiCore Charge in MT        =     7.996144155017400     
- Charge Density :: SemiCore Charge in VP        =     7.998330320672955     
- Charge Density :: Total Charge in MT-Sphere    =     28.32115356650042     
- Charge Density :: Total Charge in WS-Sphere    =     31.93083082940910     
- Charge Density :: Total Charge in VP           =     28.99832988725976     
+ Charge Density :: DeepCore Charge in MT-Sphere =    9.99999989084660     
+ Charge Density :: DeepCore Charge in WS-Sphere =    9.99999989084660     
+ Charge Density :: DeepCore Charge in EX-Sphere =    9.99999989084660     
+ Charge Density :: DeepCore Charge in MT        =    9.99999989084660     
+ Charge Density :: DeepCore Charge in VP        =    9.99999989084660     
+ Charge Density :: SemiCore Charge in MT-Sphere =    7.99614415905077     
+ Charge Density :: SemiCore Charge in WS-Sphere =    8.00000002520118     
+ Charge Density :: SemiCore Charge in EX-Sphere =    8.00000002520118     
+ Charge Density :: SemiCore Charge in MT        =    7.99614415501740     
+ Charge Density :: SemiCore Charge in VP        =    7.99833032067295     
+ Charge Density :: Total Charge in MT-Sphere    =    28.3211535665004     
+ Charge Density :: Total Charge in WS-Sphere    =    31.9308308294090     
+ Charge Density :: Total Charge in VP           =    28.9983298872597     
 --------------------------------------------------------------------------------
 
 
@@ -934,9 +1083,9 @@ Time:: calValenceStates :     0.87300Sec
           esemv              =       -40.90523904950
           ecorev             =     -1829.31564358590
           evssum             =       -36.39061029609
-          Kinetic E          =      3272.03106614515
+          Kinetic E          =      3272.03106614514
           Coulomb E(rho)     =      1415.82041899201
-          Coulomb E(Z_rho)   =     -7834.64634223577
+          Coulomb E(Z_rho)   =     -7834.64634223576
           Coulomb E          =     -6418.82592324376
           Exch E             =      -128.41296594550
           pterm1             =        41.56420928766
@@ -961,7 +1110,7 @@ Time:: calValenceStates :     0.87300Sec
 ================================================================================
  AtomId    Iter    RMS of Rho   RMS of Pot      Diff Ef    Diff Etot
 --------------------------------------------------------------------------------
-      1       1   0.14940D-12  0.37712D-07  0.00000D+00  0.00000D+00
+      1       1   0.14941D-12  0.37712D-07  0.00000D+00  0.00000D+00
 ================================================================================
 
 
@@ -1027,8 +1176,8 @@ Time:: IO for VisualGrid :     0.00000Sec
 
 
 ================================================================================
-Time:: Iteration      1 :     0.88000Sec
-Time:: Cummulative      :     1.22200Sec
+Time:: Iteration      1 :     2.31300Sec
+Time:: Cummulative      :     2.87000Sec
 ================================================================================
 
 --------------------------------------------------------------------------------
@@ -1095,10 +1244,10 @@ MS_DOS          =    1.19467633(ws)   0.70220048(mt)
 MS_DOS + SS_DOS =    5.87350132(ws)   4.65145118(mt)
 
 ================================================================================
-Time:: Job total        :     1.29500Sec
+Time:: Job total        :     2.97300Sec
 --------------------------------------------------------------------------------
   Run Ending! 
 
-Execution ends at 16:34:51, 08-02-2018
+Execution ends at 15:46:52, 09-18-2018
 --------------------------------------------------------------------------------
 End of a successful run......!
