@@ -11,15 +11,15 @@
              *                                                      *
              ********************************************************
   
- CHARACTER_BYTES =             1
- INTEGER_BYTES   =             4
- REAL_BYTES      =             8
- COMPLEX_BYTES   =            16
- ADDRESS_BYTES   =             8
+ CHARACTER_BYTES =            1
+ INTEGER_BYTES   =            4
+ REAL_BYTES      =            8
+ COMPLEX_BYTES   =           16
+ ADDRESS_BYTES   =            8
   
- Number of Procs =             8
+ Number of Procs =            8
   
-Execution starts at 09:15:46, 07-26-2018 on     8 nodes
+Execution starts at 10:47:19, 10-04-2018 on     8 nodes
 #-------------------------------------------------------------------------------
 #
 #
@@ -34,7 +34,7 @@ Execution starts at 09:15:46, 07-26-2018 on     8 nodes
 #
 #   username                 : ywg
 #   system name              : muir6.psc.edu
-#   code compiled            : Wednesday, July 18 2018 14:02:04
+#   code compiled            : Wednesday, October 03 2018 21:04:47
 #-------------------------------------------------------------------------------
 
  The Position Data File: ./position.dat
@@ -74,25 +74,22 @@ Space group is symmorphic
 ********************************
 
 Wavevector mesh contains     616 points
-  some of these mesh points are related by lattice translation vectors  some of these mesh points are related by lattice translation vectors
+  some of these mesh points are related by lattice translation vectors
     104 of the mesh points removed.
 
   some of these mesh points are related by lattice translation vectors
   some of these mesh points are related by lattice translation vectors
     104 of the mesh points removed.
 
+  some of these mesh points are related by lattice translation vectors
     104 of the mesh points removed.
-
-
-    104 of the mesh points removed.  some of these mesh points are related by lattice translation vectors
-    104 of the mesh points removed.
-
-
 
   some of these mesh points are related by lattice translation vectors
     104 of the mesh points removed.
 
   some of these mesh points are related by lattice translation vectors
+    104 of the mesh points removed.
+
     104 of the mesh points removed.
 
   some of these mesh points are related by lattice translation vectors
@@ -111,12 +108,24 @@ The number of processors in each box :    1
 The number of repeats along k-dimen. :    8
 The number of repeats along e-dimen. :    1
 Dimension of the box :    1 x    1 x    1
-MyPE =     0, NumEs, NumEsPerBox =    30   30MyPE =     1, NumEs, NumEsPerBox =    30   30
-MyPE =     1, NumKs, NumKsPerBox =    26    5
-MyPE =     1, K index =     4    5    6   25   26
+  some of these mesh points are related by lattice translation vectors
+    104 of the mesh points removed.
+
+MyPE =     0, NumEs, NumEsPerBox =    30   30
+MyPE =     0, NumKs, NumKsPerBox =    26    5
+MyPE =     0, K index =     1    2    3   25   26
+K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
+Process =     0    0    0    1    1    1    2    2    2    3    3    3    4    4    4    5, ...,...
+MyPE =     1, NumEs, NumEsPerBox =    30   30
 MyPE =     2, NumEs, NumEsPerBox =    30   30
 MyPE =     2, NumKs, NumKsPerBox =    26    5
 MyPE =     2, K index =     7    8    9   25   26
+MyPE =     3, NumEs, NumEsPerBox =    30   30
+MyPE =     3, NumKs, NumKsPerBox =    26    5
+MyPE =     3, K index =    10   11   12   25   26
+MyPE =     4, NumEs, NumEsPerBox =    30   30
+MyPE =     4, NumKs, NumKsPerBox =    26    5
+MyPE =     4, K index =    13   14   15   25   26
 MyPE =     5, NumEs, NumEsPerBox =    30   30
 MyPE =     5, NumKs, NumKsPerBox =    26    5
 MyPE =     5, K index =    16   17   18   25   26
@@ -126,18 +135,10 @@ MyPE =     6, K index =    19   20   21   25   26
 MyPE =     7, NumEs, NumEsPerBox =    30   30
 MyPE =     7, NumKs, NumKsPerBox =    26    5
 MyPE =     7, K index =    22   23   24   25   26
-MyPE =     3, NumEs, NumEsPerBox =    30   30
-MyPE =     3, NumKs, NumKsPerBox =    26    5
-MyPE =     3, K index =    10   11   12   25   26
-MyPE =     4, NumEs, NumEsPerBox =    30   30
-MyPE =     4, NumKs, NumKsPerBox =    26    5
-MyPE =     0, NumKs, NumKsPerBox =    26    5
-
-MyPE =     4, K index =    13   14   15   25   26
-MyPE =     0, K index =     1    2    3   25   26
-K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
-Process =     0    0    0    1    1    1    2    2    2    3    3    3    4    4    4    5, ...,...
+MyPE =     1, NumKs, NumKsPerBox =    26    5
+MyPE =     1, K index =     4    5    6   25   26
 
 ================================================================================
 
 The number of processes that write output data:      1
+ Running on            1 threads

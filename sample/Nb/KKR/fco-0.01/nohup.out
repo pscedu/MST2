@@ -19,7 +19,7 @@
   
  Number of Procs =            8
   
-Execution starts at 09:34:58, 09-27-2018 on     8 nodes
+Execution starts at 16:48:53, 10-03-2018 on     8 nodes
 #-------------------------------------------------------------------------------
 #
 #
@@ -34,7 +34,7 @@ Execution starts at 09:34:58, 09-27-2018 on     8 nodes
 #
 #   username                 : ywg
 #   system name              : muir6.psc.edu
-#   code compiled            : Wednesday, September 26 2018 22:40:45
+#   code compiled            : Wednesday, October 03 2018 16:31:14
 #-------------------------------------------------------------------------------
 
  The Position Data File: ./position.dat
@@ -103,26 +103,26 @@ MyPE =     0, K index =     1    2    3    4    5    6    7    8    9   10   11 
 K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
 Process =     0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0, ...,...
 MyPE =     3, NumEs, NumEsPerBox =    40   40
-MyPE =     1, NumEs, NumEsPerBox =    40   40
-MyPE =     1, NumKs, NumKsPerBox =   512  256
+MyPE =     3, NumKs, NumKsPerBox =   512  256
+MyPE =     3, K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
 MyPE =     4, NumEs, NumEsPerBox =    40   40
 MyPE =     4, NumKs, NumKsPerBox =   512  256
 MyPE =     4, K index =   257  258  259  260  261  262  263  264  265  266  267  268  269  270  271  272, ...,...
-MyPE =     5, NumEs, NumEsPerBox =    40   40
-MyPE =     5, NumKs, NumKsPerBox =   512  256
-MyPE =     5, K index =   257  258  259  260  261  262  263  264  265  266  267  268  269  270  271  272, ...,...
 MyPE =     6, NumEs, NumEsPerBox =    40   40
 MyPE =     6, NumKs, NumKsPerBox =   512  256
 MyPE =     6, K index =   257  258  259  260  261  262  263  264  265  266  267  268  269  270  271  272, ...,...
 MyPE =     7, NumEs, NumEsPerBox =    40   40
 MyPE =     7, NumKs, NumKsPerBox =   512  256
 MyPE =     7, K index =   257  258  259  260  261  262  263  264  265  266  267  268  269  270  271  272, ...,...
-MyPE =     1, K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
-MyPE =     3, NumKs, NumKsPerBox =   512  256
 MyPE =     2, NumEs, NumEsPerBox =    40   40
 MyPE =     2, NumKs, NumKsPerBox =   512  256
 MyPE =     2, K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
-MyPE =     3, K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
+MyPE =     5, NumEs, NumEsPerBox =    40   40
+MyPE =     5, NumKs, NumKsPerBox =   512  256
+MyPE =     5, K index =   257  258  259  260  261  262  263  264  265  266  267  268  269  270  271  272, ...,...
+MyPE =     1, NumEs, NumEsPerBox =    40   40
+MyPE =     1, NumKs, NumKsPerBox =   512  256
+MyPE =     1, K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
 
 ================================================================================
 
