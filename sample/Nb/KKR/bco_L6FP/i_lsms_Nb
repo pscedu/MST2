@@ -9,7 +9,7 @@
 Current File Path          ::  ./
 Current File Name          ::  i_lsms_Nb
 Info Table File Name       ::  info_table_Nb
-No. Iterations (> 0)       ::  50
+No. Iterations (> 0)       ::  100
 Method of SCF Calculation  ::  2
    -2. Single Site         -----------
    -1. ScreenKKR-LSMS      -----------(Broken)
