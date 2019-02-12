@@ -1,0 +1,386 @@
+  
+             ********************************************************
+             *                                                      *
+             *              Fortran 90 Interface Module             *
+             *                                                      *
+             *                         For                          *
+             *                                                      *
+             *              MPI Message Passing Library             *
+             *                                                      *
+             *                   Version No. 2.0k                   *
+             *                                                      *
+             ********************************************************
+  
+ CHARACTER_BYTES =            1
+ INTEGER_BYTES   =            4
+ REAL_BYTES      =            8
+ COMPLEX_BYTES   =           16
+ ADDRESS_BYTES   =            8
+  
+ Number of Procs =           16
+  
+Execution starts at 16:56:50, 02-11-2019 on    16 nodes
+#-------------------------------------------------------------------------------
+#
+#
+#           ********************************************************
+#           *                                                      *
+#           *    Full-Potential Multiple Scattering Theory Based   *
+#           *                                                      *
+#           *  Ab Initio Electronic Structure Calculation Package  *
+#           *                                                      *
+#           ********************************************************
+#
+#
+#   username                 : ywg
+#   system name              : muir6.psc.edu
+#   code compiled            : Monday, February 11 2019 16:28:30
+#-------------------------------------------------------------------------------
+
+ The Position Data File: ./position.dat
+
+ The Position Data is read successfully!
+
+
+================================================================================
+
+ The lattice system is: Cubic       
+
+********************************
+* Output from SPACEGRP         *
+********************************
+
+The point group of the crystal is the full cubic        group
+Space group is symmorphic
+--------------------------------------------------------------------------------
+
+********************************
+* Output from CHECKSYMM        *
+********************************
+
+Symmetry is correct
+--------------------------------------------------------------------------------
+
+********************************
+* Output from SPACEGRP         *
+********************************
+
+The point group of the crystal is the full cubic        group
+Space group is symmorphic
+--------------------------------------------------------------------------------
+
+********************************
+* Output from SPKPT            *
+********************************
+
+Wavevector mesh contains    4496 points
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+  some of these mesh points are related by lattice translation vectors
+    400 of the mesh points removed.
+
+--------------------------------------------------------------------------------
+
+================================================================================
+
+            *********************************************
+            *     Output from createParallelization     *
+            *            in ProcMappingModule           *
+            *********************************************
+
+The number of processors in each box :    1
+The number of repeats along k-dimen. :    4
+The number of repeats along e-dimen. :    4
+Dimension of the box :    1 x    1 x    1
+MyPE =     7, NumEs, NumEsPerBox =    30    9
+MyPE =     7, E index =     4    8   12   16   20   24   28   29   30
+MyPE =     7, NumKs, NumKsPerBox =   140   35
+MyPE =     0, NumEs, NumEsPerBox =    30    9
+MyPE =     0, E index =     1    5    9   13   17   21   25   29   30
+MyPE =     0, NumKs, NumKsPerBox =   140   35
+MyPE =     0, K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
+MyPE =     1, NumEs, NumEsPerBox =    30    9
+MyPE =     1, E index =     2    6   10   14   18   22   26   29   30
+MyPE =     1, NumKs, NumKsPerBox =   140   35
+MyPE =     1, K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
+MyPE =     2, NumEs, NumEsPerBox =    30    9
+MyPE =     2, E index =     3    7   11   15   19   23   27   29   30
+MyPE =     2, NumKs, NumKsPerBox =   140   35
+MyPE =     2, K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
+MyPE =     5, NumEs, NumEsPerBox =    30    9
+MyPE =     5, E index =     2    6   10   14   18   22   26   29   30
+MyPE =     5, NumKs, NumKsPerBox =   140   35
+MyPE =     5, K index =    36   37   38   39   40   41   42   43   44   45   46   47   48   49   50   51, ...,...
+MyPE =     7, K index =    36   37   38   39   40   41   42   43   44   45   46   47   48   49   50   51, ...,...
+K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
+Process =     0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0, ...,...
+MyPE =     6, NumEs, NumEsPerBox =    30    9
+MyPE =     6, E index =     3    7   11   15   19   23   27   29   30
+MyPE =     6, NumKs, NumKsPerBox =   140   35
+MyPE =     6, K index =    36   37   38   39   40   41   42   43   44   45   46   47   48   49   50   51, ...,...
+MyPE =     4, NumEs, NumEsPerBox =    30    9
+MyPE =     3, NumEs, NumEsPerBox =    30    9
+MyPE =     3, E index =     4    8   12   16   20   24   28   29   30
+MyPE =     3, NumKs, NumKsPerBox =   140   35
+MyPE =     3, K index =     1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16, ...,...
+MyPE =     4, E index =     1    5    9   13   17   21   25   29   30
+MyPE =     4, NumKs, NumKsPerBox =   140   35
+MyPE =     4, K index =    36   37   38   39   40   41   42   43   44   45   46   47   48   49   50   51, ...,...
+
+================================================================================
+
+The number of processes that write output data:      1
+ Running on            1 threads
+MyPE,p_den =     2    0.38541649D-01  0.34548662D-01
+MyPE,p_den =    10    0.10779117D-01  0.19847933D-01
+MyPE,p_den =     6    0.10779117D-01 -0.11425871D-02
+MyPE,p_den =    14    0.38541649D-01  0.41045356D-01
+MyPE,p_den =     9   -0.23289584D-02  0.97619073D-02
+MyPE,p_den =     4    0.28271418D-01  0.21283715D-01
+MyPE,p_den =     3    0.34187892D-01  0.28759978D-01
+MyPE,p_den =     5    0.20641189D-01  0.11638641D-01
+MyPE,p_den =     7   -0.23289584D-02 -0.13637227D-01
+MyPE,p_den =    11    0.20641189D-01  0.27640738D-01
+MyPE,p_den =     1    0.41258938D-01  0.38775333D-01
+MyPE,p_den =    13    0.34187892D-01  0.38182784D-01
+MyPE,p_den =    15    0.41258938D-01  0.42131710D-01
+MyPE,p_den =     8   -0.14268048D-01 -0.36773803D-02
+MyPE,p_den =    12    0.28271418D-01  0.33693965D-01
+MyPE,p_den =     9    0.77655634D-03  0.12402805D-01
+MyPE,p_den =    11    0.22475887D-01  0.28877692D-01
+MyPE,p_den =     7    0.77655634D-03 -0.10602077D-01
+MyPE,p_den =     3    0.35007877D-01  0.29911463D-01
+MyPE,p_den =    15    0.41885116D-01  0.42760261D-01
+MyPE,p_den =     2    0.39200384D-01  0.35341982D-01
+MyPE,p_den =     4    0.29473882D-01  0.23044791D-01
+MyPE,p_den =    10    0.13376293D-01  0.21731557D-01
+MyPE,p_den =     5    0.22475887D-01  0.14158078D-01
+MyPE,p_den =     6    0.13376293D-01  0.19280694D-02
+MyPE,p_den =    14    0.39200384D-01  0.41670838D-01
+MyPE,p_den =    13    0.35007877D-01  0.38845805D-01
+MyPE,p_den =     1    0.41885116D-01  0.39424845D-01
+MyPE,p_den =     8   -0.11232429D-01 -0.58064822D-03
+MyPE,p_den =    12    0.29473882D-01  0.34530778D-01
+MyPE,p_den =     4    0.29276289D-01  0.22849142D-01
+MyPE,p_den =    11    0.22279350D-01  0.28681062D-01
+MyPE,p_den =     9    0.62938146D-03  0.12216917D-01
+MyPE,p_den =     7    0.62938146D-03 -0.10684995D-01
+MyPE,p_den =     3    0.34804983D-01  0.29714465D-01
+MyPE,p_den =    15    0.41661719D-01  0.42532800D-01
+MyPE,p_den =     5    0.22279350D-01  0.13969109D-01
+MyPE,p_den =     8   -0.11312362D-01 -0.72033419D-03
+MyPE,p_den =     2    0.38987263D-01  0.35138996D-01
+MyPE,p_den =    13    0.34804983D-01  0.38634043D-01
+MyPE,p_den =    10    0.13187628D-01  0.21536133D-01
+MyPE,p_den =     6    0.13187628D-01  0.17763395D-02
+MyPE,p_den =    14    0.38987263D-01  0.41448443D-01
+MyPE,p_den =     1    0.41661719D-01  0.39211220D-01
+MyPE,p_den =    12    0.29276289D-01  0.34329144D-01
+MyPE,p_den =     4    0.29212195D-01  0.22793788D-01
+MyPE,p_den =     8   -0.11324551D-01 -0.74703324D-03
+MyPE,p_den =    11    0.22224583D-01  0.28617900D-01
+MyPE,p_den =     9    0.60069919D-03  0.12174197D-01
+MyPE,p_den =     7    0.60069919D-03 -0.10697808D-01
+MyPE,p_den =     3    0.34732337D-01  0.29649808D-01
+MyPE,p_den =    15    0.41576968D-01  0.42446410D-01
+MyPE,p_den =     5    0.22224583D-01  0.13924349D-01
+MyPE,p_den =    12    0.29212195D-01  0.34257318D-01
+MyPE,p_den =     2    0.38907409D-01  0.35065832D-01
+MyPE,p_den =    13    0.34732337D-01  0.38554836D-01
+MyPE,p_den =    10    0.13143606D-01  0.21482410D-01
+MyPE,p_den =     6    0.13143606D-01  0.17463527D-02
+MyPE,p_den =     1    0.41576968D-01  0.39130979D-01
+MyPE,p_den =    14    0.38907409D-01  0.41364093D-01
+MyPE,p_den =     4    0.29245265D-01  0.22822501D-01
+MyPE,p_den =     9    0.61550228D-03  0.12196542D-01
+MyPE,p_den =     5    0.22253014D-01  0.13947744D-01
+MyPE,p_den =     8   -0.11319418D-01 -0.73333097D-03
+MyPE,p_den =    13    0.34769719D-01  0.38595572D-01
+MyPE,p_den =     1    0.41620564D-01  0.39172246D-01
+MyPE,p_den =    11    0.22253014D-01  0.28650496D-01
+MyPE,p_den =     7    0.61550228D-03 -0.10692239D-01
+MyPE,p_den =    12    0.29245265D-01  0.34294280D-01
+MyPE,p_den =     3    0.34769719D-01  0.29683152D-01
+MyPE,p_den =    15    0.41620564D-01  0.42490854D-01
+MyPE,p_den =     2    0.38948478D-01  0.35103475D-01
+MyPE,p_den =    10    0.13166630D-01  0.21510312D-01
+MyPE,p_den =     6    0.13166630D-01  0.17618830D-02
+MyPE,p_den =    14    0.38948478D-01  0.41407481D-01
+MyPE,p_den =     4    0.29143214D-01  0.22734457D-01
+MyPE,p_den =     8   -0.11337021D-01 -0.77488636D-03
+MyPE,p_den =     9    0.57073225D-03  0.12128919D-01
+MyPE,p_den =    11    0.22165917D-01  0.28549937D-01
+MyPE,p_den =     7    0.57073225D-03 -0.10710927D-01
+MyPE,p_den =     3    0.34654012D-01  0.29580203D-01
+MyPE,p_den =    15    0.41485526D-01  0.42353197D-01
+MyPE,p_den =    12    0.29143214D-01  0.34179883D-01
+MyPE,p_den =     5    0.22165917D-01  0.13876811D-01
+MyPE,p_den =     2    0.38821268D-01  0.34986945D-01
+MyPE,p_den =    13    0.34654012D-01  0.38469394D-01
+MyPE,p_den =    10    0.13096904D-01  0.21424892D-01
+MyPE,p_den =     6    0.13096904D-01  0.17149775D-02
+MyPE,p_den =    14    0.38821268D-01  0.41273086D-01
+MyPE,p_den =     1    0.41485526D-01  0.39044417D-01
+MyPE,p_den =     9    0.57379024D-03  0.12135705D-01
+MyPE,p_den =     4    0.29157173D-01  0.22745353D-01
+MyPE,p_den =     5    0.22176570D-01  0.13884208D-01
+MyPE,p_den =    13    0.34670867D-01  0.38488271D-01
+MyPE,p_den =     1    0.41505917D-01  0.39063592D-01
+MyPE,p_den =     8   -0.11338297D-01 -0.77230239D-03
+MyPE,p_den =     2    0.38840322D-01  0.35003986D-01
+MyPE,p_den =     6    0.13104051D-01  0.17183692D-02
+MyPE,p_den =    11    0.22176570D-01  0.28563597D-01
+MyPE,p_den =    10    0.13104051D-01  0.21435215D-01
+MyPE,p_den =     7    0.57379024D-03 -0.10711973D-01
+MyPE,p_den =     3    0.34670867D-01  0.29594391D-01
+MyPE,p_den =    14    0.38840322D-01  0.41293375D-01
+MyPE,p_den =    15    0.41505917D-01  0.42374004D-01
+MyPE,p_den =    12    0.29157173D-01  0.34196492D-01
+MyPE,p_den =     4    0.29150908D-01  0.22739177D-01
+MyPE,p_den =     8   -0.11341015D-01 -0.77681436D-03
+MyPE,p_den =     2    0.38833530D-01  0.34997525D-01
+MyPE,p_den =     9    0.56906041D-03  0.12129847D-01
+MyPE,p_den =    10    0.13098109D-01  0.21429052D-01
+MyPE,p_den =     6    0.13098109D-01  0.17135109D-02
+MyPE,p_den =    14    0.38833530D-01  0.41286286D-01
+MyPE,p_den =    12    0.29150908D-01  0.34190077D-01
+MyPE,p_den =     5    0.22170369D-01  0.13878257D-01
+MyPE,p_den =    11    0.22170369D-01  0.28557364D-01
+MyPE,p_den =    13    0.34664411D-01  0.38481523D-01
+MyPE,p_den =     7    0.56906041D-03 -0.10714785D-01
+MyPE,p_den =     3    0.34664411D-01  0.29588142D-01
+MyPE,p_den =     1    0.41498796D-01  0.39056783D-01
+MyPE,p_den =    15    0.41498796D-01  0.42366753D-01
+MyPE,p_den =     4    0.29150525D-01  0.22739021D-01
+MyPE,p_den =     2    0.38832812D-01  0.34996926D-01
+MyPE,p_den =     6    0.13098205D-01  0.17137368D-02
+MyPE,p_den =    10    0.13098205D-01  0.21428937D-01
+MyPE,p_den =     9    0.56929146D-03  0.12129960D-01
+MyPE,p_den =    14    0.38832812D-01  0.41285506D-01
+MyPE,p_den =     8   -0.11340736D-01 -0.77657786D-03
+MyPE,p_den =     5    0.22170234D-01  0.13878337D-01
+MyPE,p_den =    11    0.22170234D-01  0.28557000D-01
+MyPE,p_den =    13    0.34663825D-01  0.38480814D-01
+MyPE,p_den =     7    0.56929146D-03 -0.10714509D-01
+MyPE,p_den =     3    0.34663825D-01  0.29587739D-01
+MyPE,p_den =     1    0.41498012D-01  0.39056058D-01
+MyPE,p_den =    15    0.41498012D-01  0.42365953D-01
+MyPE,p_den =    12    0.29150525D-01  0.34189505D-01
+MyPE,p_den =     9    0.56825520D-03  0.12128629D-01
+MyPE,p_den =     5    0.22168757D-01  0.13876974D-01
+MyPE,p_den =    13    0.34662181D-01  0.38479074D-01
+MyPE,p_den =     4    0.29148972D-01  0.22737543D-01
+MyPE,p_den =     1    0.41496169D-01  0.39054300D-01
+MyPE,p_den =     2    0.38831060D-01  0.34995277D-01
+MyPE,p_den =     6    0.13096850D-01  0.17126691D-02
+MyPE,p_den =    10    0.13096850D-01  0.21427474D-01
+MyPE,p_den =    14    0.38831060D-01  0.41283672D-01
+MyPE,p_den =    11    0.22168757D-01  0.28555459D-01
+MyPE,p_den =     7    0.56825520D-03 -0.10715110D-01
+MyPE,p_den =     3    0.34662181D-01  0.29586185D-01
+MyPE,p_den =     8   -0.11341317D-01 -0.77756275D-03
+MyPE,p_den =    15    0.41496169D-01  0.42364075D-01
+MyPE,p_den =    12    0.29148972D-01  0.34187874D-01
+MyPE,p_den =     9    0.56856995D-03  0.12128971D-01
+MyPE,p_den =     4    0.29149196D-01  0.22737827D-01
+MyPE,p_den =     5    0.22169048D-01  0.13877313D-01
+MyPE,p_den =    13    0.34662357D-01  0.38479230D-01
+MyPE,p_den =     1    0.41496323D-01  0.39054455D-01
+MyPE,p_den =     2    0.38831215D-01  0.34995449D-01
+MyPE,p_den =     6    0.13097193D-01  0.17129894D-02
+MyPE,p_den =    11    0.22169048D-01  0.28555687D-01
+MyPE,p_den =     8   -0.11341090D-01 -0.77725797D-03
+MyPE,p_den =    10    0.13097193D-01  0.21427769D-01
+MyPE,p_den =     7    0.56856995D-03 -0.10714880D-01
+MyPE,p_den =     3    0.34662357D-01  0.29586403D-01
+MyPE,p_den =    14    0.38831215D-01  0.41283825D-01
+MyPE,p_den =    15    0.41496323D-01  0.42364231D-01
+MyPE,p_den =    12    0.29149196D-01  0.34188052D-01
+MyPE,p_den =     9    0.56859585D-03  0.12129015D-01
+MyPE,p_den =     5    0.22169111D-01  0.13877360D-01
+MyPE,p_den =     1    0.41496431D-01  0.39054556D-01
+MyPE,p_den =    13    0.34662447D-01  0.38479330D-01
+MyPE,p_den =     4    0.29149273D-01  0.22737891D-01
+MyPE,p_den =     8   -0.11341081D-01 -0.77723438D-03
+MyPE,p_den =     2    0.38831316D-01  0.34995541D-01
+MyPE,p_den =     6    0.13097239D-01  0.17130169D-02
+MyPE,p_den =    11    0.22169111D-01  0.28555764D-01
+MyPE,p_den =    10    0.13097239D-01  0.21427830D-01
+MyPE,p_den =     7    0.56859585D-03 -0.10714871D-01
+MyPE,p_den =     3    0.34662447D-01  0.29586481D-01
+MyPE,p_den =    14    0.38831316D-01  0.41283932D-01
+MyPE,p_den =    12    0.29149273D-01  0.34188141D-01
+MyPE,p_den =    15    0.41496431D-01  0.42364341D-01
+MyPE,p_den =     9    0.56861798D-03  0.12129051D-01
+MyPE,p_den =     5    0.22169159D-01  0.13877397D-01
+MyPE,p_den =    13    0.34662515D-01  0.38479404D-01
+MyPE,p_den =     4    0.29149331D-01  0.22737940D-01
+MyPE,p_den =     1    0.41496510D-01  0.39054631D-01
+MyPE,p_den =     8   -0.11341073D-01 -0.77721398D-03
+MyPE,p_den =     2    0.38831391D-01  0.34995609D-01
+MyPE,p_den =     6    0.13097275D-01  0.17130401D-02
+MyPE,p_den =    11    0.22169159D-01  0.28555821D-01
+MyPE,p_den =    10    0.13097275D-01  0.21427877D-01
+MyPE,p_den =     7    0.56861798D-03 -0.10714862D-01
+MyPE,p_den =     3    0.34662515D-01  0.29586540D-01
+MyPE,p_den =    14    0.38831391D-01  0.41284011D-01
+MyPE,p_den =    12    0.29149331D-01  0.34188208D-01
+MyPE,p_den =    15    0.41496510D-01  0.42364422D-01
+MyPE,p_den =     9    0.56860523D-03  0.12129037D-01
+MyPE,p_den =     5    0.22169148D-01  0.13877384D-01
+MyPE,p_den =    13    0.34662509D-01  0.38479400D-01
+MyPE,p_den =     1    0.41496506D-01  0.39054627D-01
+MyPE,p_den =     4    0.29149324D-01  0.22737929D-01
+MyPE,p_den =    11    0.22169148D-01  0.28555813D-01
+MyPE,p_den =     7    0.56860523D-03 -0.10714872D-01
+MyPE,p_den =     3    0.34662509D-01  0.29586533D-01
+MyPE,p_den =    15    0.41496506D-01  0.42364418D-01
+MyPE,p_den =     2    0.38831387D-01  0.34995604D-01
+MyPE,p_den =     6    0.13097262D-01  0.17130272D-02
+MyPE,p_den =    10    0.13097262D-01  0.21427866D-01
+MyPE,p_den =     8   -0.11341082D-01 -0.77722636D-03
+MyPE,p_den =    14    0.38831387D-01  0.41284007D-01
+MyPE,p_den =    12    0.29149324D-01  0.34188202D-01
